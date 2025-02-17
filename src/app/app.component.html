@@ -1,21 +1,31 @@
-<div class="flex-col justify-center mt-5">
-  <div class="flex justify-center">
-    <h1 class="font-bold text-xl">
-      The JAX Data Science Showcase App
-    </h1>
+<div class="flex flex-col items-center mt-5">
+  <h1 class="font-bold text-xl">
+    Shared UI Components List
+  </h1>
+  <div class="flex w-3/4 mt-5">
+    <p-table class="w-full" [value]="uiComponents" showGridlines >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Component</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-component>
+        <tr>
+          <td class="w-2/12">{{ component.name }}</td>
+          <td class="w-8/12">{{ component.description }}</td>
+          <td class="w-2/12">
+            <a [routerLink]="component.route" class="pi-link font-medium">view</a>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 
-  <div class="flex-col justify-center mt-5">
-    <div class="flex justify-center">
-      <h2 class=" font-medium text-xl">
-        Async Tasks Module
-      </h2>
-    </div>
-
-    <div class="flex justify-center mt-5">
-      <lib-jds-async-tasks class="w-8/12"></lib-jds-async-tasks>
+  <div class="flex w-3/4 justify-center mt-5">
+    <div class="router-outlet-wh">
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
-
-<router-outlet></router-outlet>
