@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { TableModule } from 'primeng/table';
+// components
+import { HeaderComponent } from './components/header/header.component';
 
 interface UiComponent {
   name: string;
@@ -12,7 +14,8 @@ interface UiComponent {
 @Component({
   imports: [
     RouterModule,
-    TableModule
+    TableModule,
+    HeaderComponent
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',

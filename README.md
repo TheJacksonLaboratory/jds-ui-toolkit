@@ -22,6 +22,45 @@ currency ensures that shared components benefit from the latest performance
 improvements, security patches, and feature enhancements while maintaining 
 backward compatibility.
 
+
+## Setup
+
+Clone the repository, move to a branch and install the dependencies:
+
+```bash
+  npm install
+```
+
+You must run this before running any other commands.
+```bash
+  npm run build
+```
+
+To start the showcase application, use:
+
+```bash
+  npm run start
+```
+
+To test before pushing changes, use:
+
+```bash
+  npm run test
+```
+
+To lint before pushing changes, use:
+
+```bash
+  npm run lint
+```
+
+To build the showcase application, use:
+
+```bash
+  npm run build
+```
+
+
 ## Libraries
 
 The workspace already contains two libraries - **@jds/ui-components** 
