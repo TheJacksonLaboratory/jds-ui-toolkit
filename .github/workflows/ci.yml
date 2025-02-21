@@ -19,8 +19,8 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Lint affected
-        run: npx nx affected -t lint
+        run: npx nx lint
       - name: Test affected
-        run: npx nx affected -t test --configuration=ci
+        run: npx nx test --configuration=ci
       - name: Build affected
-        run: npx nx affected -t build
+        run: npx nx build
