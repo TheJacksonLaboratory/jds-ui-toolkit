@@ -1,10 +1,25 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { ButtonModule } from 'primeng/button';
+
+import { AuthenticationComponent} from '@jax-data-science-demo/ui-components';
+
 @Component({
   selector: 'app-showcase-auth',
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule, AuthenticationComponent],
   templateUrl: './showcase-auth.component.html',
   styleUrl: './showcase-auth.component.css',
+  standalone: true
 })
-export class ShowcaseAuthComponent {}
+export class ShowcaseAuthComponent {
+  configLogin = {
+    appState: { target: '/search/authentication' }
+  };
+
+  configLogout = {
+    logoutParams: {
+      returnTo: document.location.origin
+    }
+  };
+}

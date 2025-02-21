@@ -17,9 +17,16 @@
         "polyfills": ["zone.js"],
         "tsConfig": "tsconfig.app.json",
         "assets": [
+          "src/favicon.ico",
+          "src/assets",
           {
             "glob": "**/*",
             "input": "public"
+          },
+          {
+            "glob": "**/*",
+            "input": "node_modules/primeicons/fonts",
+            "output": "/assets/fonts"
           }
         ],
         "styles": ["./src/styles.css"],
@@ -30,8 +37,8 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",

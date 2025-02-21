@@ -1,0 +1,28 @@
+<div class="tw-w-full tw-mt-5">
+  <p-table class="tw-w-full" [value]="uiComponents" showGridlines stripedRows>
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="tw-w-2/12 tw-font-semibold">Name</th>
+        <th class="tw-w-8/12 tw-font-semibold">Description</th>
+        <th class="tw-w-8/12 tw-font-semibold">Auth0 Required</th>
+        <th class="tw-w-2/12 tw-font-semibold"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-component>
+      <tr>
+        <td class="tw-w-2/12">{{ component.name }}</td>
+        <td class="tw-w-6/12">{{ component.description }}</td>
+        <td class="tw-w-2/12">{{ component.isAuthRequired }}</td>
+        <td class="tw w-2/12">
+          <a [routerLink]="component.route" class="pi pi-eye font-medium">view</a>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div class="tw-w-full tw-mt-5">
+  <div class="router-outlet-wh">
+    <router-outlet></router-outlet>
+  </div>
+</div>

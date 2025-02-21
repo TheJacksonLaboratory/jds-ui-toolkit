@@ -1,29 +1,8 @@
 <div class="tw-flex tw-flex-col tw-items-center tw-full">
   <app-header class="tw-w-full"></app-header>
 
-  <div class="tw-w-3/4 tw-mt-5 tw-text-center">
+  <div class="tw-w-3/4 tw-mt-10 tw-text-center">
     <h1 class="tw-text-2xl">Components</h1>
-  </div>
-
-  <div class="tw-w-3/4 tw-mt-5">
-    <p-table class="tw-w-full" [value]="uiComponents" showGridlines stripedRows>
-      <ng-template pTemplate="header">
-        <tr>
-          <th class="tw-w-2/12">Component</th>
-          <th class="tw-w-8/12">Description</th>
-          <th class="tw-w-2/12"></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-component>
-        <tr>
-          <td class="w-2/12">{{ component.name }}</td>
-          <td class="w-8/12">{{ component.description }}</td>
-          <td class="w-2/12">
-            <a [routerLink]="component.route" class="pi-link font-medium">view</a>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
   </div>
 
   <div class="tw-w-3/4 tw-mt-5">

@@ -1,5 +1,5 @@
 # JdsUiComponents
-
+# UNDER CONSTRUCTION!!!
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
 ## Overview
@@ -34,6 +34,10 @@ Clone the repository, move to a branch and install the dependencies:
 You must run this before running any other commands.
 ```bash
   npm run build
+  
+  nx run jds-ui-components:build:production --statsJson
+  
+  webpack-bundle-analyzer dist/jds-ui-components/stats.json
 ```
 
 To start the showcase application, use:

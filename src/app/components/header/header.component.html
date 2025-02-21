@@ -1,8 +1,28 @@
 <p-menubar styleClass="tw-border-none tw-bg-blue-500 tw-p-5">
   <ng-template pTemplate="start">
     <div class="tw-flex tw-items-center">
-      <!-- <h2 class="tw-text-2xl tw-text-white tw-primary-500">JDS UI Components</h2> -->
       <h2 class="tw-text-2xl tw-text-white">JDS UI Components</h2>
     </div>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <p-button
+      *ngIf="(auth.isAuthenticated$ | async) === false"
+      id="jds-login-btn"
+      label="Login"
+      styleClass="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
+      icon="pi pi-sign-in"
+      iconPos="left"
+      (click)="login()"
+    />
+
+    <p-button
+      *ngIf="auth.isAuthenticated$ | async"
+      id="jds-logout-btn"
+      label="Logout"
+      styleClass="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
+      icon="pi pi-user"
+      iconPos="left"
+      (click)="logout()"
+    />
   </ng-template>
 </p-menubar>
