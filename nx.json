@@ -95,5 +95,11 @@
     "changelog": {
       "projectChangelogs": true
     }
-  }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default"
+    }
+  },
+  "neverConnectToCloud": true
 }
