@@ -37,7 +37,7 @@ export class OntologyService {
    * Get a term by its ID
    * @param id - the term ID
    */
-  term(id: string): Observable<OntologyTerm>  {
+  term(id: string): Observable<Response<OntologyTerm>>  {
     const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}`
     return this.httpClient.get<Response<OntologyTerm>>(url)
   }
