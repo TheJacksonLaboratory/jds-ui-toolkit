@@ -148,7 +148,7 @@ const testOntologyConfig: OntologyConfig[] = [{
   description: "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease."
 }];
 
-function flushFakeHpConfig(httpTestingController: HttpTestingController, service: any) {
+function flushFakeHpConfig<T>(httpTestingController: HttpTestingController, service: T) {
   const req = httpTestingController.expectOne(service.config_location);
   expect(req.request.method).toEqual('GET');
   req.flush(testOntologyConfig);

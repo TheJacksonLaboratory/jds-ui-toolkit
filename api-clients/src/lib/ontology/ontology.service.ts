@@ -8,7 +8,7 @@ import { CollectionResponse, Response } from '../async-tasks/models/response';
   providedIn: 'root'
 })
 export class OntologyService {
-  config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies.json'
+  config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies-internal.json'
   private config!: OntologyConfig[];
 
   /**
@@ -17,7 +17,7 @@ export class OntologyService {
   constructor(private httpClient: HttpClient) {
     this.httpClient.get<OntologyConfig[]>(this.config_location).subscribe({
       next: (config) => this.config = config,
-      error: (error) => {
+      error: () => {
         this.config = [];
       }
     });

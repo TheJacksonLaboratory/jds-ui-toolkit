@@ -24,5 +24,6 @@ export enum Ontology {
 }
 
 export interface OntologyTerm {
-
+  id: string;
+  name: string;
 }
