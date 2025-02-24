@@ -1,23 +1,19 @@
 <!-- Tailwind CSS classes -->
-<div class="flex-col">
-  <div class="flex-col">
-    <div class="flex justify-center my-5">
-      <h3 class="font-medium">
-        Async Tasks UI Component
-      </h3>
-    </div>
+<div class="tw-flex-col">
+  <div class="tw-flex tw-justify-center tw-my-5">
+    <h3 class="tw-font-semibold">
+      Async Tasks
+    </h3>
   </div>
-  <br>
-  <br>
   <p-table
     [value]="tasks"
     showGridlines
     stripedRows>
     <ng-template #header>
       <tr>
-        <th>Task ID</th>
-        <th>Task Name</th>
-        <th>Task Status</th>
+        <th class="tw-font-semibold">Task ID</th>
+        <th class="tw-font-semibold">Task Name</th>
+        <th class="tw-font-semibold">Task Status</th>
       </tr>
     </ng-template>
     <ng-template #body let-task>

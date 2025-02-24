@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AsyncTasksComponent } from '@jax-data-science-demo/ui-components';
+// components
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
-  imports: [RouterModule, AsyncTasksComponent],
+  imports: [
+    RouterModule,
+    HeaderComponent
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
