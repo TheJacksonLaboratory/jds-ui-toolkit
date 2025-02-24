@@ -1,48 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-
-export enum Ontology {
-  HP = 'Human Phenotype Ontology',
-  MONDO = 'MONDO Disease Ontology',
-  MP = 'Mamallian Phenotype Ontology',
-  CL = 'Cell Ontology',
-  MAXO = 'Medical Action Ontology'
-}
-
-export interface Term {}
-
-export interface OntologyConfig {
-  name: string;
-  prefix: string;
-  github: {
-    api: string;
-    home: string;
-  };
-  home: string;
-  api: {
-    docs: string;
-    base: string;
-  };
-  base_file: string;
-  international: boolean;
-  description: string;
-}
+import { Ontology, OntologyConfig, OntologyTerm } from '../async-tasks/models/ontology';
+import { CollectionResponse, Response } from '../async-tasks/models/response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OntologyService {
-  private config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies.json'
-  private config: OntologyConfig[];
+  config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies.json'
+  private config!: OntologyConfig[];
 
   /**
-   * This is may not be the best way to implement configuration of this service. Must discuss.
+   * Get the configuration file from the source for the backend api service
    */
   constructor(private httpClient: HttpClient) {
-    this.httpClient.get<OntologyConfig[]>(this.config_location).subscribe((data) => {
-      this.config = data;
+    this.httpClient.get<OntologyConfig[]>(this.config_location).subscribe({
+      next: (config) => this.config = config,
+      error: (error) => {
+        this.config = [];
+      }
     });
   }
 
@@ -51,63 +28,75 @@ export class OntologyService {
    * @param query - the search query
    * @param limit - the number of results to return
    * @param ontology - the ontology to search
-   * TODO: define the return type, implement pagination
    */
-  search(query: string, limit: number, ontology: Ontology): Observable<any> {
-    return this.httpClient.get<any>(`${this.ontologyBaseResolver(ontology)}/search?q=${query}&limit=${limit}`);
+  search(query: string, limit: number, ontology: Ontology): Observable<CollectionResponse<OntologyTerm>> {
+    return this.httpClient.get<CollectionResponse<OntologyTerm>>(`${this.ontologyBaseResolver(ontology)}/search?q=${query}&limit=${limit}`);
   }
 
   /**
    * Get a term by its ID
    * @param id - the term ID
-   * @param ontology - the ontology to search
-   * TODO: define the term type and location
    */
-  term(id: string, ontology: Ontology): Observable<Term>  {
-    return this.httpClient.get<Term>(`${this.ontologyBaseResolver(ontology)}/${id}`)
+  term(id: string): Observable<OntologyTerm>  {
+    const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}`
+    return this.httpClient.get<Response<OntologyTerm>>(url)
   }
 
   /**
    * Get the parents of a term
    * @param id - the term ID
-   * @param ontology - the ontology to search
    */
-  parents(id: string, ontology: Ontology): Observable<Term[]> {
-    return this.httpClient.get<Term[]>(`${this.ontologyBaseResolver(ontology)}/${id}/parents`);
+  parents(id: string): Observable<CollectionResponse<OntologyTerm>> {
+    const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/parents`
+    return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
   }
 
   /**
    * Get the children of a term
    * @param id - the term ID
-   * @param ontology - the ontology to search
    */
-  children(id: string, ontology: Ontology): Observable<Term[]> {
-    return this.httpClient.get<Term[]>(`${this.ontologyBaseResolver(ontology)}/${id}/children`);
+  children(id: string): Observable<CollectionResponse<OntologyTerm>> {
+    const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/children`
+    return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
   }
 
   /**
    * Get the ancestors of a term
    * @param id - the term ID
-   * @param ontology - the ontology to search
    */
-  ancestors(id: string, ontology: Ontology): Observable<Term[]> {
-    return this.httpClient.get<Term[]>(`${this.ontologyBaseResolver(ontology)}/${id}/ancestors`);
+  ancestors(id: string): Observable<CollectionResponse<OntologyTerm>> {
+    const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/ancestors`
+    return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
   }
 
   /**
    * Get the descendants of a term
    * @param id - the term ID
-   * @param ontology - the ontology to search
    */
-  descendants(id: string, ontology: Ontology): Observable<Term[]> {
-    return this.httpClient.get<Term[]>(`${this.ontologyBaseResolver(ontology)}/${id}/descendants`);
+  descendants(id: string): Observable<CollectionResponse<OntologyTerm>> {
+    const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/descendants`
+    return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
+  }
+
+  /**
+   * Get the ontology from curie
+   */
+  ontologyFromCurie(curie: string): Ontology {
+    return Ontology[curie.split(':')[0] as keyof typeof Ontology];
   }
 
   /**
    * Get the ontology api base url configuration
    **/
-  private ontologyBaseResolver(ontology: Ontology): string {
-    return this.config.find((config) => config.name === ontology).api.base;
-  }
+  ontologyBaseResolver(ontology: Ontology): string {
+    if (!this.config || this.config.length === 0) {
+      throw new Error('No ontology configuration found.');
+    }
+    const ontology_config = this.config.find((config) => config.prefix.toUpperCase() === ontology);
 
+    if(!ontology_config) {
+      throw new Error('Ontology not found in configuration.');
+    }
+    return ontology_config.api.base;
+  }
 }
