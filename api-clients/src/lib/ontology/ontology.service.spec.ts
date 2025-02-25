@@ -1,8 +1,8 @@
 import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Ontology, OntologyConfig, OntologyTerm } from '../async-tasks/models/ontology';
-import { CollectionResponse, Response } from '../async-tasks/models/response';
+import { Ontology, OntologyConfig, OntologyTerm } from '../models/ontology';
+import { CollectionResponse, Response } from '../models/response';
 import { OntologyService } from './ontology.service';
 
 describe('OntologyService', () => {

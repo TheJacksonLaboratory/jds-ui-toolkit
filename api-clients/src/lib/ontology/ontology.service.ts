@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ontology, OntologyConfig, OntologyTerm } from '../async-tasks/models/ontology';
-import { CollectionResponse, Response } from '../async-tasks/models/response';
+import { Ontology, OntologyConfig, OntologyTerm } from '../models/ontology';
+import { CollectionResponse, Response } from '../models/response';
 
 @Injectable({
   providedIn: 'root'
