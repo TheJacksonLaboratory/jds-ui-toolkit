@@ -12,9 +12,7 @@ import { ASYNC_TASKS_MOCK } from './mock/async-tasks.mock';
 })
 export class AsyncTasksService {
 
-  constructor() {
-    console.log('AsyncTasksService constructed');
-  }
+  constructor() {}
 
   getTasks(): Observable<IAsyncTask[]> {
     return of(ASYNC_TASKS_MOCK).pipe(delay(500));

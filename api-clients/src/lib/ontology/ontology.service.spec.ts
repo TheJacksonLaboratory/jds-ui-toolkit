@@ -37,7 +37,6 @@ describe('OntologyService', () => {
     flushFakeHpConfig(httpTestingController, service);
     const id = "BAD:0000001"
     const ontology = service.ontologyFromCurie(id);
-    console.log(ontology);
     expect(ontology).toBeUndefined();
   });
 
@@ -47,10 +46,7 @@ describe('OntologyService', () => {
   });
 
   it('should fail to get configuration string', () => {
-    const req = httpTestingController.expectOne(service.config_location);
-    expect(req.request.method).toEqual('GET');
-    req.flush('Error occurred', { status: 500, statusText: 'Internal Server Error'});
-
+    flushBrokenConfig(httpTestingController, service);
     expect(() => service.ontologyBaseResolver(Ontology.HP)).toThrowError('No ontology configuration found.');
   });
 
@@ -76,6 +72,16 @@ describe('OntologyService', () => {
     const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}`);
     expect(req.request.method).toEqual('GET');
     req.flush(fakeResponse);
+  });
+
+  it('should fail to get the fake term', () => {
+    flushBrokenConfig(httpTestingController, service);
+    const id = "HP:0000001";
+    const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "All"}};
+    service.term(id).subscribe( {
+      next: (term) =>  expect(term).toEqual(fakeResponse),
+      error: (error) => expect(error).toEqual('No ontology configuration found.')
+    });
   });
 
   it('should get the fake term parents', () => {
@@ -152,4 +158,10 @@ function flushFakeHpConfig(httpTestingController: HttpTestingController, service
   const req = httpTestingController.expectOne(service.config_location);
   expect(req.request.method).toEqual('GET');
   req.flush(testOntologyConfig);
+}
+
+function flushBrokenConfig(httpTestingController: HttpTestingController, service: OntologyService) {
+  const req = httpTestingController.expectOne(service.config_location);
+  expect(req.request.method).toEqual('GET');
+  req.flush('Error occurred', { status: 500, statusText: 'Internal Server Error'});
 }
