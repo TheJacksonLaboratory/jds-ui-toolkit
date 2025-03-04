@@ -3,8 +3,7 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 // models
-import { Response } from './models/response';
-import { IAsyncTask } from './models/async-task';
+import { IAsyncTask } from '../models/async-task';
 // mock async tasks
 import { ASYNC_TASKS_MOCK } from './mock/async-tasks.mock';
 
@@ -12,11 +11,6 @@ import { ASYNC_TASKS_MOCK } from './mock/async-tasks.mock';
   providedIn: 'root'
 })
 export class AsyncTasksService {
-
-  constructor() {
-    console.log('AsyncTasksService constructed');
-  }
-
   getTasks(): Observable<IAsyncTask[]> {
     return of(ASYNC_TASKS_MOCK).pipe(delay(500));
   }
