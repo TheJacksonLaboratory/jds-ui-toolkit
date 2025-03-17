@@ -21,7 +21,7 @@ export class AsyncTaskComponent implements OnInit {
     console.log('AsyncTaskComponent constructed');
   }
   ngOnInit() {
-    this.asyncTaskFacade.openAsyncTasksEventsListener();
+    this.asyncTaskFacade.openAsyncTaskEventListener();
 
     this.asyncTaskFacade.getTasks$().subscribe(
       (tasks) => {
