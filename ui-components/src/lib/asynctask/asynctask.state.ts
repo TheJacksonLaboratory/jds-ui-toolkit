@@ -8,7 +8,7 @@ import { IAsyncTask } from '@jax-data-science-demo/api-clients';
 @Injectable({
   providedIn: 'root'
 })
-export class AsyncTasksState {
+export class AsyncTaskState {
   private statuses$: BehaviorSubject<IAsyncTask[]> = new BehaviorSubject<IAsyncTask[]>([]);
 
   setStatuses(statuses: IAsyncTask[]): void {

@@ -3,32 +3,32 @@ import { CommonModule } from '@angular/common';
 // PrimeNG
 import { TableModule } from 'primeng/table';
 // facades
-import { AsyncTasksFacade } from './async-tasks.facade';
+import { AsyncTaskFacade } from './asynctask.facade';
 // models
 import { IAsyncTask } from '@jax-data-science-demo/api-clients';
 
 @Component({
   selector: 'lib-jds-async-tasks',
   imports: [CommonModule, TableModule],
-  templateUrl: './async-tasks.component.html',
-  styleUrl: './async-tasks.component.css',
+  templateUrl: './asynctask.component.html',
+  styleUrl: './asynctask.component.css',
   standalone: true,
 })
-export class AsyncTasksComponent implements OnInit {
+export class AsyncTaskComponent implements OnInit {
   tasks: IAsyncTask[] = [];
 
-  constructor(private asyncTasksFacade: AsyncTasksFacade) {
-    console.log('AsyncTasksComponent constructed');
+  constructor(private asyncTaskFacade: AsyncTaskFacade) {
+    console.log('AsyncTaskComponent constructed');
   }
   ngOnInit() {
-    this.asyncTasksFacade.openAsyncTasksEventsListener();
+    this.asyncTaskFacade.openAsyncTasksEventsListener();
 
-    this.asyncTasksFacade.getRunStatuses$().subscribe(
+    this.asyncTaskFacade.getRunStatuses$().subscribe(
       (tasks) => {
         this.tasks = tasks;
         console.log('tasks', tasks);
     });
 
-    console.log('AsyncTasksComponent initialized');
+    console.log('AsyncTaskComponent initialized');
   }
 }

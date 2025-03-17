@@ -2,38 +2,38 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 // states
-import { AsyncTasksState } from './async-tasks.state';
+import { AsyncTaskState } from './asynctask.state';
 
 // models
 import { IAsyncTask } from '@jax-data-science-demo/api-clients';
 
 // services
-import { AsyncTasksService } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AsyncTasksFacade {
+export class AsyncTaskFacade {
   constructor(
-    private asyncTasksState: AsyncTasksState,
-    private asyncTasksService: AsyncTasksService
+    private asyncTaskState: AsyncTaskState,
+    private asyncTaskService: AsyncTaskService
   ) { }
 
   openAsyncTasksEventsListener(): void {
     console.log("creates listener to the API's server sent events endpoint");
 
-    this.asyncTasksService.getTasks().subscribe((tasks) => {
-      tasks.forEach((task) => {
-        this.addStatus(task);
+    this.asyncTaskService.getRuns().subscribe((tasks) => {
+      tasks.data.forEach((task) => {
+        this.addStatus(task.status);
       });
     });
   }
 
   addStatus(status: IAsyncTask): void {
-    this.asyncTasksState.addStatus(status);
+    this.asyncTaskState.addStatus(status);
   }
 
   getRunStatuses$(): Observable<IAsyncTask[]> {
-    return this.asyncTasksState.getStatuses$();
+    return this.asyncTaskState.getStatuses$();
   }
 }
