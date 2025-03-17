@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { AsyncTasksFacade } from './async-tasks.facade';
+import { AsyncTaskFacade } from './asynctask.facade';
 
-describe('AsyncTasksFacade', () => {
-  let facade: AsyncTasksFacade;
+describe('AsyncTaskFacade', () => {
+  let facade: AsyncTaskFacade;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [AsyncTasksFacade],
+      providers: [AsyncTaskFacade],
     });
 
-    facade = TestBed.inject(AsyncTasksFacade);
+    facade = TestBed.inject(AsyncTaskFacade);
   });
 
   it('should create', () => {
