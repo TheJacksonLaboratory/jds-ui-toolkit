@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 // facades
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
-import { IAsyncTask } from '@jax-data-science-demo/api-clients';
+import { Run } from '@jax-data-science-demo/api-clients';
 
 @Component({
   selector: 'lib-jds-async-tasks',
@@ -15,7 +15,7 @@ import { IAsyncTask } from '@jax-data-science-demo/api-clients';
   standalone: true,
 })
 export class AsyncTaskComponent implements OnInit {
-  tasks: IAsyncTask[] = [];
+  tasks: Run[] = [];
 
   constructor(private asyncTaskFacade: AsyncTaskFacade) {
     console.log('AsyncTaskComponent constructed');
@@ -23,7 +23,7 @@ export class AsyncTaskComponent implements OnInit {
   ngOnInit() {
     this.asyncTaskFacade.openAsyncTasksEventsListener();
 
-    this.asyncTaskFacade.getRunStatuses$().subscribe(
+    this.asyncTaskFacade.getTasks$().subscribe(
       (tasks) => {
         this.tasks = tasks;
         console.log('tasks', tasks);

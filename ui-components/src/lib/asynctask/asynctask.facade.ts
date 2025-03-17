@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { AsyncTaskState } from './asynctask.state';
 
 // models
-import { IAsyncTask } from '@jax-data-science-demo/api-clients';
+import { Run } from '@jax-data-science-demo/api-clients';
 
 // services
 import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
@@ -24,16 +24,16 @@ export class AsyncTaskFacade {
 
     this.asyncTaskService.getRuns().subscribe((tasks) => {
       tasks.data.forEach((task) => {
-        this.addStatus(task.status);
+        this.addTask(task);
       });
     });
   }
 
-  addStatus(status: IAsyncTask): void {
-    this.asyncTaskState.addStatus(status);
+  addTask(task: Run): void {
+    this.asyncTaskState.addTask(task);
   }
 
-  getRunStatuses$(): Observable<IAsyncTask[]> {
-    return this.asyncTaskState.getStatuses$();
+  getTasks$(): Observable<Run[]> {
+    return this.asyncTaskState.getTasks$();
   }
 }
