@@ -3,6 +3,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { CollectionResponse, Response } from '../models/response';
 import { AsyncTaskService } from './asynctask.service';
+import { 
+  Input, 
+  InputReference, 
+  InputSubmission, 
+  Result, 
+  ResultReference, 
+  Run, 
+  WorkflowExecutionStatus 
+} from '../models/asynctask';
 
 describe('AsyncTaskService', () => {
   let service: AsyncTaskService;
@@ -47,7 +56,9 @@ describe('AsyncTaskService', () => {
   // Input methods tests
   describe('Input methods', () => {
     it('should get all inputs', () => {
-      const mockResponse: CollectionResponse<any> = { data: [{ id: 1, name: 'Test Input' }] };
+      const mockResponse: CollectionResponse<InputReference> = { 
+        data: [{ id: 1, name: 'Test Input', description: null }] 
+      };
       
       service.getInputs().subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -59,8 +70,20 @@ describe('AsyncTaskService', () => {
     });
 
     it('should add an input', () => {
-      const mockInput = { task_type: 'HelloWorld', values: { name: 'Test' } };
-      const mockResponse: Response<any> = { object: { id: 1, name: 'Test Input' } };
+      const mockInput: InputSubmission = { 
+        task_type: 'HelloWorld', 
+        values: { name: 'Test' } 
+      };
+      const mockResponse: Response<Input> = { 
+        object: { 
+          id: 1, 
+          name: 'Test Input', 
+          description: null, 
+          owner_id: 123, 
+          values: { name: 'Test' },
+          type: 'HelloWorld'
+        } 
+      };
       
       service.addInput(mockInput).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -74,7 +97,16 @@ describe('AsyncTaskService', () => {
 
     it('should get an input by ID', () => {
       const inputId = 1;
-      const mockResponse: Response<any> = { object: { id: inputId, name: 'Test Input' } };
+      const mockResponse: Response<Input> = { 
+        object: { 
+          id: inputId, 
+          name: 'Test Input', 
+          description: null, 
+          owner_id: 123, 
+          values: { name: 'Test' },
+          type: 'HelloWorld'
+        } 
+      };
       
       service.getInput(inputId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -89,7 +121,7 @@ describe('AsyncTaskService', () => {
       const inputId = 1;
       const name = 'Updated Name';
       const description = 'Updated Description';
-      const mockResponse: Response<any> = { 
+      const mockResponse: Response<InputReference> = { 
         object: { id: inputId, name: name, description: description } 
       };
       
@@ -105,8 +137,8 @@ describe('AsyncTaskService', () => {
     it('should update an input with only name', () => {
       const inputId = 1;
       const name = 'Updated Name';
-      const mockResponse: Response<any> = { 
-        object: { id: inputId, name: name } 
+      const mockResponse: Response<InputReference> = { 
+        object: { id: inputId, name: name, description: null } 
       };
       
       service.updateInput(inputId, name).subscribe(response => {
@@ -122,7 +154,15 @@ describe('AsyncTaskService', () => {
   // Run methods tests
   describe('Run methods', () => {
     it('should get all runs', () => {
-      const mockResponse: CollectionResponse<any> = { data: [{ id: 1, status: 2 }] };
+      const mockResponse: CollectionResponse<Run> = { 
+        data: [{ 
+          id: 1, 
+          status: WorkflowExecutionStatus.COMPLETED, 
+          input_id: 123, 
+          owner_id: 456, 
+          workflow_id: 'workflow-123' 
+        }] 
+      };
       
       service.getRuns().subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -135,7 +175,15 @@ describe('AsyncTaskService', () => {
 
     it('should get runs filtered by workflow ID', () => {
       const workflowId = 'workflow123';
-      const mockResponse: CollectionResponse<any> = { data: [{ id: 1, workflow_id: workflowId }] };
+      const mockResponse: CollectionResponse<Run> = { 
+        data: [{ 
+          id: 1, 
+          workflow_id: workflowId, 
+          status: WorkflowExecutionStatus.COMPLETED, 
+          input_id: 123, 
+          owner_id: 456 
+        }] 
+      };
       
       service.getRuns(workflowId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -148,7 +196,15 @@ describe('AsyncTaskService', () => {
 
     it('should create a run with input ID', () => {
       const inputId = 1;
-      const mockResponse: Response<any> = { object: { id: 2, input_id: inputId } };
+      const mockResponse: Response<Run> = { 
+        object: { 
+          id: 2, 
+          input_id: inputId, 
+          status: WorkflowExecutionStatus.RUNNING, 
+          owner_id: 456, 
+          workflow_id: 'workflow-123' 
+        } 
+      };
       
       service.createRun(inputId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -161,8 +217,19 @@ describe('AsyncTaskService', () => {
     });
 
     it('should create a run with input submission', () => {
-      const inputSubmission = { task_type: 'HelloWorld', values: { name: 'Test' } };
-      const mockResponse: Response<any> = { object: { id: 2 } };
+      const inputSubmission: InputSubmission = { 
+        task_type: 'HelloWorld', 
+        values: { name: 'Test' } 
+      };
+      const mockResponse: Response<Run> = { 
+        object: { 
+          id: 2, 
+          input_id: 123, 
+          status: WorkflowExecutionStatus.RUNNING, 
+          owner_id: 456, 
+          workflow_id: 'workflow-123' 
+        } 
+      };
       
       service.createRun(undefined, inputSubmission).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -175,7 +242,13 @@ describe('AsyncTaskService', () => {
     });
 
     it('should get run events', () => {
-      const mockResponse = { events: [{ run_id: 1, status: 'COMPLETED' }] };
+      const mockResponse: Run = { 
+        id: 1, 
+        status: WorkflowExecutionStatus.COMPLETED, 
+        input_id: 123, 
+        owner_id: 456, 
+        workflow_id: 'workflow-123' 
+      };
       
       service.getRunEvents().subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -188,7 +261,15 @@ describe('AsyncTaskService', () => {
 
     it('should get a run by ID', () => {
       const runId = 1;
-      const mockResponse: Response<any> = { object: { id: runId, status: 2 } };
+      const mockResponse: Response<Run> = { 
+        object: { 
+          id: runId, 
+          status: WorkflowExecutionStatus.COMPLETED, 
+          input_id: 123, 
+          owner_id: 456, 
+          workflow_id: 'workflow-123' 
+        } 
+      };
       
       service.getRun(runId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -201,7 +282,15 @@ describe('AsyncTaskService', () => {
 
     it('should get run results', () => {
       const runId = 1;
-      const mockResponse: Response<any> = { object: { id: 2, run_id: runId } };
+      const mockResponse: Response<Result> = { 
+        object: { 
+          id: 2, 
+          run_id: runId, 
+          values: { output: 'Success' }, 
+          name: 'Test Result', 
+          description: null 
+        } 
+      };
       
       service.getRunResults(runId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -214,7 +303,16 @@ describe('AsyncTaskService', () => {
 
     it('should get run inputs', () => {
       const runId = 1;
-      const mockResponse: Response<any> = { object: { id: 3, name: 'Input for run 1' } };
+      const mockResponse: Response<Input> = { 
+        object: { 
+          id: 3, 
+          name: 'Input for run 1', 
+          description: null, 
+          owner_id: 123, 
+          values: { name: 'Test' },
+          type: 'HelloWorld'
+        } 
+      };
       
       service.getRunInputs(runId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -229,7 +327,9 @@ describe('AsyncTaskService', () => {
   // Result methods tests
   describe('Result methods', () => {
     it('should get all results', () => {
-      const mockResponse: CollectionResponse<any> = { data: [{ id: 1, run_id: 1 }] };
+      const mockResponse: CollectionResponse<ResultReference> = { 
+        data: [{ id: 1, run_id: 1, name: 'Test Result', description: null }] 
+      };
       
       service.getResults().subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -242,7 +342,15 @@ describe('AsyncTaskService', () => {
 
     it('should get a result by ID', () => {
       const resultId = 1;
-      const mockResponse: Response<any> = { object: { id: resultId, run_id: 2 } };
+      const mockResponse: Response<Result> = { 
+        object: { 
+          id: resultId, 
+          run_id: 2, 
+          values: { output: 'Success' }, 
+          name: 'Test Result', 
+          description: null 
+        } 
+      };
       
       service.getResult(resultId).subscribe(response => {
         expect(response).toEqual(mockResponse);
@@ -257,8 +365,8 @@ describe('AsyncTaskService', () => {
       const resultId = 1;
       const name = 'Updated Result';
       const description = 'Updated Description';
-      const mockResponse: Response<any> = { 
-        object: { id: resultId, name: name, description: description } 
+      const mockResponse: Response<ResultReference> = { 
+        object: { id: resultId, run_id: 2, name: name, description: description } 
       };
       
       service.updateResult(resultId, name, description).subscribe(response => {
@@ -273,8 +381,8 @@ describe('AsyncTaskService', () => {
     it('should update a result with only description', () => {
       const resultId = 1;
       const description = 'Updated Description';
-      const mockResponse: Response<any> = { 
-        object: { id: resultId, description: description } 
+      const mockResponse: Response<ResultReference> = { 
+        object: { id: resultId, run_id: 2, name: null, description: description } 
       };
       
       service.updateResult(resultId, undefined, description).subscribe(response => {

@@ -2,6 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { CollectionResponse, Response } from '../models/response';
+import { 
+  Input, 
+  InputReference, 
+  InputSubmission, 
+  Result, 
+  ResultReference, 
+  Run 
+} from '../models/asynctask';
 
 /**
  * Service for interacting with the Async Task API
@@ -40,24 +48,24 @@ export class AsyncTaskService {
   /**
    * Get all inputs
    */
-  getInputs(): Observable<CollectionResponse<any>> {
-    return this.http.get<CollectionResponse<any>>(`${this.baseUrl}/inputs`);
+  getInputs(): Observable<CollectionResponse<InputReference>> {
+    return this.http.get<CollectionResponse<InputReference>>(`${this.baseUrl}/inputs`);
   }
 
   /**
    * Create a new input
    * @param inputSubmission - the input data to submit
    */
-  addInput(inputSubmission: any): Observable<Response<any>> {
-    return this.http.post<Response<any>>(`${this.baseUrl}/inputs`, inputSubmission);
+  addInput(inputSubmission: InputSubmission): Observable<Response<Input>> {
+    return this.http.post<Response<Input>>(`${this.baseUrl}/inputs`, inputSubmission);
   }
 
   /**
    * Get an input by its ID
    * @param inputId - the input ID
    */
-  getInput(inputId: number): Observable<Response<any>> {
-    return this.http.get<Response<any>>(`${this.baseUrl}/inputs/${inputId}`);
+  getInput(inputId: number): Observable<Response<Input>> {
+    return this.http.get<Response<Input>>(`${this.baseUrl}/inputs/${inputId}`);
   }
 
   /**
@@ -66,7 +74,7 @@ export class AsyncTaskService {
    * @param name - optional new name
    * @param description - optional new description
    */
-  updateInput(inputId: number, name?: string, description?: string): Observable<Response<any>> {
+  updateInput(inputId: number, name?: string, description?: string): Observable<Response<InputReference>> {
     let url = `${this.baseUrl}/inputs/${inputId}?`;
     if (name !== undefined) {
       url += `name=${name}&`;
@@ -74,7 +82,7 @@ export class AsyncTaskService {
     if (description !== undefined) {
       url += `description=${description}`;
     }
-    return this.http.patch<Response<any>>(url);
+    return this.http.patch<Response<InputReference>>(url, null);
   }
 
   // Run methods
@@ -83,12 +91,12 @@ export class AsyncTaskService {
    * Get all runs visible to a user
    * @param workflowId - optional workflow ID filter
    */
-  getRuns(workflowId?: string): Observable<CollectionResponse<any>> {
+  getRuns(workflowId?: string): Observable<CollectionResponse<Run>> {
     let url = `${this.baseUrl}/runs`;
     if (workflowId) {
       url += `?workflow_id=${workflowId}`;
     }
-    return this.http.get<CollectionResponse<any>>(url);
+    return this.http.get<CollectionResponse<Run>>(url);
   }
 
   /**
@@ -96,43 +104,43 @@ export class AsyncTaskService {
    * @param inputId - optional input ID
    * @param inputSubmission - optional input submission data
    */
-  createRun(inputId?: number, inputSubmission?: any): Observable<Response<any>> {
+  createRun(inputId?: number, inputSubmission?: InputSubmission): Observable<Response<Run>> {
     let url = `${this.baseUrl}/runs`;
     if (inputId !== undefined) {
       url += `?input_id=${inputId}`;
     }
-    return this.http.post<Response<any>>(url, inputSubmission || null);
+    return this.http.post<Response<Run>>(url, inputSubmission || null);
   }
 
   /**
    * Stream run events
    */
-  getRunEvents(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/runs/events`);
+  getRunEvents(): Observable<Run> {
+    return this.http.get<Run>(`${this.baseUrl}/runs/events`);
   }
 
   /**
    * Get a run by its ID
    * @param runId - the run ID
    */
-  getRun(runId: number): Observable<Response<any>> {
-    return this.http.get<Response<any>>(`${this.baseUrl}/runs/${runId}`);
+  getRun(runId: number): Observable<Response<Run>> {
+    return this.http.get<Response<Run>>(`${this.baseUrl}/runs/${runId}`);
   }
 
   /**
    * Get a run's results by the run ID
    * @param runId - the run ID
    */
-  getRunResults(runId: number): Observable<Response<any>> {
-    return this.http.get<Response<any>>(`${this.baseUrl}/runs/${runId}/results`);
+  getRunResults(runId: number): Observable<Response<Result>> {
+    return this.http.get<Response<Result>>(`${this.baseUrl}/runs/${runId}/results`);
   }
 
   /**
    * Get a run's inputs by the run ID
    * @param runId - the run ID
    */
-  getRunInputs(runId: number): Observable<Response<any>> {
-    return this.http.get<Response<any>>(`${this.baseUrl}/runs/${runId}/inputs`);
+  getRunInputs(runId: number): Observable<Response<Input>> {
+    return this.http.get<Response<Input>>(`${this.baseUrl}/runs/${runId}/inputs`);
   }
 
   // Result methods
@@ -140,17 +148,17 @@ export class AsyncTaskService {
   /**
    * Get all results
    */
-  getResults(): Observable<CollectionResponse<any>> {
-    return this.http.get<CollectionResponse<any>>(`${this.baseUrl}/results`);
+  getResults(): Observable<CollectionResponse<ResultReference>> {
+    return this.http.get<CollectionResponse<ResultReference>>(`${this.baseUrl}/results`);
   }
 
   /**
    * Get a result by its ID
    * @param resultId - the result ID
    */
-  getResult(resultId: number): Observable<Response<any>> {
+  getResult(resultId: number): Observable<Response<Result>> {
     try {
-      return this.http.get<Response<any>>(`${this.baseUrl}/results/${resultId}`);
+      return this.http.get<Response<Result>>(`${this.baseUrl}/results/${resultId}`);
     } catch (error) {
       return throwError(error);
     }
@@ -162,7 +170,7 @@ export class AsyncTaskService {
    * @param name - optional new name
    * @param description - optional new description
    */
-  updateResult(resultId: number, name?: string, description?: string): Observable<Response<any>> {
+  updateResult(resultId: number, name?: string, description?: string): Observable<Response<ResultReference>> {
     try {
       let url = `${this.baseUrl}/results/${resultId}?`;
       if (name !== undefined) {
@@ -171,7 +179,7 @@ export class AsyncTaskService {
       if (description !== undefined) {
         url += `description=${description}`;
       }
-      return this.http.patch<Response<any>>(url);
+      return this.http.patch<Response<ResultReference>>(url, null);
     } catch (error) {
       return throwError(error);
     }
