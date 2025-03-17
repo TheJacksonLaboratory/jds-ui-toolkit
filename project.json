@@ -97,6 +97,12 @@
         "port": 4200,
         "spa": true
       }
+    },
+    "local-registry": {
+        "executor": "@nx/js:verdaccio",
+        "options": {
+            "port": 4873
+        }
     }
   }
 }

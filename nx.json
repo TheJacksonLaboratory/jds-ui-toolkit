@@ -94,6 +94,12 @@
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true
+    },
+    "version": {
+      "generatorOptions": {
+        "currentVersionResolver": "registry"
+      },
+      "preVersionCommand": "nx run-many --target=build --all"
     }
   },
   "tasksRunnerOptions": {
