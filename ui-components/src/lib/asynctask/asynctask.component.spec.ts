@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ShowcaseAsyncTasksComponent } from './showcase-async-tasks.component';
-import { AsyncTaskFacade } from '@jax-data-science-demo/ui-components';
+import { AsyncTaskComponent } from './asynctask.component';
+import { AsyncTaskFacade } from './asynctask.facade';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { of } from 'rxjs';
 
@@ -11,20 +11,22 @@ const mockAsyncTaskFacade = {
   addTask: jest.fn(),
 };
 
-describe('ShowcaseAsyncTasksComponent', () => {
-  let component: ShowcaseAsyncTasksComponent;
-  let fixture: ComponentFixture<ShowcaseAsyncTasksComponent>;
+describe('AsyncTaskComponent', () => {
+  let component: AsyncTaskComponent;
+  let fixture: ComponentFixture<AsyncTaskComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShowcaseAsyncTasksComponent],
+      imports: [
+        AsyncTaskComponent,
+      ],
       providers: [
         provideHttpClient(withFetch()), // Modern approach for HTTP in tests
         { provide: AsyncTaskFacade, useValue: mockAsyncTaskFacade },
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ShowcaseAsyncTasksComponent);
+    fixture = TestBed.createComponent(AsyncTaskComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
