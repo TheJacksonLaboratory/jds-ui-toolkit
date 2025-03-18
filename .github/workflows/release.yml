@@ -35,6 +35,18 @@ jobs:
         run: npx nx affected -t build --base=origin/main
         shell: bash
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
       - name: Publish packages
         run: npx nx release publish
         shell: bash
