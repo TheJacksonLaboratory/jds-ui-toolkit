@@ -36,7 +36,7 @@ jobs:
         shell: bash
 
       - name: Publish packages
-        run: npx nx release publish --skip-build
+        run: npx nx release publish --base=origin/main --head=HEAD
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
