@@ -32,7 +32,7 @@ jobs:
         shell: bash
 
       - name: Build affected
-        run: npx nx affected -t build --base=origin/main --head=HEAD
+        run: npx nx run-many --target=build --all --base=origin/main --head=HEAD
         shell: bash
 
       - name: Publish packages
