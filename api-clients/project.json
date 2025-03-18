@@ -34,7 +34,7 @@
     },
     "nx-release-publish": {
       "options":{
-        "packageRoot": "dist/libs/api-clients"
+        "packageRoot": "dist/api-clients"
       }
     }
   }
