@@ -10,7 +10,9 @@ import {
   ResultReference, 
   Run 
 } from '../models/asynctask';
-import { fetchEventSource, FatalError, RetriableError } from '@microsoft/fetch-event-source';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { FatalError, RetriableError } from '../classes/error-types';
+
 
 /**
  * Service for interacting with the Async Task API
