@@ -32,11 +32,11 @@ jobs:
         shell: bash
 
       - name: Build affected
-        run: npx nx affected -t build
+        run: npx nx run-many --target=build --all
         shell: bash
 
       - name: Publish packages
-        run: npx nx release publish --skip-build
+        run: npx nx release publish
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}

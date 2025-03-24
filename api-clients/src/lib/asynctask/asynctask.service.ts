@@ -10,6 +10,9 @@ import {
   ResultReference, 
   Run 
 } from '../models/asynctask';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { FatalError, RetriableError } from '../classes/error-types';
+
 
 /**
  * Service for interacting with the Async Task API
@@ -113,10 +116,59 @@ export class AsyncTaskService {
   }
 
   /**
-   * Stream run events
+   * Stream run events using server-sent events (SSE)
+   * @returns Observable that emits Run objects as they arrive from the server
    */
   getRunEvents(): Observable<Run> {
-    return this.http.get<Run>(`${this.baseUrl}/runs/events`);
+    return new Observable<Run>(observer => {
+      const controller = new AbortController();
+      
+      fetchEventSource(`${this.baseUrl}/runs/events`, {
+        method: 'GET',
+        async onopen(res) {
+          const contentType = res.headers.get('content-type');
+          if (!contentType?.startsWith('text/event-stream')) {
+            throw new FatalError(`Expected content-type to be text/event-stream, Actual: ${contentType}`);
+          }
+          if (res.ok && res.status === 200) {
+            console.log('Run events stream opened');
+            return; // Connection established successfully
+          }
+          if (res.status >= 400 && res.status < 500 && res.status !== 429) {
+            throw new FatalError(`Failed to open run events stream: ${res.status} ${res.statusText}`);
+          }
+          // Any other status will be retried automatically
+          throw new RetriableError('Retrying connection to run events stream');
+        },
+        onclose() {
+          console.log('Run events stream closed');
+          observer.complete();
+        },
+        onerror(error) {
+          if (error instanceof FatalError) {
+            observer.error(error);
+            throw error; // Rethrow to stop the operation
+          } else {
+            observer.error(error);
+            // Don't rethrow retriable errors to allow the library to retry
+          }
+        },
+        onmessage(event) {
+          try {
+            const runData = JSON.parse(event.data) as Run;
+            observer.next(runData);
+          } catch (error) {
+            observer.error(new Error(`Failed to parse run event data: ${error}`));
+          }
+        },
+        signal: controller.signal
+      });
+
+      // Return cleanup function
+      return () => {
+        controller.abort();
+      };
+    });
   }
 
   /**
