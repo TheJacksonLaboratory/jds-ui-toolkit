@@ -63,12 +63,6 @@ export class AsyncTaskFacade {
    */
   openAsyncTaskEventListener(): void {
     console.log("creates listener to the API's server sent events endpoint");
-
-    this.asyncTaskService.getRuns().subscribe((tasks) => {
-      tasks.data.forEach((task) => {
-        this.addTask(task);
-      });
-    });
   }
 
   addTask(task: RunInput): void {

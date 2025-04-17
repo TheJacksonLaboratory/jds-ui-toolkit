@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 const mockAsyncTaskFacade = {
   getTasks$: jest.fn().mockReturnValue(of(null)),
   openAsyncTaskEventListener: jest.fn(),
+  fetchAsyncTasks: jest.fn(),
   addTask: jest.fn(),
 };
 

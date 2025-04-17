@@ -55,7 +55,7 @@ export class AsyncTaskComponent implements OnInit {
 
     // open server sent events streaming on currently running tasks
     // // TODO: [GIK 4/16/2025] SSE handling to be implemented in IS-75
-    // this.asyncTaskFacade.openAsyncTaskEventListener();
+    this.asyncTaskFacade.openAsyncTaskEventListener();
 
     // subscribe to task updates
     this.asyncTaskFacade.getTasks$().subscribe(

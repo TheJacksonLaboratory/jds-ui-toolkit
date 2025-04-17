@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 
 // Create mock for AsyncTaskService
 const mockAsyncTaskService = {
+  setBaseUrl: jest.fn(),
   getRuns: jest.fn().mockReturnValue(of(null)),
   getRunEvents: jest.fn().mockReturnValue(of(null)),
   addTask: jest.fn().mockReturnValue(of(null)),
