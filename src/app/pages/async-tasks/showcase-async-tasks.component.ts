@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AsyncTaskComponent } from '@jax-data-science-demo/ui-components';
+import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science-demo/ui-components';
 
 @Component({
   selector: 'app-showcase-async-tasks',
@@ -10,4 +10,12 @@ import { AsyncTaskComponent } from '@jax-data-science-demo/ui-components';
   styleUrl: './showcase-async-tasks.component.css',
   standalone: true
 })
-export class ShowcaseAsyncTasksComponent {}
+export class ShowcaseAsyncTasksComponent {
+  tableConfiguration: IAsyncTableConfig = {
+    isExpandable: true,
+    rowsPerPage: 5,
+    isPaginated: true,
+    isStriped: true,
+    showActions: true
+  };
+}

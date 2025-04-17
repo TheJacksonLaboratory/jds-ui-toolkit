@@ -22,7 +22,7 @@ import { FatalError, RetriableError } from '../classes/error-types';
   providedIn: 'root'
 })
 export class AsyncTaskService {
-  private baseUrl = '/asynctask/api';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -34,8 +34,8 @@ export class AsyncTaskService {
     this.baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
     
     // Ensure the URL ends with the expected path
-    if (!this.baseUrl.endsWith('/asynctask/api')) {
-      this.baseUrl = `${this.baseUrl}/asynctask/api`;
+    if (!this.baseUrl.endsWith('/api')) {
+      this.baseUrl = `${this.baseUrl}/api`;
     }
   }
 
@@ -95,6 +95,7 @@ export class AsyncTaskService {
    * @param workflowId - optional workflow ID filter
    */
   getRuns(workflowId?: string): Observable<CollectionResponse<Run>> {
+
     let url = `${this.baseUrl}/runs`;
     if (workflowId) {
       url += `?workflow_id=${workflowId}`;

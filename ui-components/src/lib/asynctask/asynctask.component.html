@@ -1,26 +1,77 @@
-<!-- Tailwind CSS classes -->
-<div class="tw-flex-col">
+<div class="tw-flex-col tw-p-3 tw-bg-gray-100">
   <div class="tw-flex tw-justify-center tw-my-5">
-    <h3 class="tw-font-semibold">
-      Async Tasks
+    <h3 class="tw-font-semibold tw-w-full text-2xl">
+      Task Runs Tracking
     </h3>
   </div>
   <p-table
     [value]="tasks"
-    showGridlines
-    stripedRows>
-    <ng-template #header>
+    [paginator]="tableConfig.isPaginated"
+    [rows]="tableConfig.rowsPerPage"
+    [rowsPerPageOptions]="tableConfig.rowsPerPageOptions"
+    [expandedRowKeys]="expandedRows"
+    [stripedRows]="tableConfig.isStriped"
+    dataKey="id"
+    class="tw-text-sm"
+  >
+    <ng-template pTemplate="header">
       <tr>
-        <th class="tw-font-semibold">Task ID</th>
-        <th class="tw-font-semibold">Task Name</th>
-        <th class="tw-font-semibold">Task Status</th>
+        <th *ngIf="tableConfig.isExpandable" style="width: 3rem"></th>
+        <th class="tw-font-semibold tw-w-12">#</th>
+        <th class="tw-font-semibold tw-w-1/4">Name</th>
+        <th class="tw-font-semibold tw-w-1/3">Description</th>
+        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap">Run Initiated</th>
+        <th class="tw-font-semibold tw-w-1/12">Status</th>
+        <th class="tw-font-semibold tw-w-1/6">Actions</th>
       </tr>
     </ng-template>
-    <ng-template #body let-task>
+    <ng-template #body let-task let-i="rowIndex" let-expanded="expanded">
       <tr>
-        <td>{{ task.id }}</td>
-        <td>{{ task.name }}</td>
-        <td>{{ task.status }}</td>
+        <td *ngIf="tableConfig.isExpandable">
+          <p-button
+            [pRowToggler]="task"
+            styleClass="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+          </p-button>
+        </td>
+        <td class="tw-w-12 tw-text-center">{{ i + 1 }}</td>
+        <td class="tw-text-nowrap tw-w-1/5">{{ task.name }}</td>
+        <td class="tw-w-1/3">{{ task.description }}</td>
+        <td class="tw-w-1/6"></td>
+        <td class="tw-w-1/12">
+          <span
+            class="tw-p-2 tw-rounded-full tw-text-center tw-w-20 tw-text-xs"
+            [ngClass]="{
+              'tw-text-purple-800 tw-bg-purple-100': task.status == 1,
+              'tw-text-green-800 tw-bg-green-100': task.status == 2,
+              'tw-text-red-800 tw-bg-red-100': task.status == 3,
+              'tw-text-gray-800 tw-bg-gray-100': task.status == 4,
+              'tw-text-orange-800 tw-bg-orange-100': task.status == 5,
+              'tw-text-yellow-800 tw-bg-yellow-100': task.status == 6,
+              'tw-text-blue-800 tw-bg-blue-100': task.status == 7
+            }">
+            {{ WorkflowExecutionStatus[task.status] }}
+          </span>
+        </td>
+        <td class="tw-w-1/6">
+          <span class="tw-text-blue-900 tw-text-sm tw-mx-2">
+            <i class="pi pi-pencil"></i> Edit Run
+          </span>
+          <span class="tw-text-red-900 tw-text-sm tw-mx-2">
+            <i class="pi pi-trash"></i> Delete
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-task *ngIf="tableConfig.isExpandable">
+      <tr>
+        <!-- <td colspan="7"> -->
+        <td [attr.colspan]="tableConfig.isExpandable ? 7 : 6">
+          <div class="tw-p-4 tw-bg-gray-50">
+            <h4 class="tw-font-medium tw-mb-2">{{ task.name }} details</h4>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>

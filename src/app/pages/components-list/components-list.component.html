@@ -2,19 +2,23 @@
   <p-table class="tw-w-full" [value]="uiComponents" showGridlines stripedRows>
     <ng-template pTemplate="header">
       <tr>
-        <th class="tw-w-2/12 tw-font-semibold">Name</th>
-        <th class="tw-w-8/12 tw-font-semibold">Description</th>
-        <th class="tw-w-8/12 tw-font-semibold">Auth0 Required</th>
-        <th class="tw-w-2/12 tw-font-semibold"></th>
+        <th class="tw-w-1/6 tw-font-semibold">Name</th>
+        <th class="tw-w-1/2 tw-font-semibold">Description</th>
+        <th class="tw-w-1/6 tw-font-semibold">Auth0 Required</th>
+        <th class="tw-w-1/6 tw-font-semibold"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-component>
       <tr>
-        <td class="tw-w-2/12">{{ component.name }}</td>
-        <td class="tw-w-6/12">{{ component.description }}</td>
-        <td class="tw-w-2/12">{{ component.isAuthRequired }}</td>
-        <td class="tw w-2/12">
-          <a [routerLink]="component.route" class="pi pi-eye font-medium">view</a>
+        <td class="tw-w-1/6">{{ component.name }}</td>
+        <td class="tw-w-1/2">{{ component.description }}</td>
+        <td class="tw-w-1/6">{{ component.isAuthRequired }}</td>
+        <td class="tw-w-1/6">
+          <a [routerLink]="component.route">
+            <span class="tw-text-blue-900 tw-text-sm">
+              <i class="pi pi-cog tw-mx-1"></i> View
+            </span>
+          </a>
         </td>
       </tr>
     </ng-template>
