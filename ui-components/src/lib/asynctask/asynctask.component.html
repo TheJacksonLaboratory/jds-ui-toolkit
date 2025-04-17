@@ -42,13 +42,13 @@
           <span
             class="tw-p-2 tw-rounded-full tw-text-center tw-w-20 tw-text-xs"
             [ngClass]="{
-              'tw-text-purple-800 tw-bg-purple-100': task.status == 1,
-              'tw-text-green-800 tw-bg-green-100': task.status == 2,
-              'tw-text-red-800 tw-bg-red-100': task.status == 3,
-              'tw-text-gray-800 tw-bg-gray-100': task.status == 4,
-              'tw-text-orange-800 tw-bg-orange-100': task.status == 5,
-              'tw-text-yellow-800 tw-bg-yellow-100': task.status == 6,
-              'tw-text-blue-800 tw-bg-blue-100': task.status == 7
+              'tw-text-purple-800 tw-bg-purple-100': task.status === 1,
+              'tw-text-green-800 tw-bg-green-100': task.status === 2,
+              'tw-text-red-800 tw-bg-red-100': task.status === 3,
+              'tw-text-gray-800 tw-bg-gray-100': task.status === 4,
+              'tw-text-orange-800 tw-bg-orange-100': task.status === 5,
+              'tw-text-yellow-800 tw-bg-yellow-100': task.status === 6,
+              'tw-text-blue-800 tw-bg-blue-100': task.status === 7
             }">
             {{ WorkflowExecutionStatus[task.status] }}
           </span>
