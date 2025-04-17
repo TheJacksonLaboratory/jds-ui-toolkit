@@ -15,6 +15,7 @@ export class ShowcaseAsyncTasksComponent {
     isExpandable: true,
     rowsPerPage: 5,
     isPaginated: true,
+    rowsPerPageOptions: [5, 10, 25, 50],
     isStriped: true,
     showActions: true
   };
