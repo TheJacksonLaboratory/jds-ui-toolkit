@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AsyncTasksComponent } from '@jax-data-science-demo/ui-components';
+import { AsyncTasksComponent } from '@jds-angular/components'
 
 @Component({
   selector: 'app-showcase-async-tasks',

@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
-import Nora from '@primeng/themes/nora';
+import { JdsPreset } from '@jds-angular/theme';
 
 import { appRoutes } from './app.routes';
 
@@ -19,12 +19,13 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Nora,
+        preset: JdsPreset,
         options: {
           cssLayer: {
             name: 'primeng',
-            order: 'tailwind-base, primeng, tailwind-utilities'
-          }
+            order: 'primeng, tailwind-base, tailwind-utilities'
+          },
+          darkModeSelector: '.my-app-dark'
         }
       }
     }),

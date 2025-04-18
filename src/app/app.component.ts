@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-// components
-import { HeaderComponent } from './components/header/header.component';
+import { NavbarComponent } from '@jds-angular/components';
 
 @Component({
   imports: [
     RouterModule,
-    HeaderComponent
+    NavbarComponent
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,5 +13,5 @@ import { HeaderComponent } from './components/header/header.component';
   standalone: true,
 })
 export class AppComponent {
-  title = 'jds-ui-components';
+  title = 'jds-angular';
 }

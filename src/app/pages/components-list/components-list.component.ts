@@ -30,13 +30,13 @@ export class ComponentsListComponent implements OnInit {
     return [
       {
         name: 'AsyncTasks',
-        description: 'AsyncTasks component description',
+        description: 'AsyncTasks components description',
         isAuthRequired: true,
         route: 'async-tasks'
       },
       {
         name: 'Authentication',
-        description: 'Authentication component description',
+        description: 'Authentication components description',
         isAuthRequired: false,
         route: 'authentication'
       }
