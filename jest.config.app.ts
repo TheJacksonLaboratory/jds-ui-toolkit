@@ -1,8 +1,8 @@
 export default {
-  displayName: 'jds-ui-components',
+  displayName: 'jds-angular',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/jds-ui-components',
+  coverageDirectory: './coverage/jds-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -1,5 +1,5 @@
 {
-  "name": "@jax-data-science-demo/api-clients",
+  "name": "@jds-angular/api-clients",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/core": "^19.1.0",

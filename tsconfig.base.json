@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jax-data-science-demo/api-clients": ["api-clients/src/index.ts"],
-      "@jax-data-science-demo/ui-components": ["ui-components/src/index.ts"]
+      "@jds-angular/api-clients": ["api-clients/src/index.ts"],
+      "@jds-angular/components": ["components/src/index.ts"],
+      "@jds-angular/theme": ["theme/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

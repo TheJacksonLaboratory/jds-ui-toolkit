@@ -1,4 +1,4 @@
-# JdsUiComponents
+# JDS Angular
 # UNDER CONSTRUCTION!!!
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
@@ -35,9 +35,9 @@ You must run this before running any other commands.
 ```bash
   npm run build
   
-  nx run jds-ui-components:build:production --statsJson
+  nx run jds-angular:build:production --statsJson
   
-  webpack-bundle-analyzer dist/jds-ui-components/stats.json
+  webpack-bundle-analyzer dist/jds-angular/stats.json
 ```
 
 To start the showcase application, use:
@@ -73,7 +73,7 @@ You should not add new projects to the monorepo workspace. New UI components sho
 be added to the **@jds/ui-components** or **jds/api-clients** as shown below:
 
 ```angular2html
-npx nx g @nrwl/angular:component --path=ui-components/ my-new-component --directory=ui-components
+npx nx g @nrwl/angular:component --path=components/ my-new-component --directory=components
 ```
 
 The showcase application is to 
@@ -123,19 +123,19 @@ You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx 
 To run the dev server for your app, use:
 
 ```sh
-npx nx serve jds-ui-components
+npx nx serve jds-angular
 ```
 
 To create a production bundle:
 
 ```sh
-npx nx build jds-ui-components
+npx nx build jds-angular
 ```
 
 To see all available targets to run for a project, run:
 
 ```sh
-npx nx show project jds-ui-components
+npx nx show project jds-angular
 ```
 
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
