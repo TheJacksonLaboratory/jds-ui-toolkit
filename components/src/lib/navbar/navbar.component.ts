@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
 // Auth0
 import { AuthService } from '@auth0/auth0-angular';
 import { MenuItem } from 'primeng/api';
@@ -20,15 +20,22 @@ import { MenubarModule } from 'primeng/menubar';
 export class NavbarComponent implements OnInit {
 
   @Input() authentication: boolean = false;
-  @Input() title: string = "";
+  @Input() title: string = "JDS Angular Application";
   @Input() logo: string = "";
   @Input() items: MenuItem[] = [];
 
-  constructor(public auth: AuthService) { }
+  private authService: AuthService | null = null;
+
+  constructor(public injector: Injector) { }
 
   /**
-   * OnInit(): provides the components with default configuration options
+   * Lifecycle hook that is called after the component is initialized.
+   * If authentication is enabled, retrieves the `AuthService` instance
+   * from the Angular `Injector` to handle authentication-related functionality.
    */
   ngOnInit() {
+    if (this.authentication) {
+      this.authService = this.injector.get(AuthService);
+    }
   }
 }
