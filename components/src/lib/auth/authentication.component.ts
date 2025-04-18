@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 // Auth0
 import { AuthService } from '@auth0/auth0-angular';
-// PrimeNG
-import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'lib-jds-auth',
-  imports: [CommonModule, ButtonModule, TableModule],
+  imports: [CommonModule, ButtonModule],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css',
   standalone: true
@@ -20,7 +18,7 @@ export class AuthenticationComponent implements OnInit {
   constructor(public auth: AuthService) { }
 
   /**
-   * OnInit(): provides the component with default configuration options
+   * OnInit(): provides the components with default configuration options
    */
   ngOnInit() {
     this.configLogin = {
@@ -37,14 +35,14 @@ export class AuthenticationComponent implements OnInit {
   }
 
   /**
-   * Login parameters are passed as component configuration options
+   * Login parameters are passed as components configuration options
    */
   login() {
     this.auth.loginWithRedirect(this.configLogin);
   }
 
   /**
-   * Logout parameters are passed as component configuration options
+   * Logout parameters are passed as components configuration options
    */
   logout() {
     this.auth.logout(this.configLogout);

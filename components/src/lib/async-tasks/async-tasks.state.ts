@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 // models
-import { IAsyncTask } from '@jax-data-science-demo/api-clients';
+import { IAsyncTask } from '@jds-angular/api-clients';
 
 
 @Injectable({

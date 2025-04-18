@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { AsyncTasksState } from './async-tasks.state';
 
 // models
-import { IAsyncTask } from '@jax-data-science-demo/api-clients';
+import { IAsyncTask } from '@jds-angular/api-clients';
 
 // services
-import { AsyncTasksService } from '@jax-data-science-demo/api-clients';
+import { AsyncTasksService } from '@jds-angular/api-clients';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 // facades
 import { AsyncTasksFacade } from './async-tasks.facade';
 // models
-import { IAsyncTask } from '@jax-data-science-demo/api-clients';
+import { IAsyncTask } from '@jds-angular/api-clients';
 
 @Component({
   selector: 'lib-jds-async-tasks',
