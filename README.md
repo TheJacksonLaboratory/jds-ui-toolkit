@@ -1,29 +1,35 @@
 # JdsUiComponents
-# UNDER CONSTRUCTION!!!
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+
+<a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
+    <img src="public/JAX-logo-helix-only-blue.png" width="45">
+</a> 
 
 ## Overview
 
-The JdsUiComponents workspace is a development environment engineered to streamline 
-the creation, testing and deployment of shared UI components and libraries across 
-the JAX Data Science community. Built on Angular's architecture, this workspace 
-leverages modern build tools and development practices to optimize the component 
-development lifecycle.
+The *JAX Data Science UI Components* workspace is a development environment that has the purpose to 
+streamline the creation, testing and deployment of shared UI components and libraries across 
+the JAX Data Science community. The workspace leverages modern development practices and build 
+tools, which enables code reuse, reduces duplication, and ensures architectural UI consistency.
 
-The platform implements a monorepo structure using the Nx build system. 
-By centralizing component development, the workspace facilitates code reuse, 
-reduces duplication, and ensures architectural consistency across all JAX 
-Data Science applications.
+The workspace implements a monorepo structure using the Nx build system with one 
+root application and two libraries - *@jax-data-science/ui-components* 
+and *@jax-data-science/api-cleints*.
 
 Maintained by the JAX Data Science UX/UI team, the workspace undergoes continuous 
-updates to leverage the latest stable versions of core technologies, including Angular, 
-TypeScript, RxJS, and associated testing frameworks. This commitment to technological 
+updates to leverage the latest stable core technologies. Our commitment to technological 
 currency ensures that shared components benefit from the latest performance 
-improvements, security patches, and feature enhancements while maintaining 
-backward compatibility.
-
+improvements, security patches, and feature enhancements while keeping backward compatibility.
 
 ## Setup
+- Clone the repository from [GitHub](https://github.com/TheJacksonLaboratory/jds-ui-components)
+
+
+- Install the dependencies using [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm).
+```bash
+    npm install
+```
+
+- Build the 
 
 Clone the repository, move to a branch and install the dependencies:
 

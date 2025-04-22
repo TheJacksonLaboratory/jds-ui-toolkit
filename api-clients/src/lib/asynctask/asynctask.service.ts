@@ -95,6 +95,7 @@ export class AsyncTaskService {
    * @param workflowId - optional workflow ID filter
    */
   getRuns(workflowId?: string): Observable<CollectionResponse<Run>> {
+
     let url = `${this.baseUrl}/runs`;
     if (workflowId) {
       url += `?workflow_id=${workflowId}`;

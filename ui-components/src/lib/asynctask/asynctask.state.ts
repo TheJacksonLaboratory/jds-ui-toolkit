@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 // models
-import { Run } from '@jax-data-science-demo/api-clients';
+import { RunInput } from './asynctask.model';
 
 /**
  * State management service for async tasks
@@ -14,14 +14,14 @@ import { Run } from '@jax-data-science-demo/api-clients';
   providedIn: 'root'
 })
 export class AsyncTaskState {
-  private tasks$: BehaviorSubject<Run[]> = new BehaviorSubject<Run[]>([]);
+  private tasks$: BehaviorSubject<RunInput[]> = new BehaviorSubject<RunInput[]>([]);
 
   /**
    * Sets the complete list of task statuses
    * 
    * @param tasks Array of Run objects representing current tasks
    */
-  setTasks(tasks: Run[]): void {
+  setTasks(tasks: RunInput[]): void {
     this.tasks$.next(tasks);
   }
 
@@ -30,21 +30,18 @@ export class AsyncTaskState {
    * 
    * @returns Observable of Run array
    */
-  getTasks$(): Observable<Run[]> {
+  getTasks$(): Observable<RunInput[]> {
     return this.tasks$.asObservable();
   }
 
   /**
-   * Adds new task or updates existing task status
+   * Adds new task to the tasks list or updates an existing task's status.
    * 
-   * This method adds a new task only when the task does not exist,
-   * otherwise it updates the existing task's status.
-   *
-   * @param task Run object to be added or updated
+   * This method adds a new task only when the task does not alr
    */
-  addTask(task: Run): void {
+  addTask(task: RunInput): void {
     const currentTasks = this.tasks$.getValue();
-    const index = currentTasks.findIndex(t => t.id === task.id);
+    const index = currentTasks.findIndex(t => t.name === task.name);
 
     if(index !== -1) {
       // update the task entry in case it already exists
