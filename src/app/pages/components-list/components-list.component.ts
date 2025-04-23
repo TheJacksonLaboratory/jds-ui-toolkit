@@ -32,12 +32,14 @@ export class ComponentsListComponent implements OnInit {
         name: 'AsyncTasks',
         description: 'AsyncTasks components description',
         isAuthRequired: true,
+        status: "In Progress",
         route: 'async-tasks'
       },
       {
         name: 'Authentication',
         description: 'Authentication components description',
         isAuthRequired: false,
+        status: "In Progress",
         route: 'authentication'
       }
     ];

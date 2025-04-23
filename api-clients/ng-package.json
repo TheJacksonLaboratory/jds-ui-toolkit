@@ -3,5 +3,9 @@
   "dest": "../dist/api-clients",
   "lib": {
     "entryFile": "src/index.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "@microsoft/fetch-event-source",
+    "rxjs"
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@jds-angular/components",
+  "name": "@jax-data-science/components",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^19.1.0",
@@ -7,8 +7,8 @@
     "@nx/angular": "^20.4.2",
     "@auth0/auth0-angular": "^2.2.3",
     "primeng": "^19.0.6",
-    "rxjs": "~7.8.0",
-    "@jax-data-science-demo/api-clients": "^0.0.1"
+    "rxjs": "^7.8.0",
+    "@jax-data-science/api-clients": "^0.0.2-8"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.2"
