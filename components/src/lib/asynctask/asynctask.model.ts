@@ -2,7 +2,7 @@
  * Types specific to the AsyncTasks UI component
  */
 
-import { WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 
 /**
  * RunInput interface combines Run and InputReference properties

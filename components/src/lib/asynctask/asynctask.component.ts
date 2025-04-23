@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
 import { RunInput } from './asynctask.model';
-import { WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 
 /**
  * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it could be exported to the parent:

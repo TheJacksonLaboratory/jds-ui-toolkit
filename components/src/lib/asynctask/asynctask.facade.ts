@@ -9,7 +9,7 @@ import { AsyncTaskState } from './asynctask.state';
 import { RunInput } from './asynctask.model';
 
 // services
-import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService } from '@jax-data-science/api-clients';
 
 @Injectable({
   providedIn: 'root'
