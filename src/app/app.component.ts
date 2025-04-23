@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from '@jds-angular/components';
+import { NavbarComponent } from '@jax-data-science/components';
 
 @Component({
   imports: [
@@ -13,5 +13,5 @@ import { NavbarComponent } from '@jds-angular/components';
   standalone: true,
 })
 export class AppComponent {
-  title = 'jds-angular';
+  title = 'jax-data-science';
 }

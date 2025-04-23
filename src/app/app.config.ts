@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
-import { JdsPreset } from '@jds-angular/theme';
+import { JdsPreset } from '@jax-data-science/theme';
 
 import { appRoutes } from './app.routes';
 

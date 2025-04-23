@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ButtonModule } from 'primeng/button';
 
-import { AuthenticationComponent} from '@jds-angular/components';
+import { AuthenticationComponent} from '@jax-data-science/components';
 
 @Component({
   selector: 'app-showcase-auth',
