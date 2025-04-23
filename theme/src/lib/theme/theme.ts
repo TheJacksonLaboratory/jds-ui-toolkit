@@ -8,6 +8,16 @@ const JdsPreset = definePreset(Lara, {
   primitive: primitive,
   semantic: semantic,
   components: components,
-});
+},
+  `
+  :root {
+    --submenu-text-color: #fffff;
+  }
+
+  .p-menubar-submenu .p-menubar-item-content {
+    color: black;
+    }
+   `
+);
 
 export {JdsPreset};
