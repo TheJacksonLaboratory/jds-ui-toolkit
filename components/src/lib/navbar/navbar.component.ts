@@ -22,7 +22,23 @@ export class NavbarComponent implements OnInit {
   @Input() authentication: boolean = false;
   @Input() title: string = "JDS Angular Application";
   @Input() logo: string = "";
-  @Input() items: MenuItem[] = [];
+  @Input() items: MenuItem[] = [
+    {label: "Explore", icon: "", items: [
+        {
+          label: "News",
+          url: "www.google.com/news",
+          styleClass: "text-black"
+        },
+        {
+          label: "Search",
+          routerLink: "/search",
+          styleClass: "text-black"
+        }
+      ]
+    },
+    {label: "Components", icon: ""},
+    {label: "Contact", icon: "" }
+  ];
 
   private authService: AuthService | null = null;
 
