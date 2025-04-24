@@ -12,8 +12,8 @@ import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@aut
   standalone: true
 })
 export class AuthenticationComponent implements OnInit {
-  @Input() configLogin: RedirectLoginOptions<AppState>;
-  @Input() configLogout: LogoutOptions;
+  @Input() configLogin: RedirectLoginOptions<AppState>= {};
+  @Input() configLogout: LogoutOptions = {};
 
   constructor(public auth: AuthService) { }
 
