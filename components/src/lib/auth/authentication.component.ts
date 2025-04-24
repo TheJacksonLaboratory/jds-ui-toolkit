@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 // Auth0
-import { AuthService } from '@auth0/auth0-angular';
+import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'lib-jds-auth',
@@ -12,8 +12,8 @@ import { AuthService } from '@auth0/auth0-angular';
   standalone: true
 })
 export class AuthenticationComponent implements OnInit {
-  @Input() configLogin: any;
-  @Input() configLogout: any;
+  @Input() configLogin: RedirectLoginOptions<AppState>;
+  @Input() configLogout: LogoutOptions;
 
   constructor(public auth: AuthService) { }
 

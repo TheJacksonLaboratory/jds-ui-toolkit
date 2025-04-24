@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 // states
 import { AsyncTaskState } from './asynctask.state';
@@ -25,12 +25,12 @@ export class AsyncTaskFacade {
   fetchAsyncTasks(): void {
     forkJoin({
       runs: this.asyncTaskService.getRuns().pipe(
-        catchError((error) => {
+        catchError(() => {
           return of({ data: [] }); // returns empty array
         })
       ),
       inputs: this.asyncTaskService.getInputs().pipe(
-        catchError((error) => {
+        catchError(() => {
           return of({ data: [] }); // returns empty array
         })
       )
