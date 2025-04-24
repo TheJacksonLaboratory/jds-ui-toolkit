@@ -19,9 +19,9 @@ import { MenubarModule } from 'primeng/menubar';
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() authentication: boolean = false;
-  @Input() title: string = "JDS Angular Application";
-  @Input() logo: string = "";
+  @Input() authentication = false;
+  @Input() title = "JDS Angular Application";
+  @Input() logo = "";
   @Input() items: MenuItem[] = [
     {label: "Explore", icon: "", items: [
         {
