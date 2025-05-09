@@ -5,7 +5,8 @@ import { provideRouter } from '@angular/router';
 import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
-import Nora from '@primeng/themes/nora';
+import Lara from '@primeng/themes/lara'
+import Aura from '@primeng/themes/aura'
 
 import { appRoutes } from './app.routes';
 
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Nora,
+        preset: Lara,
         options: {
           cssLayer: {
             name: 'primeng',

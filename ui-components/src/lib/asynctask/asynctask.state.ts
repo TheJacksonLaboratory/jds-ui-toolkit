@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { signal } from '@angular/core';
 
 // models
-import { RunInput } from './asynctask.model';
+import { Filter, RunInput } from './asynctask.model';
 
 /**
  * State management service for async tasks
@@ -15,6 +16,12 @@ import { RunInput } from './asynctask.model';
 })
 export class AsyncTaskState {
   private tasks$: BehaviorSubject<RunInput[]> = new BehaviorSubject<RunInput[]>([]);
+  // activeFilters = signal<any[]>([]);
+  private filters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
+  private activeFilters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
+
+  descriptionFilterOptions = signal<string[]>([]);
+  descriptionFilter = signal<string[]>([]);
 
   /**
    * Sets the complete list of task statuses
@@ -51,5 +58,21 @@ export class AsyncTaskState {
       // add task entry in case it does not exist
       this.tasks$.next([...currentTasks, task]);
     }
+  }
+
+  getFilters$(): Observable<Filter[]> {
+    return this.filters$.asObservable();
+  }
+
+  setFilters(filters: Filter[]): void {
+    this.filters$.next(filters);
+  }
+
+  getActiveFilters$(): Observable<Filter[]> {
+    return this.activeFilters$.asObservable();
+  }
+
+  setActiveFilters(activeFilters: Filter[]): void {
+    this.activeFilters$.next(activeFilters);
   }
 }

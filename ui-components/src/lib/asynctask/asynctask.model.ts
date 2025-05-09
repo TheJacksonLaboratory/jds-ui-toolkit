@@ -28,3 +28,14 @@ export interface RunInput {
    */
   status: WorkflowExecutionStatus;
 }
+
+export interface Filter {
+  name: string;
+  options: FilterOption[];
+  selectedOptions: FilterOption[];
+}
+
+export interface FilterOption {
+  label: string;
+  value: boolean;
+}
