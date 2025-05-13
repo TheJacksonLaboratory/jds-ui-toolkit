@@ -12,6 +12,7 @@
         class="tw-mr-2 tw-h-10"
       />
       <p-button icon="pi pi-filter"
+                *ngIf="tableConfig.allowFilters"
                 [rounded]="true"
                 [text]="true"
                 (onClick)="openFilterPanel()"
@@ -52,7 +53,7 @@
     [rowsPerPageOptions]="tableConfig.rowsPerPageOptions"
     [expandedRowKeys]="expandedRows"
     [stripedRows]="tableConfig.isStriped"
-    [globalFilterFields]="['name', 'description', 'status']"
+    [globalFilterFields]="['name', 'description']"
     styleClass="async-task-table"
     dataKey="id"
     class="tw-text-sm"

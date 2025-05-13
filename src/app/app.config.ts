@@ -6,7 +6,6 @@ import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara'
-import Aura from '@primeng/themes/aura'
 
 import { appRoutes } from './app.routes';
 

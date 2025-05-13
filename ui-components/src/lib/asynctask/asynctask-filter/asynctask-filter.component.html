@@ -1,7 +1,7 @@
 <div class="tw-flex tw-flex-col tw-p-3">
   <ng-container *ngIf="filters && filters.length">
     <ng-container *ngIf="activeFilters.length">
-      <div class="tw-flex tw-justify-between tw-items-center">
+      <div class="tw-flex tw-justify-between tw-items-center tw-mb-1">
         <h2>Applied Filters</h2>
         <p-button text="true"
                   (onClick)="clearAllFilters()"
@@ -37,8 +37,10 @@
                  [filter]="true"
                  [multiple]="true"
                  [checkbox]="true"
+                 [showToggleAll]="false"
+                 scrollHeight="500px"
                  [(ngModel)]="filter.selectedOptions"
-                 (onChange)="onFilterChange($event, filter)">
+                 (onChange)="onFilterChange()">
       </p-listbox>
     </p-panel>
   </ng-container>

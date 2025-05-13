@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 // states
 import { AsyncTaskState } from './asynctask.state';
@@ -10,6 +10,7 @@ import { Filter, RunInput } from './asynctask.model';
 
 // services
 import { AsyncTaskService, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { IFilterConfig } from './asynctask.component';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +51,6 @@ export class AsyncTaskFacade {
         });
 
         this.asyncTaskState.setTasks(runInputs);
-        this.setUpFilters(runInputs);
       },
       (error) => {
         // TODO: [GIK 4/16/2025] error handling will be implemented in IS-78
@@ -90,28 +90,13 @@ export class AsyncTaskFacade {
     this.asyncTaskState.setActiveFilters(filters);
   }
 
-  setUpFilters(tasks: RunInput[]): void {
+  /**
+   * Sets up filters for the AsyncTask table. Status is the only default filter. The rest are defined in the tableConfig.filterConfigs array.
+   * @param filterConfigs
+   */
+  setUpFilters(filterConfigs?: IFilterConfig[]): void {
     const filters: Filter[] = [];
-    // Descriptions
-    const descriptionFilter: Filter = {
-      name: 'Description',
-      options: [],
-      selectedOptions: [],
-    }
-    const uniqueDescriptions = new Set(
-      tasks.filter((task) =>
-            task.description !== null && task.description !== undefined
-        ).map((task) => task.description)
-    );
-    uniqueDescriptions.forEach((description) => {
-      if (description) {
-        descriptionFilter.options.push({
-          label: description,
-          value: false,
-        });
-      }
-    });
-    filters.push(descriptionFilter)
+
     // Status
     const statusFilter: Filter = {
       name: 'Status',
@@ -120,14 +105,31 @@ export class AsyncTaskFacade {
     }
     for (let i = 0; i < Object.values(WorkflowExecutionStatus).length/2; i++) {
       statusFilter.options.push({
-        label: Object.values(WorkflowExecutionStatus)[i] as string,
-        value: false,
+        label: Object.values(WorkflowExecutionStatus)[i] as string
       })
     }
     filters.push(statusFilter);
+
+    // Config filters
+    if (filterConfigs) {
+      filterConfigs.forEach(filterConfig => {
+        const filter: Filter = {
+          name: filterConfig.displayName,
+          options: filterConfig.filterOptions.map(option => ({label: option})),
+          selectedOptions: [],
+        }
+        filters.push(filter);
+      });
+    }
+
     this.asyncTaskState.setFilters(filters);
   }
 
+  /**
+   * Filters tasks based on the selected options in the filters.
+   * @param tasks
+   * @param filters
+   */
   filterTasks(tasks: RunInput[], filters: Filter[]) {
     return tasks.filter((task) => {
       for (const filter of filters) {
@@ -147,12 +149,21 @@ export class AsyncTaskFacade {
     });
   }
 
+  /**
+   * Removes a filter from the active filters list and clears its selected options.
+   * @param activeFilters
+   * @param filter
+   */
   removeFilter(activeFilters: Filter[], filter: Filter) {
     filter.selectedOptions = [];
-    const myActiveFilters = activeFilters.filter((f) => f.name !== filter.name);
-    this.setActiveFilters(myActiveFilters);
+    const newActiveFilters = activeFilters.filter((f) => f.name !== filter.name);
+    this.setActiveFilters(newActiveFilters);
   }
 
+  /**
+   * Clears all selected options in the filters and sets the active filters to an empty array.
+   * @param filters
+   */
   clearAllFilters(filters: Filter[]) {
     filters.forEach((filter) => {
       filter.selectedOptions = [];

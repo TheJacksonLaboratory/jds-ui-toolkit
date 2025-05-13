@@ -37,5 +37,5 @@ export interface Filter {
 
 export interface FilterOption {
   label: string;
-  value: boolean;
+  value?: string;
 }

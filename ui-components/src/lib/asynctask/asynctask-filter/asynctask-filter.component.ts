@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
-import { Listbox, ListboxChangeEvent, ListboxFilterEvent } from 'primeng/listbox';
+import { Listbox } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
 import { Filter, RunInput } from '../asynctask.model';
 import { AsyncTaskFacade } from '../asynctask.facade';
@@ -13,10 +12,6 @@ import { Chip } from 'primeng/chip';
   selector: 'lib-asynctask-filter',
   imports: [
     CommonModule,
-    Accordion,
-    AccordionContent,
-    AccordionHeader,
-    AccordionPanel,
     Listbox,
     FormsModule,
     Button,
@@ -29,10 +24,6 @@ import { Chip } from 'primeng/chip';
 export class AsyncTaskFilterComponent implements OnInit {
   @Input() tasks: RunInput[] = [];
   @Output() closeFilter = new EventEmitter();
-
-  // descriptionOptions: (string | null | undefined)[] = [];
-  descriptionOptions: { label: string; value: string }[] = [];
-  descriptionFilter: string[] = [];
 
   filters: Filter[] = [];
   activeFilters: Filter[] = [];
@@ -54,7 +45,7 @@ export class AsyncTaskFilterComponent implements OnInit {
     });
   }
 
-  onFilterChange(event: ListboxChangeEvent, filter: Filter) {
+  onFilterChange() {
     this.facade.setActiveFilters(
       this.filters.filter((value) => value.selectedOptions.length > 0)
     );
@@ -66,12 +57,5 @@ export class AsyncTaskFilterComponent implements OnInit {
 
   clearAllFilters() {
     this.facade.clearAllFilters(this.activeFilters);
-  }
-
-  applyFilters() {
-    this.facade.setActiveFilters(
-      this.filters.filter((value) => value.selectedOptions.length > 0)
-    );
-    this.closeFilter.emit();
   }
 }
