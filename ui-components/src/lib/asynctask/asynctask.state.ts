@@ -16,12 +16,9 @@ import { Filter, RunInput } from './asynctask.model';
 })
 export class AsyncTaskState {
   private tasks$: BehaviorSubject<RunInput[]> = new BehaviorSubject<RunInput[]>([]);
-  // activeFilters = signal<any[]>([]);
   private filters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
   private activeFilters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
 
-  descriptionFilterOptions = signal<string[]>([]);
-  descriptionFilter = signal<string[]>([]);
 
   /**
    * Sets the complete list of task statuses
