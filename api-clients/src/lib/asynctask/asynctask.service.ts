@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subscriber, throwError } from 'rxjs';
+
+import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source';
+// models
 import { CollectionResponse, Response } from '../models/response';
 import { 
   Input, 
@@ -10,7 +13,6 @@ import {
   ResultReference, 
   Run 
 } from '../models/asynctask';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { FatalError, RetriableError } from '../classes/error-types';
 
 
@@ -22,7 +24,7 @@ import { FatalError, RetriableError } from '../classes/error-types';
   providedIn: 'root'
 })
 export class AsyncTaskService {
-  private baseUrl = '/asynctask/api';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -34,8 +36,8 @@ export class AsyncTaskService {
     this.baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
     
     // Ensure the URL ends with the expected path
-    if (!this.baseUrl.endsWith('/asynctask/api')) {
-      this.baseUrl = `${this.baseUrl}/asynctask/api`;
+    if (!this.baseUrl.endsWith('/api')) {
+      this.baseUrl = `${this.baseUrl}/api`;
     }
   }
 
@@ -117,59 +119,79 @@ export class AsyncTaskService {
   }
 
   /**
-   * Stream run events using server-sent events (SSE)
-   * @returns Observable that emits Run objects as they arrive from the server
+   * Calls the fetchEventSource() function, which is a wrapper around the native
+   * EventSource API. This function is used to establish connection to an API
+   * endpoint and listen to event streaming data associated with task runs.
+   *
+   * @return an observable that emits run events
    */
-  getRunEvents(): Observable<Run> {
-    return new Observable<Run>(observer => {
-      const controller = new AbortController();
-      
-      fetchEventSource(`${this.baseUrl}/runs/events`, {
-        method: 'GET',
-        async onopen(res) {
-          const contentType = res.headers.get('content-type');
-          if (!contentType?.startsWith('text/event-stream')) {
-            throw new FatalError(`Expected content-type to be text/event-stream, Actual: ${contentType}`);
-          }
-          if (res.ok && res.status === 200) {
-            console.log('Run events stream opened');
-            return; // Connection established successfully
-          }
-          if (res.status >= 400 && res.status < 500 && res.status !== 429) {
-            throw new FatalError(`Failed to open run events stream: ${res.status} ${res.statusText}`);
-          }
-          // Any other status will be retried automatically
-          throw new RetriableError('Retrying connection to run events stream');
-        },
-        onclose() {
-          console.log('Run events stream closed');
-          observer.complete();
-        },
-        onerror(error) {
-          if (error instanceof FatalError) {
-            observer.error(error);
-            throw error; // Rethrow to stop the operation
-          } else {
-            observer.error(error);
-            // Don't rethrow retriable errors to allow the library to retry
-          }
-        },
-        onmessage(event) {
-          try {
-            const runData = JSON.parse(event.data) as Run;
-            observer.next(runData);
-          } catch (error) {
-            observer.error(new Error(`Failed to parse run event data: ${error}`));
-          }
-        },
-        signal: controller.signal
-      });
+  getRunEvents(accessToken: string): Observable<Run> {
 
-      // Return cleanup function
-      return () => {
-        controller.abort();
-      };
-    });
+    // observable constructor argument is 'subscribe()' method implementation
+    return new Observable<Run>(
+      (subscriber: Subscriber<Run>) => {
+
+        // abort controller to cancel the request (on component destroy)
+        const abortController = new AbortController();
+
+        fetchEventSource(`${this.baseUrl}/runs/events`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          async onopen(response): Promise<void> {
+            // check that media type is 'text/event-stream'
+            const contentType = response.headers.get('content-type');
+
+            if(!contentType?.startsWith('text/event-stream')) {
+              // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
+            }
+
+            // resolve promise (without returning any value)
+            if(response.ok && response.status === 200)  return;
+
+            // opening SSE connection failed
+            if(response.status >= 400 && response.status < 500 && response.status !== 429) {
+              // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
+            }
+
+            // automatically retry on any other non-fatal status
+            // TODO [GIK 5/13/2025]: retryable error to be handled in G3-631
+          },
+          onmessage(event: EventSourceMessage) {
+            try {
+              const run: Run = JSON.parse(event.data) as Run;
+              console.log("Check 1");
+              // console.log(run);
+              console.log(event);
+              console.log("Check 2");
+              // subscriber.next(run);
+            } catch(error ) {
+              // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
+            }
+          },
+          onclose(): void {
+            console.log("closing connection");
+            // observable completes
+            subscriber.complete();
+          },
+          onerror(error: Error): void {
+            // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
+          },
+          signal: abortController.signal
+        }).catch(error => {
+          // setup and execution error handling
+          // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
+        });
+
+        // cleanup when the observable is unsubscribed
+        return () => {
+          abortController.abort(); // abort the request
+        }
+
+      });
   }
 
   /**

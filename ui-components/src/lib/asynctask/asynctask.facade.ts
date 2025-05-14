@@ -9,7 +9,7 @@ import { AsyncTaskState } from './asynctask.state';
 import { RunInput } from './asynctask.model';
 
 // services
-import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService, Run } from '@jax-data-science-demo/api-clients';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,14 @@ export class AsyncTaskFacade {
     asyncTaskService.setBaseUrl('https://astra-dev.jax.org');
   }
 
+
+  /**
+   * Fetches historical async tasks data.
+   *
+   * The data involves detailed information about completed tasks runs including
+   * their inputs and statuses (e.g., completed, failed, terminated). The response
+   * is then transformed into the RunInput type and stored in the AsyncTaskState.
+   */
   fetchAsyncTasks(): void {
     forkJoin({
       runs: this.asyncTaskService.getRuns().pipe(
@@ -59,10 +67,14 @@ export class AsyncTaskFacade {
   }
 
   /**
-   * TODO: [GIK 4/16/2025] SSE handling to be implemented in IS-75
+   * Fetches event streaming data from the API's server-sent events endpoint.
+   *
+   * The method returns an observable  to the API's server-sent events endpoint and
+   * fetches messages that include task updates. The messages are then transformed into
+   * RunInput type and stored in the AsyncTaskState.
    */
-  openAsyncTaskEventListener(): void {
-    console.log("creates listener to the API's server sent events endpoint");
+  openAsyncTasksEventStreaming(accessToken: string): Observable<Run> {
+    return this.asyncTaskService.getRunEvents(accessToken);
   }
 
   addTask(task: RunInput): void {

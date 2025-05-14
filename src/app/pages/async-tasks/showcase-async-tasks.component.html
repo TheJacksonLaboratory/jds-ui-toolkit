@@ -1,1 +1,4 @@
-<lib-jds-async-tasks [tableConfig]="tableConfiguration"></lib-jds-async-tasks>
+<lib-jds-async-tasks *ngIf = "accessToken$ | async as accessToken"
+  [tableConfig]="tableConfiguration"
+  [accessToken]="accessToken">
+</lib-jds-async-tasks>

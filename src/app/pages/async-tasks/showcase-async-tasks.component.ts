@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '@auth0/auth0-angular';
+import { Observable } from 'rxjs';
 
 import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science-demo/ui-components';
 
@@ -10,7 +12,8 @@ import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science-demo/ui
   styleUrl: './showcase-async-tasks.component.css',
   standalone: true
 })
-export class ShowcaseAsyncTasksComponent {
+export class ShowcaseAsyncTasksComponent implements OnInit {
+
   tableConfiguration: IAsyncTableConfig = {
     isExpandable: true,
     rowsPerPage: 5,
@@ -19,4 +22,12 @@ export class ShowcaseAsyncTasksComponent {
     isStriped: true,
     showActions: true
   };
+
+  accessToken$: Observable<string> = new Observable<string>();
+
+  constructor(private auth: AuthService) { }
+
+  ngOnInit() {
+    this.accessToken$ = this.auth.getAccessTokenSilently();
+  }
 }
