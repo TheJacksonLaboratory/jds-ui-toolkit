@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { signal } from '@angular/core';
 
 // models
 import { Filter, RunInput } from './asynctask.model';
