@@ -19,4 +19,12 @@ export class ShowcaseAsyncTasksComponent {
     isStriped: true,
     showActions: true
   };
+
+  editTask(task: any) {
+    console.log('Edit Task:', task);
+  }
+
+  openTask(task: any) {
+    console.log('Open Task:', task);
+  }
 }

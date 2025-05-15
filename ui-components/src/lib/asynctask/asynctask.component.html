@@ -61,6 +61,7 @@
                         icon="pi pi-external-link"
                         severity="info"
                         styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="openTask(task)"
                         variant="text" />
             </div>
             <div class="tw-w-1/3">
@@ -69,6 +70,7 @@
                         icon="pi pi-pencil"
                         severity="info"
                         styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="editTask(task)"
                         variant="text" />
             </div>
             @if (task.status === 1) {
@@ -78,6 +80,7 @@
                           icon="pi pi-times-circle"
                           severity="contrast"
                           styleClass="tw-mx-2 tw-p-2"
+                          (onClick)="cancelTask(task)"
                           variant="text" />
               </div>
             } @else {
@@ -87,6 +90,7 @@
                           icon="pi pi-trash"
                           severity="danger"
                           styleClass="tw-mx-2 tw-p-2"
+                          (onClick)="deleteTask(task)"
                           variant="text" />
               </div>
             }

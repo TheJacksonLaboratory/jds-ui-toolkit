@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -42,6 +42,8 @@ export class AsyncTaskComponent implements OnInit {
     isStriped: true,
     showActions: true,
   };
+  @Output() editEmitter = new EventEmitter<RunInput>();
+  @Output() openEmitter = new EventEmitter<RunInput>();
   // tracking expanded rows
   expandedRows: Record<string, boolean> = {};
 
@@ -66,5 +68,23 @@ export class AsyncTaskComponent implements OnInit {
           this.expandedRows = this.tableConfig.defaultExpandedRows;
         }
     });
+  }
+
+  deleteTask(task: RunInput) {
+    this.tasks.splice(this.tasks.indexOf(task), 1);
+    this.asyncTaskFacade.deleteTask(task);
+  }
+
+  editTask(task: RunInput) {
+    this.editEmitter.emit(task);
+  }
+
+  openTask(task: RunInput) {
+    this.openEmitter.emit(task);
+  }
+
+  cancelTask(task: RunInput) {
+    this.asyncTaskFacade.cancelTask(task);
+    this.tasks.splice(this.tasks.indexOf(task), 1);
   }
 }
