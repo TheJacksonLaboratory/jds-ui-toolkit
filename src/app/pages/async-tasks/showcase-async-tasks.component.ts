@@ -16,7 +16,18 @@ export class ShowcaseAsyncTasksComponent {
     rowsPerPage: 5,
     isPaginated: true,
     rowsPerPageOptions: [5, 10, 25, 50],
-    isStriped: true,
-    showActions: true
+    isStriped: false,
+    showActions: true,
+    allowFilters: true,
+    filterConfigs: [
+      {
+        displayName: 'Description',
+        filterOptions: ['test', 'test2', 'test3']
+      },
+      {
+        displayName: 'Name',
+        filterOptions: ['data', 'hello']
+      }
+    ]
   };
 }
