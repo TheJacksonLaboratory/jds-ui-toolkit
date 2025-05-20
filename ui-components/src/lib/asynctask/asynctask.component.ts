@@ -153,21 +153,36 @@ export class AsyncTaskComponent implements OnInit {
     this.asyncTaskFacade.setActiveFilters(myActiveFilters);
   }
 
+  /**
+   * Removes a task from the list of tasks and deletes it from the backend.
+   * @param task
+   */
   deleteTask(task: RunInput) {
     this.tasks.splice(this.tasks.indexOf(task), 1);
     this.asyncTaskFacade.deleteTask(task);
   }
 
+  /**
+   * Emits the task to be edited.
+   * @param task
+   */
   editTask(task: RunInput) {
     this.editEmitter.emit(task);
   }
 
+  /**
+   * Emits the task to be opened.
+   * @param task
+   */
   openTask(task: RunInput) {
     this.openEmitter.emit(task);
   }
 
+  /**
+   * Cancels a running task.
+   * @param task
+   */
   cancelTask(task: RunInput) {
     this.asyncTaskFacade.cancelTask(task);
-    this.tasks.splice(this.tasks.indexOf(task), 1);
   }
 }

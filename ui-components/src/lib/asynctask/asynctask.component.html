@@ -100,45 +100,47 @@
           </span>
         </td>
         <td>
-          <div class="tw-flex">
-            <div class="tw-w-1/3">
-              <p-button label="Open"
-                        *ngIf="task.status === 2"
-                        icon="pi pi-external-link"
-                        severity="info"
-                        styleClass="tw-mx-2 tw-p-2"
-                        (onClick)="openTask(task)"
-                        variant="text" />
-            </div>
-            <div class="tw-w-1/3">
-              <p-button label="Edit"
-                        *ngIf="task.status !== 1"
-                        icon="pi pi-pencil"
-                        severity="info"
-                        styleClass="tw-mx-2 tw-p-2"
-                        (onClick)="editTask(task)"
-                        variant="text" />
-            </div>
+          <div class="tw-flex tw-justify-end">
+
+            <p-button *ngIf="task.status === 2"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="openTask(task)"
+                      title="Open Task"
+                      variant="text" >
+              <i class="pi pi-external-link"></i>
+              <span class="tw-hidden lg:tw-block">Open</span>
+            </p-button>
+
+            <p-button *ngIf="task.status !== 1"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="editTask(task)"
+                      title="Edit Task"
+                      variant="text" >
+              <i class="pi pi-pencil"></i>
+              <span class="tw-hidden lg:tw-block">Edit</span>
+            </p-button>
             @if (task.status === 1) {
-              <div class="tw-w-1/3">
-                <p-button label="Cancel"
-                          *ngIf="task.status === 1"
-                          icon="pi pi-times-circle"
-                          severity="contrast"
-                          styleClass="tw-mx-2 tw-p-2"
-                          (onClick)="cancelTask(task)"
-                          variant="text" />
-              </div>
+              <p-button *ngIf="task.status === 1"
+                        severity="contrast"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="cancelTask(task)"
+                        title="Cancel Task"
+                        variant="text" >
+                <i class="pi pi-times-circle"></i>
+                <span class="tw-hidden lg:tw-block">Cancel</span>
+              </p-button>
             } @else {
-              <div class="tw-w-1/3">
-                <p-button label="Delete"
-                          *ngIf="task.status !== 1"
-                          icon="pi pi-trash"
-                          severity="danger"
-                          styleClass="tw-mx-2 tw-p-2"
-                          (onClick)="deleteTask(task)"
-                          variant="text" />
-              </div>
+              <p-button *ngIf="task.status !== 1"
+                        severity="danger"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="deleteTask(task)"
+                        title="Delete Task"
+                        variant="text" >
+                <i class="pi pi-trash"></i>
+                <span class="tw-hidden lg:tw-block">Delete</span>
+              </p-button>
             }
           </div>
         </td>
@@ -158,6 +160,5 @@
   </p-table>
 </div>
 <p-drawer [(visible)]="filterVisible" position="right" header="Filter" styleClass="tw-w-1/4 tw-min-w-[400px]">
-  <!--  filter component goes here -->
   <lib-asynctask-filter (closeFilter)="filterVisible = !filterVisible"></lib-asynctask-filter>
 </p-drawer>
