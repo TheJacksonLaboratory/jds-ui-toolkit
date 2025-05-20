@@ -2,7 +2,6 @@
   display: block;
 }
 
-
-.paginator {
-  background-color: red;
+.cursor-pointer {
+  cursor: pointer;
 }

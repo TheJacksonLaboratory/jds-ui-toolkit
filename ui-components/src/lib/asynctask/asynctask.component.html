@@ -3,23 +3,35 @@
     <h3 class="tw-font-semibold tw-w-full text-2xl">
       Task Tracker
     </h3>
-    <div class="tw-flex tw-my-4">
-      <input
-        pInputText
-        type="text"
-        (input)="applyFilterGlobal($event, 'contains')"
-        placeholder="Search"
-        class="tw-mr-2 tw-h-10"
+  </div>
+
+  <!-- search and chips section -->
+  <div class="tw-flex tw-my-4">
+    <p-iconfield class="tw-w-1/3">
+      <input type="text"
+             placeholder="Search"
+             class="tw-w-full"
+             (input)="applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+             pInputText
+             #asyncTasksGlobalSearch
       />
-      <p-button icon="pi pi-filter"
-                *ngIf="tableConfig.allowFilters"
-                [rounded]="true"
-                [text]="true"
-                (onClick)="openFilterPanel()"
-                label="Filter"
-                severity="info" />
-      @for (filter of activeFilters; track filter.name) {
-        @if (filter.selectedOptions.length > 0) {
+      <p-inputicon styleClass="pi pi-times"
+                   class="cursor-pointer"
+                   *ngIf="asyncTasksGlobalSearch.value !== ''"
+                   (click)="asyncTasksGlobalSearch.value = ''; applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+      />
+    </p-iconfield>
+
+    <p-button icon="pi pi-filter"
+              *ngIf="tableConfig.allowFilters"
+              [rounded]="true"
+              [text]="true"
+              (onClick)="openFilterPanel()"
+              label="Filter"
+              severity="info" />
+
+    @for(filter of activeFilters; track filter.name) {
+      @if(filter.selectedOptions.length > 0) {
           <p-chip class="tw-mr-1 tw-bg-gray-200"
                   [removable]="true"
                   (onRemove)="removeFilter(filter)">
@@ -30,16 +42,17 @@
               }
             </div>
           </p-chip>
-        }
       }
-      <p-button [rounded]="true"
-                *ngIf="activeFilters.length"
-                [text]="true"
-                (onClick)="clearFilters()"
-                label="clear all"
-                severity="info" />
-    </div>
+    }
+
+    <p-button [rounded]="true"
+              *ngIf="activeFilters.length"
+              [text]="true"
+              (onClick)="clearFilters()"
+              label="clear all"
+              severity="info" />
   </div>
+
   <p-table
     #taskTable
     [value]="filteredTasks"
@@ -63,11 +76,19 @@
     <ng-template #header>
       <tr>
         <th *ngIf="tableConfig.isExpandable" style="width: 3rem"></th>
-        <th class="tw-font-semibold tw-w-12">#</th>
-        <th class="tw-font-semibold tw-w-1/4" pSortableColumn="name">Name <p-sortIcon field="name" /></th>
-        <th class="tw-font-semibold tw-w-1/3" pSortableColumn="description">Description <p-sortIcon field="description" /></th>
-        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap" pSortableColumn="initiated">Run Initiated <p-sortIcon field="initiated" /></th>
-        <th class="tw-font-semibold tw-w-1/12" pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+        <th class="tw-font-semibold tw-w-1/12 tw-text-nowrap">Run Id</th>
+        <th class="tw-font-semibold tw-w-1/6" pSortableColumn="name">
+          Name <p-sortIcon field="name" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/3" pSortableColumn="description">
+          Description <p-sortIcon field="description" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap" pSortableColumn="initiated">
+          Run Initiated <p-sortIcon field="initiated" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/12" pSortableColumn="status">
+          Status <p-sortIcon field="status" />
+        </th>
         <th class="tw-font-semibold tw-w-1/6">Actions</th>
       </tr>
     </ng-template>
@@ -80,8 +101,9 @@
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
           </p-button>
         </td>
-        <td class="tw-w-12 tw-text-center">{{ i + 1 }}</td>
-        <td class="tw-text-nowrap tw-w-1/5">{{ task.name }}</td>
+        <!-- <td class="tw-w-12 tw-text-center">{{ i + 1 }}</td> -->
+        <td class="tw-w-1/12">{{ task.id }}</td>
+        <td class="tw-w-1/6">{{ task.name }}</td>
         <td class="tw-w-1/3">{{ task.description }}</td>
         <td class="tw-w-1/6"></td>
         <td class="tw-w-1/12">

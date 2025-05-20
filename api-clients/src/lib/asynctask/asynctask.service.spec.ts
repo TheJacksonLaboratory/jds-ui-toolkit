@@ -251,7 +251,7 @@ describe('AsyncTaskService', () => {
         workflow_id: 'workflow-123' 
       };
 
-      service.getRunEvents().subscribe(response => {
+      service.getRunEvents("").subscribe(response => {
         expect(response).toEqual(mockResponse);
       });
       // TO-DO: [GIK 03/24/2025] `/runs/events` endpoint is passed as a parameter to fetchEventSource,
