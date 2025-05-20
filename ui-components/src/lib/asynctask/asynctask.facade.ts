@@ -149,7 +149,7 @@ export class AsyncTaskFacade {
    * @param tasks
    * @param filters
    */
-  filterTasks(tasks: RunInput[], filters: Filter[]) {
+  filterTasks(tasks: RunInput[], filters: Filter[]): RunInput[] {
     return tasks.filter((task) => {
       for (const filter of filters) {
         const selectedOptions = filter.selectedOptions.map(option => option.label);

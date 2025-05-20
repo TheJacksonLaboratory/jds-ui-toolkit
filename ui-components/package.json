@@ -8,7 +8,9 @@
     "@auth0/auth0-angular": "^2.2.3",
     "primeng": "^19.0.6",
     "rxjs": "^7.8.0",
-    "@jax-data-science-demo/api-clients": "^0.0.2-8"
+    "@jax-data-science-demo/api-clients": "^0.0.2-8",
+    "@angular/forms": "^19.1.0",
+    "@primeng/themes": "^19.0.6"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.2"
