@@ -1,15 +1,24 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 // PrimeNG
-import { TableModule } from 'primeng/table';
+import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
+import { Chip } from 'primeng/chip';
+import { DataTableDesignTokens } from '@primeng/themes/types/datatable';
+import { Drawer } from 'primeng/drawer';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { Table, TableModule } from 'primeng/table';
 // facades
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
-import { RunInput } from './asynctask.model';
-// services
-import { WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { Filter, RunInput } from './asynctask.model';
+import { Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+// components
+import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
 
 /**
  * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it
@@ -24,11 +33,30 @@ export interface IAsyncTableConfig {
   isPaginated?: boolean;
   isStriped?: boolean;
   showActions: boolean;
+  allowFilters: boolean;
+  filterConfigs?: IFilterConfig[];
+}
+
+export interface IFilterConfig {
+  displayName: string;
+  filterOptions: string[];
 }
 
 @Component({
   selector: 'lib-jds-async-tasks',
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [
+    AsyncTaskFilterComponent,
+    AccordionModule,
+    ButtonModule,
+    Chip,
+    CommonModule,
+    Drawer,
+    FormsModule,
+    IconField,
+    InputText,
+    TableModule,
+    InputIconModule
+  ],
   templateUrl: './asynctask.component.html',
   styleUrl: './asynctask.component.css',
   standalone: true,
@@ -42,18 +70,39 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     rowsPerPage: 10,
     rowsPerPageOptions: [5, 10, 25, 50],
     isPaginated: true,
-    isStriped: true,
+    isStriped: false,
     showActions: true,
+    allowFilters: true,
   };
+
+  @ViewChild('taskTable') taskTable: Table | undefined;
 
   protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
 
   tasks: RunInput[] = [];
+  filteredTasks: RunInput[] = [];
 
   // tracking expanded rows
   expandedRows: Record<string, boolean> = {};
   // events subscription: used to close the SSE connection
   subEvents: Subscription = new Subscription();
+
+  // pagination
+  first = 0;
+  // filter panel
+  filterVisible = false;
+
+  tableDt: DataTableDesignTokens = {
+    header: {
+      background: '{gray.100}',
+    },
+    headerCell: {
+      background: '{gray.100}',
+    },
+  };
+
+  activeFilters: Filter[] = [];
+
   constructor(private asyncTaskFacade: AsyncTaskFacade) { }
 
   /**
@@ -62,31 +111,83 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
    * stores the tasks and their status to show the data in the view.
    */
   ngOnInit() {
-    // fetch all tasks: 'completed', 'failed', 'running', 'terminated', etc.
-    this.asyncTaskFacade.fetchAsyncTasks();
+    this.asyncTaskFacade.fetchAsyncTasks(); // initial all tasks fetch
 
-    // running tasks can change status ('completed', 'failed', etc.) and new
-    // tasks can be created, so open an SSE connection to get real-time updates
-    this.subEvents = this.asyncTaskFacade.openAsyncTasksEventStreaming(this.accessToken).subscribe();
+    // running tasks can change status to 'completed', 'failed', etc. and new
+    // tasks can be created - open an SSE connection to get real-time updates
+    this.subEvents = this.asyncTaskFacade.openAsyncTasksEventStreaming(this.accessToken).subscribe({
+      next: (run: Run) => {
+        const runExists = this.tasks.find(t => t.id === run.id) !== undefined;
 
-    // subscribe to the tasks observable that has the current tasks state
-    this.asyncTaskFacade.getTasks$().subscribe(
-      (tasks: RunInput[]) => {
-        this.tasks = tasks;
-        console.log(this.tasks);
-        if(this.tableConfig.defaultExpandedRows) {
-          this.expandedRows = this.tableConfig.defaultExpandedRows;
-        }
+        // update existing task or add a new task
+        runExists ? this.asyncTaskFacade.updateTask(run) : this.asyncTaskFacade.addTask(run);
+
+        // update selected tasks based on the active filters
+        this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
+      },
+      error: (error) => {
+        // TODO [GIK 5/15/2025]: error handling to be implemented in G3-631
+        console.error('Error fetching async tasks:', error);
+      }
+    });
+
+    // subscribe to observable that emits when the tasks collection updates
+    this.asyncTaskFacade.getTasks$().subscribe((tasks) => {
+      this.tasks = tasks;
+      this.filteredTasks = tasks;
+
+      // set up filters based on tableConfig
+      this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
+
+      if(this.tableConfig.defaultExpandedRows) {
+        this.expandedRows = this.tableConfig.defaultExpandedRows;
+      }
+    });
+
+    // subscribe to observable that emits filter selection changes
+    this.asyncTaskFacade.getActiveFilters$().subscribe({
+      next: (filters) => {
+        this.activeFilters = filters;
+        this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
+      }
     });
   }
 
   /**
-   * onDestroy: closes active subscriptions
+   * onDestroy: closes subscriptions
    */
   ngOnDestroy() {
-    console.log('running onDestroy');
     if(this.subEvents) {
       this.subEvents.unsubscribe();
     }
+  }
+
+  /**
+   * Searches the table to find matches for the given search term -
+   * only name and description fields are currently supported.
+   *
+   * @param target - the input element that has the search value
+   * @param searchMode - the search mode ('contains', 'startsWith', 'endsWith, etc.)
+   */
+  applyFilterGlobal(target: HTMLInputElement, searchMode: string): void {
+    this.taskTable?.filterGlobal(target.value, searchMode);
+  }
+
+  openFilterPanel() {
+    this.filterVisible = true;
+  }
+
+  clearFilters() {
+    this.asyncTaskFacade.clearAllFilters(this.activeFilters);
+  }
+
+  /**
+   * Removes a filter from the active filters list and clears its selected options.
+   * @param filter
+   */
+  removeFilter(filter: Filter) {
+    filter.selectedOptions = [];
+    const myActiveFilters = this.activeFilters.filter((f) => f.name !== filter.name);
+    this.asyncTaskFacade.setActiveFilters(myActiveFilters);
   }
 }

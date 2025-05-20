@@ -1,27 +1,94 @@
-<div class="tw-flex-col tw-p-3 tw-bg-gray-100">
-  <div class="tw-flex tw-justify-center tw-my-5">
+<div class="tw-flex-col tw-p-3 tw-bg-blue-50">
+  <div class="tw-flex tw-flex-col tw-justify-center">
     <h3 class="tw-font-semibold tw-w-full text-2xl">
-      Task Runs Tracking
+      Task Tracker
     </h3>
   </div>
+
+  <!-- search and chips section -->
+  <div class="tw-flex tw-my-4">
+    <p-iconfield class="tw-w-1/3">
+      <input type="text"
+             placeholder="Search"
+             class="tw-w-full"
+             (input)="applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+             pInputText
+             #asyncTasksGlobalSearch
+      />
+      <p-inputicon styleClass="pi pi-times"
+                   class="cursor-pointer"
+                   *ngIf="asyncTasksGlobalSearch.value !== ''"
+                   (click)="asyncTasksGlobalSearch.value = ''; applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+      />
+    </p-iconfield>
+
+    <p-button icon="pi pi-filter"
+              *ngIf="tableConfig.allowFilters"
+              [rounded]="true"
+              [text]="true"
+              (onClick)="openFilterPanel()"
+              label="Filter"
+              severity="info" />
+
+    @for(filter of activeFilters; track filter.name) {
+      @if(filter.selectedOptions.length > 0) {
+          <p-chip class="tw-mr-1 tw-bg-gray-200"
+                  [removable]="true"
+                  (onRemove)="removeFilter(filter)">
+            <div class="tw-flex tw-flex-wrap">
+              {{filter.name + ':'}}&nbsp;
+              @for (option of filter.selectedOptions; track $index; let j = $index) {
+                <span>{{option.label}}<ng-container *ngIf="j < filter.selectedOptions.length-1">,&nbsp;</ng-container></span>
+              }
+            </div>
+          </p-chip>
+      }
+    }
+
+    <p-button [rounded]="true"
+              *ngIf="activeFilters.length"
+              [text]="true"
+              (onClick)="clearFilters()"
+              label="clear all"
+              severity="info" />
+  </div>
+
   <p-table
-    [value]="tasks"
-    [paginator]="tableConfig.isPaginated"
+    #taskTable
+    [value]="filteredTasks"
+    [paginatorPosition]="'top'"
+    paginator="true"
+    paginatorStyleClass="tw-bg-gray-100 tw-flex tw-border-x tw-border-t tw-border-gray-300 tw-justify-start"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Runs"
     [rows]="tableConfig.rowsPerPage"
+    [first]="first"
     [rowsPerPageOptions]="tableConfig.rowsPerPageOptions"
     [expandedRowKeys]="expandedRows"
     [stripedRows]="tableConfig.isStriped"
+    [globalFilterFields]="['name', 'description']"
+    styleClass="async-task-table"
     dataKey="id"
     class="tw-text-sm"
+    showGridlines
+    [dt]="tableDt"
   >
-    <ng-template pTemplate="header">
+    <ng-template #header>
       <tr>
         <th *ngIf="tableConfig.isExpandable" style="width: 3rem"></th>
         <th class="tw-font-semibold tw-w-1/12 tw-text-nowrap">Run Id</th>
-        <th class="tw-font-semibold tw-w-1/6">Name</th>
-        <th class="tw-font-semibold tw-w-1/3">Description</th>
-        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap">Run Initiated</th>
-        <th class="tw-font-semibold tw-w-1/12">Status</th>
+        <th class="tw-font-semibold tw-w-1/6" pSortableColumn="name">
+          Name <p-sortIcon field="name" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/3" pSortableColumn="description">
+          Description <p-sortIcon field="description" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap" pSortableColumn="initiated">
+          Run Initiated <p-sortIcon field="initiated" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/12" pSortableColumn="status">
+          Status <p-sortIcon field="status" />
+        </th>
         <th class="tw-font-semibold tw-w-1/6">Actions</th>
       </tr>
     </ng-template>
@@ -77,3 +144,7 @@
     </ng-template>
   </p-table>
 </div>
+<p-drawer [(visible)]="filterVisible" position="right" header="Filter" styleClass="tw-w-1/4 tw-min-w-[400px]">
+  <!--  filter component goes here -->
+  <lib-asynctask-filter (closeFilter)="filterVisible = !filterVisible"></lib-asynctask-filter>
+</p-drawer>

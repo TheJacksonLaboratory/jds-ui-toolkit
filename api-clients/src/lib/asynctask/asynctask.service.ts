@@ -163,19 +163,16 @@ export class AsyncTaskService {
           onmessage(event: EventSourceMessage) {
             try {
               const run: Run = JSON.parse(event.data) as Run;
-              console.log("Check 1");
-              // console.log(run);
-              console.log(event);
-              console.log("Check 2");
-              // subscriber.next(run);
+
+              subscriber.next(run);
             } catch(error ) {
               // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631
             }
           },
           onclose(): void {
             console.log("closing connection");
-            // observable completes
-            subscriber.complete();
+
+            subscriber.complete(); // observable completes
           },
           onerror(error: Error): void {
             // TODO [GIK 5/13/2025]: fatal error to be handled in G3-631

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 // models
-import { RunInput } from './asynctask.model';
+import { Filter, RunInput } from './asynctask.model';
 
 /**
  * State management service for async tasks
@@ -15,23 +15,49 @@ import { RunInput } from './asynctask.model';
 })
 export class AsyncTaskState {
   private tasks$: BehaviorSubject<RunInput[]> = new BehaviorSubject<RunInput[]>([]);
+  private filters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
+  private activeFilters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
+
 
   /**
-   * Sets the complete list of task statuses
-   * 
-   * @param tasks Array of Run objects representing current tasks
+   * Loads initial RunInput[] tasks
+   *
+   * @param  RunInput[] array
    */
   setTasks(tasks: RunInput[]): void {
     this.tasks$.next(tasks);
   }
 
   /**
-   * Gets an observable of the current task statuses
+   * Gets an observable emitting currently available tasks.
    * 
-   * @returns Observable of Run array
+   * @returns RunInput[] observable
    */
   getTasks$(): Observable<RunInput[]> {
     return this.tasks$.asObservable();
+  }
+
+  /*
+   * Updates a task.
+   *
+   * @return boolean - true if the task was updated successfully, false otherwise
+   */
+  updateTask(task: RunInput): boolean {
+    const currentTasks: RunInput[] = this.tasks$.getValue();
+
+    // let t = currentTasks.find(t => t.id === task.id);
+    const index = currentTasks.findIndex(t => t.id === task.id);
+
+    if(index === -1) {
+      return false;
+    } else {
+      // t = task;
+      currentTasks[index] = task;
+
+      this.tasks$.next([...currentTasks]);
+    }
+
+    return true;
   }
 
   /**
@@ -39,17 +65,34 @@ export class AsyncTaskState {
    * 
    * This method adds a new task only when the task does not alr
    */
-  addTask(task: RunInput): void {
+  addTask(task: RunInput): boolean {
     const currentTasks = this.tasks$.getValue();
-    const index = currentTasks.findIndex(t => t.name === task.name);
 
-    if(index !== -1) {
-      // update the task entry in case it already exists
-      currentTasks[index] = task;
-      this.tasks$.next([...currentTasks]);
-    } else {
+    let t = currentTasks.find(t => t.id === task.id);
+
+    if(!t) {
       // add task entry in case it does not exist
       this.tasks$.next([...currentTasks, task]);
+    } else {
+      return false;
     }
+
+    return true;
+  }
+
+  getFilters$(): Observable<Filter[]> {
+    return this.filters$.asObservable();
+  }
+
+  setFilters(filters: Filter[]): void {
+    this.filters$.next(filters);
+  }
+
+  getActiveFilters$(): Observable<Filter[]> {
+    return this.activeFilters$.asObservable();
+  }
+
+  setActiveFilters(activeFilters: Filter[]): void {
+    this.activeFilters$.next(activeFilters);
   }
 }
