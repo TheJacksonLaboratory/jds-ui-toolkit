@@ -68,10 +68,10 @@ export class AsyncTaskState {
   addTask(task: RunInput): boolean {
     const currentTasks = this.tasks$.getValue();
 
-    let t = currentTasks.find(t => t.id === task.id);
+    const t = currentTasks.find(t => t.id === task.id);
 
     if(!t) {
-      // add task entry in case it does not exist
+      // add task entry when it does not exist
       this.tasks$.next([...currentTasks, task]);
     } else {
       return false;

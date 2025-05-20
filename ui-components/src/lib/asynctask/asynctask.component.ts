@@ -62,7 +62,7 @@ export interface IFilterConfig {
   standalone: true,
 })
 export class AsyncTaskComponent implements OnInit, OnDestroy {
-  @Input() accessToken: string = '';
+  @Input() accessToken = '';
 
   // table configuration (with defaults)
   @Input() tableConfig: IAsyncTableConfig = {
@@ -119,8 +119,12 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
       next: (run: Run) => {
         const runExists = this.tasks.find(t => t.id === run.id) !== undefined;
 
-        // update existing task or add a new task
-        runExists ? this.asyncTaskFacade.updateTask(run) : this.asyncTaskFacade.addTask(run);
+        // either update an existing task or add a new task
+        if(runExists) {
+          this.asyncTaskFacade.updateTask(run);
+        } else {
+          this.asyncTaskFacade.addTask(run);
+        }
 
         // update selected tasks based on the active filters
         this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);

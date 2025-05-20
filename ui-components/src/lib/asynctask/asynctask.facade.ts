@@ -36,11 +36,13 @@ export class AsyncTaskFacade {
     forkJoin({
       runs: this.asyncTaskService.getRuns().pipe(
         catchError((error) => {
+          console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
           return of({ data: [] }); // returns empty array
         })
       ),
       inputs: this.asyncTaskService.getInputs().pipe(
         catchError((error) => {
+          console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
           return of({ data: [] }); // returns empty array
         })
       )
