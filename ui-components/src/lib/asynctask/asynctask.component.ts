@@ -1,24 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 // PrimeNG
-import { Table, TableModule } from 'primeng/table';
+import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
+import { Chip } from 'primeng/chip';
+import { DataTableDesignTokens } from '@primeng/themes/types/datatable';
+import { Drawer } from 'primeng/drawer';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { Table, TableModule } from 'primeng/table';
 // facades
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
 import { Filter, RunInput } from './asynctask.model';
-import { WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
-import { InputText } from 'primeng/inputtext';
-import { DataTableDesignTokens } from '@primeng/themes/types/datatable';
-import { Drawer } from 'primeng/drawer';
-import { Chip } from 'primeng/chip';
-import { FormsModule } from '@angular/forms';
-import { AccordionModule } from 'primeng/accordion';
+import { Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+// components
 import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
 
 /**
- * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it could be exported to the parent:
- * it should be moved away from here once we decide if we will do a dynamic-table shared component
+ * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it
+ * could easily be exported to the parent: it should be moved away from here
+ * once we decide if we will do a dynamic-table shared component.
  */
 export interface IAsyncTableConfig {
   isExpandable: boolean;
@@ -40,22 +45,24 @@ export interface IFilterConfig {
 @Component({
   selector: 'lib-jds-async-tasks',
   imports: [
-    CommonModule,
-    TableModule,
-    ButtonModule,
-    InputText,
-    Drawer,
-    Chip,
-    FormsModule,
-    AccordionModule,
     AsyncTaskFilterComponent,
+    AccordionModule,
+    ButtonModule,
+    Chip,
+    CommonModule,
+    Drawer,
+    FormsModule,
+    IconField,
+    InputText,
+    TableModule,
+    InputIconModule
   ],
   templateUrl: './asynctask.component.html',
   styleUrl: './asynctask.component.css',
   standalone: true,
 })
-export class AsyncTaskComponent implements OnInit {
-  tasks: RunInput[] = [];
+export class AsyncTaskComponent implements OnInit, OnDestroy {
+  @Input() accessToken = '';
 
   // table configuration (with defaults)
   @Input() tableConfig: IAsyncTableConfig = {
@@ -67,19 +74,25 @@ export class AsyncTaskComponent implements OnInit {
     showActions: true,
     allowFilters: true,
   };
+
+  @ViewChild('taskTable') taskTable: Table | undefined;
+
+  protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
+
+  tasks: RunInput[] = [];
+  filteredTasks: RunInput[] = [];
+
   @Output() editEmitter = new EventEmitter<RunInput>();
   @Output() openEmitter = new EventEmitter<RunInput>();
   // tracking expanded rows
   expandedRows: Record<string, boolean> = {};
+  // events subscription: used to close the SSE connection
+  subEvents: Subscription = new Subscription();
+
   // pagination
   first = 0;
   // filter panel
   filterVisible = false;
-  filteredTasks: RunInput[] = [];
-
-  protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
-
-  @ViewChild('taskTable') taskTable: Table | undefined;
 
   tableDt: DataTableDesignTokens = {
     header: {
@@ -92,17 +105,39 @@ export class AsyncTaskComponent implements OnInit {
 
   activeFilters: Filter[] = [];
 
-  constructor(private asyncTaskFacade: AsyncTaskFacade) {}
+  constructor(private asyncTaskFacade: AsyncTaskFacade) { }
 
+  /**
+   * onInit: fetches all tasks and opens an SSE connection to get real-time updates
+   * about tasks that change status or get created; subscribes to the observable that
+   * stores the tasks and their status to show the data in the view.
+   */
   ngOnInit() {
-    // fetches not currently running tasks - completed, failed, terminated, etc.
-    this.asyncTaskFacade.fetchAsyncTasks();
+    this.asyncTaskFacade.fetchAsyncTasks(); // initial all tasks fetch
 
-    // open server sent events streaming on currently running tasks
-    // // TODO: [GIK 4/16/2025] SSE handling to be implemented in IS-75
-    this.asyncTaskFacade.openAsyncTaskEventListener();
+    // running tasks can change status to 'completed', 'failed', etc. and new
+    // tasks can be created - open an SSE connection to get real-time updates
+    this.subEvents = this.asyncTaskFacade.openAsyncTasksEventStreaming(this.accessToken).subscribe({
+      next: (run: Run) => {
+        const runExists = this.tasks.find(t => t.id === run.id) !== undefined;
 
-    // subscribe to task updates
+        // either update an existing task or add a new task
+        if(runExists) {
+          this.asyncTaskFacade.updateTask(run);
+        } else {
+          this.asyncTaskFacade.addTask(run);
+        }
+
+        // update selected tasks based on the active filters
+        this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
+      },
+      error: (error) => {
+        // TODO [GIK 5/15/2025]: error handling to be implemented in G3-631
+        console.error('Error fetching async tasks:', error);
+      }
+    });
+
+    // subscribe to observable that emits when the tasks collection updates
     this.asyncTaskFacade.getTasks$().subscribe((tasks) => {
       this.tasks = tasks;
       this.filteredTasks = tasks;
@@ -110,29 +145,38 @@ export class AsyncTaskComponent implements OnInit {
       // set up filters based on tableConfig
       this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
 
-      if (this.tableConfig.defaultExpandedRows) {
+      if(this.tableConfig.defaultExpandedRows) {
         this.expandedRows = this.tableConfig.defaultExpandedRows;
       }
     });
 
+    // subscribe to observable that emits filter selection changes
     this.asyncTaskFacade.getActiveFilters$().subscribe({
       next: (filters) => {
         this.activeFilters = filters;
         this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
-      },
+      }
     });
   }
 
   /**
-   * PrimeNG controller for global search. Global search is currently only compatible with name and description.
-   * @param event
-   * @param stringVal
+   * onDestroy: closes subscriptions
    */
-  applyFilterGlobal(event: Event, stringVal: string) {
-    this.taskTable?.filterGlobal(
-      (event.target as HTMLInputElement).value,
-      stringVal
-    );
+  ngOnDestroy() {
+    if(this.subEvents) {
+      this.subEvents.unsubscribe();
+    }
+  }
+
+  /**
+   * Searches the table to find matches for the given search term -
+   * only name and description fields are currently supported.
+   *
+   * @param target - the input element that has the search value
+   * @param searchMode - the search mode ('contains', 'startsWith', 'endsWith, etc.)
+   */
+  applyFilterGlobal(target: HTMLInputElement, searchMode: string): void {
+    this.taskTable?.filterGlobal(target.value, searchMode);
   }
 
   openFilterPanel() {

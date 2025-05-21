@@ -1,4 +1,6 @@
-<lib-jds-async-tasks [tableConfig]="tableConfiguration"
+<lib-jds-async-tasks *ngIf = "accessToken$ | async as accessToken"
+                     [tableConfig]="tableConfiguration"
+                     [accessToken]="accessToken"
                      (editEmitter)="editTask($event)"
-                     (openEmitter)="openTask($event)"
-></lib-jds-async-tasks>
+                     (openEmitter)="openTask($event)">
+</lib-jds-async-tasks>

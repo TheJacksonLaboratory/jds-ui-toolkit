@@ -9,7 +9,8 @@ import { AsyncTaskState } from './asynctask.state';
 import { Filter, RunInput } from './asynctask.model';
 
 // services
-import { AsyncTaskService, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService, Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+
 import { IFilterConfig } from './asynctask.component';
 
 @Injectable({
@@ -23,15 +24,25 @@ export class AsyncTaskFacade {
     asyncTaskService.setBaseUrl('https://astra-dev.jax.org');
   }
 
+
+  /**
+   * Fetches historical async tasks data.
+   *
+   * The data involves detailed information about completed tasks runs including
+   * their inputs and statuses (e.g., completed, failed, terminated). The response
+   * is then transformed into the RunInput type and stored in the AsyncTaskState.
+   */
   fetchAsyncTasks(): void {
     forkJoin({
       runs: this.asyncTaskService.getRuns().pipe(
         catchError((error) => {
+          console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
           return of({ data: [] }); // returns empty array
         })
       ),
       inputs: this.asyncTaskService.getInputs().pipe(
         catchError((error) => {
+          console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
           return of({ data: [] }); // returns empty array
         })
       )
@@ -60,14 +71,22 @@ export class AsyncTaskFacade {
   }
 
   /**
-   * TODO: [GIK 4/16/2025] SSE handling to be implemented in IS-75
+   * Fetches event streaming data from the API's server-sent events endpoint.
+   *
+   * The method returns an observable  to the API's server-sent events endpoint and
+   * fetches messages that include task updates. The messages are then transformed into
+   * RunInput type and stored in the AsyncTaskState.
    */
-  openAsyncTaskEventListener(): void {
-    console.log("creates listener to the API's server sent events endpoint");
+  openAsyncTasksEventStreaming(accessToken: string): Observable<Run> {
+    return this.asyncTaskService.getRunEvents(accessToken);
   }
 
-  addTask(task: RunInput): void {
-    this.asyncTaskState.addTask(task);
+  addTask(task: RunInput): boolean {
+    return this.asyncTaskState.addTask(task);
+  }
+
+  updateTask(task: RunInput): boolean {
+    return this.asyncTaskState.updateTask(task);
   }
 
   getTasks$(): Observable<RunInput[]> {

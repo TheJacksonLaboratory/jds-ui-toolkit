@@ -20,6 +20,7 @@ import { Chip } from 'primeng/chip';
   ],
   templateUrl: './asynctask-filter.component.html',
   styleUrl: './asynctask-filter.component.css',
+  standalone: true
 })
 export class AsyncTaskFilterComponent implements OnInit {
   @Input() tasks: RunInput[] = [];

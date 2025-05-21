@@ -20,21 +20,44 @@ export class AsyncTaskState {
 
 
   /**
-   * Sets the complete list of task statuses
-   * 
-   * @param tasks Array of Run objects representing current tasks
+   * Loads initial RunInput[] tasks
+   *
+   * @param  RunInput[] array
    */
   setTasks(tasks: RunInput[]): void {
     this.tasks$.next(tasks);
   }
 
   /**
-   * Gets an observable of the current task statuses
+   * Gets an observable emitting currently available tasks.
    * 
-   * @returns Observable of Run array
+   * @returns RunInput[] observable
    */
   getTasks$(): Observable<RunInput[]> {
     return this.tasks$.asObservable();
+  }
+
+  /*
+   * Updates a task.
+   *
+   * @return boolean - true if the task was updated successfully, false otherwise
+   */
+  updateTask(task: RunInput): boolean {
+    const currentTasks: RunInput[] = this.tasks$.getValue();
+
+    // let t = currentTasks.find(t => t.id === task.id);
+    const index = currentTasks.findIndex(t => t.id === task.id);
+
+    if(index === -1) {
+      return false;
+    } else {
+      // t = task;
+      currentTasks[index] = task;
+
+      this.tasks$.next([...currentTasks]);
+    }
+
+    return true;
   }
 
   /**
@@ -42,18 +65,19 @@ export class AsyncTaskState {
    * 
    * This method adds a new task only when the task does not alr
    */
-  addTask(task: RunInput): void {
+  addTask(task: RunInput): boolean {
     const currentTasks = this.tasks$.getValue();
-    const index = currentTasks.findIndex(t => t.name === task.name);
 
-    if(index !== -1) {
-      // update the task entry in case it already exists
-      currentTasks[index] = task;
-      this.tasks$.next([...currentTasks]);
-    } else {
-      // add task entry in case it does not exist
+    const t = currentTasks.find(t => t.id === task.id);
+
+    if(!t) {
+      // add task entry when it does not exist
       this.tasks$.next([...currentTasks, task]);
+    } else {
+      return false;
     }
+
+    return true;
   }
 
   getFilters$(): Observable<Filter[]> {
