@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,7 @@ import { Filter, RunInput } from './asynctask.model';
 import { Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
 // components
 import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
+import { AsyncTaskDetailsComponent } from './asynctask-details/asynctask-details.component';
 
 /**
  * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it
@@ -35,6 +36,9 @@ export interface IAsyncTableConfig {
   showActions: boolean;
   allowFilters: boolean;
   filterConfigs?: IFilterConfig[];
+  // An HTML template for the body of the expandable row. To work properly, the template must be resolved in
+  // ngAfterViewInit of the component that creates the config object.
+  detailsTemplate?: TemplateRef<null>;
 }
 
 export interface IFilterConfig {
@@ -55,7 +59,8 @@ export interface IFilterConfig {
     IconField,
     InputText,
     TableModule,
-    InputIconModule
+    InputIconModule,
+    AsyncTaskDetailsComponent,
   ],
   templateUrl: './asynctask.component.html',
   styleUrl: './asynctask.component.css',
@@ -103,7 +108,7 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
 
   activeFilters: Filter[] = [];
 
-  constructor(private asyncTaskFacade: AsyncTaskFacade) { }
+  constructor(private asyncTaskFacade: AsyncTaskFacade) {}
 
   /**
    * onInit: fetches all tasks and opens an SSE connection to get real-time updates
@@ -115,25 +120,31 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
 
     // running tasks can change status to 'completed', 'failed', etc. and new
     // tasks can be created - open an SSE connection to get real-time updates
-    this.subEvents = this.asyncTaskFacade.openAsyncTasksEventStreaming(this.accessToken).subscribe({
-      next: (run: Run) => {
-        const runExists = this.tasks.find(t => t.id === run.id) !== undefined;
+    this.subEvents = this.asyncTaskFacade
+      .openAsyncTasksEventStreaming(this.accessToken)
+      .subscribe({
+        next: (run: Run) => {
+          const runExists =
+            this.tasks.find((t) => t.id === run.id) !== undefined;
 
-        // either update an existing task or add a new task
-        if(runExists) {
-          this.asyncTaskFacade.updateTask(run);
-        } else {
-          this.asyncTaskFacade.addTask(run);
-        }
+          // either update an existing task or add a new task
+          if (runExists) {
+            this.asyncTaskFacade.updateTask(run);
+          } else {
+            this.asyncTaskFacade.addTask(run);
+          }
 
-        // update selected tasks based on the active filters
-        this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
-      },
-      error: (error) => {
-        // TODO [GIK 5/15/2025]: error handling to be implemented in G3-631
-        console.error('Error fetching async tasks:', error);
-      }
-    });
+          // update selected tasks based on the active filters
+          this.filteredTasks = this.asyncTaskFacade.filterTasks(
+            this.tasks,
+            this.activeFilters
+          );
+        },
+        error: (error) => {
+          // TODO [GIK 5/15/2025]: error handling to be implemented in G3-631
+          console.error('Error fetching async tasks:', error);
+        },
+      });
 
     // subscribe to observable that emits when the tasks collection updates
     this.asyncTaskFacade.getTasks$().subscribe((tasks) => {
@@ -143,7 +154,7 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
       // set up filters based on tableConfig
       this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
 
-      if(this.tableConfig.defaultExpandedRows) {
+      if (this.tableConfig.defaultExpandedRows) {
         this.expandedRows = this.tableConfig.defaultExpandedRows;
       }
     });
@@ -152,8 +163,11 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     this.asyncTaskFacade.getActiveFilters$().subscribe({
       next: (filters) => {
         this.activeFilters = filters;
-        this.filteredTasks = this.asyncTaskFacade.filterTasks(this.tasks, this.activeFilters);
-      }
+        this.filteredTasks = this.asyncTaskFacade.filterTasks(
+          this.tasks,
+          this.activeFilters
+        );
+      },
     });
   }
 
@@ -161,7 +175,7 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
    * onDestroy: closes subscriptions
    */
   ngOnDestroy() {
-    if(this.subEvents) {
+    if (this.subEvents) {
       this.subEvents.unsubscribe();
     }
   }
@@ -191,7 +205,9 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
    */
   removeFilter(filter: Filter) {
     filter.selectedOptions = [];
-    const myActiveFilters = this.activeFilters.filter((f) => f.name !== filter.name);
+    const myActiveFilters = this.activeFilters.filter(
+      (f) => f.name !== filter.name
+    );
     this.asyncTaskFacade.setActiveFilters(myActiveFilters);
   }
 }
