@@ -12,6 +12,12 @@ describe('AsyncTaskDetailsComponent', () => {
 
     fixture = TestBed.createComponent(AsyncTaskDetailsComponent);
     component = fixture.componentInstance;
+    component.task = {
+      id: 1,
+      name: 'Test Task',
+      description: 'This is a test task',
+      status: 1,
+    }
     fixture.detectChanges();
   });
 
