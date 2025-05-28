@@ -47,10 +47,10 @@ libraries (like */ui-components/my-new-component* or */api-clients/my-new-compon
 You can use the below Nx command: 
 ```bash
 # ui-components
-npx nx g @nrwl/angular:component --path=ui-components/my-new-component --directory=ui-components 
+npx nx g @nrwl/angular:component --path=ui-components/lib/my-new-component --export=true 
 
 # clients-api
-npx nx g @nrwl/angular:component --path=clients/my-new-component --directory=clients-api 
+npx nx g @nrwl/angular:component --path=api-clients/lib/my-new-component --export=true 
 ```
 The command will create a new module/directory in the **ui-components** library/directory. You can also use the 
 `--dry-run` flag with the above command first to see what files will be created without actually creating them.
