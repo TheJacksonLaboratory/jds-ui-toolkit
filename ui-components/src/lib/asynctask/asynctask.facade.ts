@@ -189,4 +189,14 @@ export class AsyncTaskFacade {
     });
     this.setActiveFilters([]);
   }
+
+  deleteTask(task: RunInput): void {
+    // this.asyncTaskService.deleteTask(task);
+    console.log('Delete task:', task);
+  }
+
+  cancelTask(task: RunInput): void {
+    // this.asyncTaskService.cancelTask(task);
+    console.log('Cancel task:', task);
+  }
 }

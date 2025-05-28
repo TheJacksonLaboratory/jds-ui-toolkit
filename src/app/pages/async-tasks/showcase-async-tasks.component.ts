@@ -41,4 +41,12 @@ export class ShowcaseAsyncTasksComponent implements OnInit {
   ngOnInit() {
     this.accessToken$ = this.auth.getAccessTokenSilently();
   }
+
+  editTask(task: any) {
+    console.log('Edit Task:', task);
+  }
+
+  openTask(task: any) {
+    console.log('Open Task:', task);
+  }
 }
