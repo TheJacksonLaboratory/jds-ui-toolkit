@@ -20,29 +20,27 @@ export class AsyncTaskFacade {
   constructor(
     private asyncTaskState: AsyncTaskState,
     private asyncTaskService: AsyncTaskService
-  ) {
-    asyncTaskService.setBaseUrl('https://astra-dev.jax.org');
-  }
-
+  ) { }
 
   /**
-   * Fetches historical async tasks data.
+   * Fetches async tasks data.
    *
-   * The data involves detailed information about completed tasks runs including
-   * their inputs and statuses (e.g., completed, failed, terminated). The response
-   * is then transformed into the RunInput type and stored in the AsyncTaskState.
+   * The data involves detailed information about tasks runs including inputs
+   * and statuses (e.g., completed, failed, terminated). The response data is
+   * then transformed into the RunInput type and stored in the AsyncTaskState.
    */
   fetchAsyncTasks(): void {
     forkJoin({
       runs: this.asyncTaskService.getRuns().pipe(
         catchError((error) => {
-          console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
+
           return of({ data: [] }); // returns empty array
         })
       ),
       inputs: this.asyncTaskService.getInputs().pipe(
         catchError((error) => {
           console.log(error); // TODO [GIK 5/20/2025] error handling will be implemented in IS-78
+
           return of({ data: [] }); // returns empty array
         })
       )

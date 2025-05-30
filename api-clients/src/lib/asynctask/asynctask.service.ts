@@ -1,121 +1,111 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subscriber, throwError } from 'rxjs';
-
-import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source';
+import { Injectable, inject } from '@angular/core';
+import { Observable, Subscriber } from 'rxjs';
+import { fetchEventSource, EventSourceMessage } from '@microsoft/fetch-event-source';
+// services
+import { ApiBaseService, ApiBaseServiceFactory } from '../base.service';
 // models
+import {
+  Input,
+  InputReference,
+  InputSubmission,
+  Result,
+  ResultReference,
+  Run
+} from './asynctask.model';
 import { CollectionResponse, Response } from '../models/response';
-import { 
-  Input, 
-  InputReference, 
-  InputSubmission, 
-  Result, 
-  ResultReference, 
-  Run 
-} from '../models/asynctask';
-import { FatalError, RetriableError } from '../classes/error-types';
 
-
-/**
- * Service for interacting with the Async Task API
- * Provides methods for managing inputs, runs, and results
- */
 @Injectable({
   providedIn: 'root'
 })
 export class AsyncTaskService {
-  private baseUrl = '/asynctask/api';
+  private apiBaseUrl = '/asynctask/api';
 
-  constructor(private http: HttpClient) {}
+  private apiServiceFactory: ApiBaseServiceFactory = inject(ApiBaseServiceFactory);
 
-  /**
-   * Configure the base URL for the service
-   * @param url - the base URL to use for API requests
-   */
-  setBaseUrl(url: string): void {
-    this.baseUrl = url.endsWith('/') ? url.slice(0, -1) : url;
-    
-    // Ensure the URL ends with the expected path
-    if (!this.baseUrl.endsWith('/asynctask/api')) {
-      this.baseUrl = `${this.baseUrl}/asynctask/api`;
+  private apiService: ApiBaseService =
+    this.apiServiceFactory.create(this.apiBaseUrl);
+
+  setApiBaseUrl(baseUrl: string): void {
+    this.apiBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+
+    // ensure the URL ends with '/asynctask/api'
+    if(!this.apiBaseUrl.endsWith('/asynctask/api')) {
+      this.apiBaseUrl = '/asynctask/api';
     }
+
+    // recreate the apiService
+    this.apiService = this.apiServiceFactory.create(this.apiBaseUrl);
   }
 
-  /**
-   * Get the current base URL
-   */
-  getBaseUrl(): string {
-    return this.baseUrl;
+  getApiBaseUrl(): string {
+    return this.apiBaseUrl;
   }
 
-  // Input methods
-
-  /**
-   * Get all inputs
-   */
-  getInputs(): Observable<CollectionResponse<InputReference>> {
-    return this.http.get<CollectionResponse<InputReference>>(`${this.baseUrl}/inputs`);
-  }
-
-  /**
-   * Create a new input
-   * @param inputSubmission - the input data to submit
-   */
+  // INPUT
   addInput(inputSubmission: InputSubmission): Observable<Response<Input>> {
-    return this.http.post<Response<Input>>(`${this.baseUrl}/inputs`, inputSubmission);
+    return this.apiService.post<Input>('/inputs', inputSubmission);
+  }
+  getInput(id: number): Observable<Response<Input>> {
+    return this.apiService.get<Input>(`/inputs/${id}`);
+  }
+  getInputs(): Observable<CollectionResponse<InputReference>> {
+    return this.apiService.getCollection<InputReference>('/inputs');
   }
 
   /**
-   * Get an input by its ID
-   * @param inputId - the input ID
-   */
-  getInput(inputId: number): Observable<Response<Input>> {
-    return this.http.get<Response<Input>>(`${this.baseUrl}/inputs/${inputId}`);
-  }
-
-  /**
-   * Update an input by ID
-   * @param inputId - the input ID
-   * @param name - optional new name
-   * @param description - optional new description
+   * Updates an existing input - only 'name' and 'description' can be updated
+   * @param inputId
+   * @param name - (optional) name to update
+   * @param description - (optional) description to update
    */
   updateInput(inputId: number, name?: string, description?: string): Observable<Response<InputReference>> {
-    let url = `${this.baseUrl}/inputs/${inputId}?`;
-    if (name !== undefined) {
-      url += `name=${name}&`;
+    const body: Partial<InputReference> = {};
+    if(name) {
+      body.name = name;
     }
-    if (description !== undefined) {
-      url += `description=${description}`;
+    if(description) {
+      body.description = description;
     }
-    return this.http.patch<Response<InputReference>>(url, null);
+    return this.apiService.patch<InputReference>(`/inputs/${inputId}`, body);
   }
 
-  // Run methods
+  // RUN
+  createRun(inputId?: number, inputSubmission?: InputSubmission): Observable<Response<Run>> {
+    const url = inputId ? `/runs?input_id=${inputId}` : '/runs';
+
+    return this.apiService.post<Run>(url, inputSubmission || null);
+  }
+
+  getRun(id: number): Observable<Response<Run>> {
+    return this.apiService.get<Run>(`/runs/${id}`);
+  }
 
   /**
-   * Get all runs visible to a user
-   * @param workflowId - optional workflow ID filter
+   *
+   * @param workflowId - (optional) workflow identifier
    */
   getRuns(workflowId?: string): Observable<CollectionResponse<Run>> {
+    const url = workflowId ? `/runs?workflow_id=${workflowId}` : '/runs';
 
-    let url = `${this.baseUrl}/runs`;
-    if (workflowId) {
-      url += `?workflow_id=${workflowId}`;
-    }
-    return this.http.get<CollectionResponse<Run>>(url);
+    return this.apiService.getCollection<Run>(url);
   }
 
   /**
-   * Create a new run
-   * @param inputId - optional input ID
-   * @param inputSubmission - optional input submission data
+   * Gets the input associated with the specific run ID. One run is associated
+   * with only one input, so this function returns a single input object.
+   * @param runId
    */
-  createRun(inputId?: number, inputSubmission?: InputSubmission): Observable<Response<Run>> {
-    let url = `${this.baseUrl}/runs`;
-    if (inputId !== undefined) {
-      url += `?input_id=${inputId}`;
-    }
-    return this.http.post<Response<Run>>(url, inputSubmission || null);
+  getRunInput(runId: number): Observable<Response<Input>> {
+    return this.apiService.get<Input>(`/runs/${runId}/inputs`);
+  }
+
+  /**
+   * Gets the result associated with the specific run ID. One run is associated
+   * with only one result, so this function returns a single result object.
+   * @param runId
+   */
+  getRunResult(runId: number): Observable<Response<Result>> {
+    return this.apiService.get<Result>(`/runs/${runId}/results`);
   }
 
   /**
@@ -126,15 +116,13 @@ export class AsyncTaskService {
    * @return an observable that emits run events
    */
   getRunEvents(accessToken: string): Observable<Run> {
-
     // observable constructor argument is 'subscribe()' method implementation
     return new Observable<Run>(
       (subscriber: Subscriber<Run>) => {
-
         // abort controller to cancel the request (on component destroy)
         const abortController = new AbortController();
 
-        fetchEventSource(`${this.baseUrl}/runs/events`, {
+        fetchEventSource(`${this.apiBaseUrl}/runs/events`, {
           method: 'GET',
           headers: {
             'Content-Type': 'text/event-stream',
@@ -187,80 +175,38 @@ export class AsyncTaskService {
         return () => {
           abortController.abort(); // abort the request
         }
-
       });
   }
 
-  /**
-   * Get a run by its ID
-   * @param runId - the run ID
-   */
-  getRun(runId: number): Observable<Response<Run>> {
-    return this.http.get<Response<Run>>(`${this.baseUrl}/runs/${runId}`);
+  // RESULT
+  getResult(resId: number): Observable<Response<Result>> {
+    return this.apiService.get<Result>(`/results/${resId}`);
   }
 
-  /**
-   * Get a run's results by the run ID
-   * @param runId - the run ID
-   */
-  getRunResults(runId: number): Observable<Response<Result>> {
-    return this.http.get<Response<Result>>(`${this.baseUrl}/runs/${runId}/results`);
-  }
-
-  /**
-   * Get a run's inputs by the run ID
-   * @param runId - the run ID
-   */
-  getRunInputs(runId: number): Observable<Response<Input>> {
-    return this.http.get<Response<Input>>(`${this.baseUrl}/runs/${runId}/inputs`);
-  }
-
-  // Result methods
-
-  /**
-   * Get all results
-   */
   getResults(): Observable<CollectionResponse<ResultReference>> {
-    return this.http.get<CollectionResponse<ResultReference>>(`${this.baseUrl}/results`);
+    return this.apiService.getCollection<ResultReference>('/results');
   }
 
   /**
-   * Get a result by its ID
-   * @param resultId - the result ID
+   * Updates an existing result record - only 'name' and 'description' can be updated
+   * @param resId
+   * @param name - (optional) result's name to update
+   * @param description - (optional) result's description to update
    */
-  getResult(resultId: number): Observable<Response<Result>> {
-    try {
-      return this.http.get<Response<Result>>(`${this.baseUrl}/results/${resultId}`);
-    } catch (error) {
-      return throwError(error);
+  updateResult(resId: number, name?: string, description?: string): Observable<Response<ResultReference>> {
+    const body: Partial<ResultReference> = {};
+    if(name) {
+      body.name = name;
     }
-  }
-
-  /**
-   * Update a result by its ID
-   * @param resultId - the result ID
-   * @param name - optional new name
-   * @param description - optional new description
-   */
-  updateResult(resultId: number, name?: string, description?: string): Observable<Response<ResultReference>> {
-    try {
-      let url = `${this.baseUrl}/results/${resultId}?`;
-      if (name !== undefined) {
-        url += `name=${name}&`;
-      }
-      if (description !== undefined) {
-        url += `description=${description}`;
-      }
-      return this.http.patch<Response<ResultReference>>(url, null);
-    } catch (error) {
-      return throwError(error);
+    if(description) {
+      body.description = description;
     }
+    return this.apiService.patch<ResultReference>(`/results/${resId}`, body);
   }
 
-  /**
-   * Get health check status
-   */
+  // HEALTH CHECK
+  // TO-DO [GIK 05/30/2025]: needs to be moved outside this service to another
   getHealthCheck(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/monitors/servers/health`);
+    return this.apiService.get<any>('/monitors/servers/health');
   }
 }
