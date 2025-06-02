@@ -121,13 +121,50 @@
             {{ WorkflowExecutionStatus[task.status] }}
           </span>
         </td>
-        <td class="tw-w-1/6">
-          <span class="tw-text-blue-900 tw-text-sm tw-mx-2">
-            <i class="pi pi-pencil"></i> Edit Run
-          </span>
-          <span class="tw-text-red-900 tw-text-sm tw-mx-2">
-            <i class="pi pi-trash"></i> Delete
-          </span>
+        <td>
+          <div class="tw-flex tw-justify-end">
+
+            <p-button *ngIf="task.status === WorkflowExecutionStatus.COMPLETED"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="openTask(task)"
+                      title="Open Task"
+                      variant="text" >
+              <i class="pi pi-external-link"></i>
+              <span class="tw-hidden lg:tw-block">Open</span>
+            </p-button>
+
+            <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="editTask(task)"
+                      title="Edit Task"
+                      variant="text" >
+              <i class="pi pi-pencil"></i>
+              <span class="tw-hidden lg:tw-block">Edit</span>
+            </p-button>
+            @if (task.status === 1) {
+              <p-button *ngIf="task.status === WorkflowExecutionStatus.RUNNING"
+                        severity="contrast"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="cancelTask(task)"
+                        title="Cancel Task"
+                        variant="text" >
+                <i class="pi pi-times-circle"></i>
+                <span class="tw-hidden lg:tw-block">Cancel</span>
+              </p-button>
+            } @else {
+              <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
+                        severity="danger"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="deleteTask(task)"
+                        title="Delete Task"
+                        variant="text" >
+                <i class="pi pi-trash"></i>
+                <span class="tw-hidden lg:tw-block">Delete</span>
+              </p-button>
+            }
+          </div>
         </td>
       </tr>
     </ng-template>
@@ -144,6 +181,5 @@
   </p-table>
 </div>
 <p-drawer [(visible)]="filterVisible" position="right" header="Filter" styleClass="tw-w-1/4 tw-min-w-[400px]">
-  <!--  filter component goes here -->
   <lib-asynctask-filter (closeFilter)="filterVisible = !filterVisible"></lib-asynctask-filter>
 </p-drawer>

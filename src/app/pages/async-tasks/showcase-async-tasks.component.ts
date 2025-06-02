@@ -44,6 +44,14 @@ export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
     this.accessToken$ = this.auth.getAccessTokenSilently();
   }
 
+  editTask(task: any) {
+    console.log('Edit Task:', task);
+  }
+
+  openTask(task: any) {
+    console.log('Open Task:', task);
+  }
+
   ngAfterViewInit() {
     this.tableConfiguration.detailsTemplate = this.detailsTemplate;
   }
