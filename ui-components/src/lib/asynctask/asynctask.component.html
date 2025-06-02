@@ -169,13 +169,12 @@
       </tr>
     </ng-template>
 
-    <ng-template #expandedrow let-task *ngIf="tableConfig.isExpandable">
-      <tr>
-        <!-- <td colspan="7"> -->
+    <ng-template #expandedrow let-task>
+      <tr *ngIf="tableConfig.isExpandable">
         <td [attr.colspan]="tableConfig.isExpandable ? 7 : 6">
-          <div class="tw-p-4 tw-bg-gray-50">
-            <h4 class="tw-font-medium tw-mb-2">{{ task.name }} details</h4>
-          </div>
+          <lib-asynctask-details [task]="task"
+                                 [bodyTemplate]="tableConfig.detailsTemplate"
+          ></lib-asynctask-details>
         </td>
       </tr>
     </ng-template>

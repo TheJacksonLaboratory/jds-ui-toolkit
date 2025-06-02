@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
@@ -12,7 +12,8 @@ import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science-demo/ui
   styleUrl: './showcase-async-tasks.component.css',
   standalone: true
 })
-export class ShowcaseAsyncTasksComponent implements OnInit {
+export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
+  @ViewChild('detailsTemplate') detailsTemplate!: TemplateRef<null>;
 
   tableConfiguration: IAsyncTableConfig = {
     isExpandable: true,
@@ -31,7 +32,8 @@ export class ShowcaseAsyncTasksComponent implements OnInit {
         displayName: 'Name',
         filterOptions: ['data', 'hello']
       }
-    ]
+    ],
+    detailsTemplate: this.detailsTemplate
   };
 
   accessToken$: Observable<string> = new Observable<string>();
@@ -48,5 +50,9 @@ export class ShowcaseAsyncTasksComponent implements OnInit {
 
   openTask(task: any) {
     console.log('Open Task:', task);
+  }
+
+  ngAfterViewInit() {
+    this.tableConfiguration.detailsTemplate = this.detailsTemplate;
   }
 }
