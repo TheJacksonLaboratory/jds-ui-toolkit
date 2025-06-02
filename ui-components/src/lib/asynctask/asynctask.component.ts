@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -82,6 +82,8 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
   tasks: RunInput[] = [];
   filteredTasks: RunInput[] = [];
 
+  @Output() editEmitter = new EventEmitter<RunInput>();
+  @Output() openEmitter = new EventEmitter<RunInput>();
   // tracking expanded rows
   expandedRows: Record<string, boolean> = {};
   // events subscription: used to close the SSE connection
@@ -193,5 +195,38 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     filter.selectedOptions = [];
     const myActiveFilters = this.activeFilters.filter((f) => f.name !== filter.name);
     this.asyncTaskFacade.setActiveFilters(myActiveFilters);
+  }
+
+  /**
+   * Removes a task from the list of tasks and deletes it from the backend.
+   * @param task
+   */
+  deleteTask(task: RunInput) {
+    this.tasks.splice(this.tasks.indexOf(task), 1);
+    this.asyncTaskFacade.deleteTask(task);
+  }
+
+  /**
+   * Emits the task to be edited.
+   * @param task
+   */
+  editTask(task: RunInput) {
+    this.editEmitter.emit(task);
+  }
+
+  /**
+   * Emits the task to be opened.
+   * @param task
+   */
+  openTask(task: RunInput) {
+    this.openEmitter.emit(task);
+  }
+
+  /**
+   * Cancels a running task.
+   * @param task
+   */
+  cancelTask(task: RunInput) {
+    this.asyncTaskFacade.cancelTask(task);
   }
 }
