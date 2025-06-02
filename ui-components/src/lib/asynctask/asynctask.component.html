@@ -124,7 +124,7 @@
         <td>
           <div class="tw-flex tw-justify-end">
 
-            <p-button *ngIf="task.status === 2"
+            <p-button *ngIf="task.status === WorkflowExecutionStatus.COMPLETED"
                       severity="info"
                       styleClass="tw-mx-2 tw-p-2"
                       (onClick)="openTask(task)"
@@ -134,7 +134,7 @@
               <span class="tw-hidden lg:tw-block">Open</span>
             </p-button>
 
-            <p-button *ngIf="task.status !== 1"
+            <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
                       severity="info"
                       styleClass="tw-mx-2 tw-p-2"
                       (onClick)="editTask(task)"
@@ -144,7 +144,7 @@
               <span class="tw-hidden lg:tw-block">Edit</span>
             </p-button>
             @if (task.status === 1) {
-              <p-button *ngIf="task.status === 1"
+              <p-button *ngIf="task.status === WorkflowExecutionStatus.RUNNING"
                         severity="contrast"
                         styleClass="tw-mx-2 tw-p-2"
                         (onClick)="cancelTask(task)"
@@ -154,7 +154,7 @@
                 <span class="tw-hidden lg:tw-block">Cancel</span>
               </p-button>
             } @else {
-              <p-button *ngIf="task.status !== 1"
+              <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
                         severity="danger"
                         styleClass="tw-mx-2 tw-p-2"
                         (onClick)="deleteTask(task)"
