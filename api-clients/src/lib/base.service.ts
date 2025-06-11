@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
+
 // models
+import { ErrorResponse } from './models/error';
 import { Response, CollectionResponse } from './models/response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiBaseServiceFactory {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   create(baseUrl: string): ApiBaseService {
     return new ApiBaseService(this.http, baseUrl);
@@ -29,28 +31,74 @@ export class ApiBaseService {
   private handleResponse<T>(
     response: Response<T> | CollectionResponse<T>,
   ): Response<T> | CollectionResponse<T> {
-    if (response.errors) {
+    if(response.errors) {
+      // TO-DO: [GIK 6/6/2025] once the API service has the capabilities to respond
+      // with meaningful validation and analytical errors, this will need to be
+      // updated to typecast these into the ErrorResponse model and rethrow the error object
       throw new Error(response.errors.join(', '));
     }
     return response;
   }
 
   /**
-   * Handles HTTP errors
-   * @param error The HTTP error
-   * @private
+   * Handles HTTP errors by catching them and rethrowing a consistent
+   * error response that contains an error code, numeric code, and
+   * a user-friendly message.
+   * TO-DO: [GIK 6/10/2025] consider adding error logging capabilities to an external service
+   * @param error an error object, typically an HttpErrorResponse
+   * @returns an Observable that emits an ErrorResponse object
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private handleError(error: any) {
-    let errorMessage = 'An unknown error occurred';
-    if (error.error?.message) {
-      errorMessage = error.error.message;
-    } else if (error.message) {
-      errorMessage = error.message;
+  private handleHttpError(error: any): Observable<never> {
+    let errorResponse: ErrorResponse;
+
+    // errors returned on the Observable response stream
+    // will be wrapped in an HttpErrorResponse class
+    if(error.name === 'HttpErrorResponse') {
+      errorResponse = {
+        code: error.statusText || 'HTTP_ERROR',
+        num_code: error.status,
+        message: this.getErrorMessage(error),
+      };
+    } else {
+      errorResponse = {
+        code: 'UNKNOWN_ERROR',
+        num_code: 0,
+        message: error.message || 'An unknown error occurred',
+      }
     }
-    // You can customize error handling here (e.g., show toast, log to service)
-    console.error('API Error:', errorMessage);
-    return throwError(() => new Error(errorMessage));
+
+    return throwError(() => errorResponse);
+  }
+
+  /**
+   * Get a user-friendly error message based on the HTTP status code
+   *
+   * @param error
+   * @return a string containing the error message
+   */
+  getErrorMessage(error: HttpErrorResponse): string {
+    switch(error.status) {
+      case 400:
+        return 'Bad request - malformed request syntax or invalid parameters';
+        break;
+      case 401:
+        return 'Unauthorized - authentication required or invalid credentials';
+        break;
+      case 403:
+        return 'Forbidden - the authenticated user does not have permission to perform the operation';
+        break;
+      case 404:
+        return 'Not found - the requested resource does not exist';
+        break;
+      case 422:
+        return 'Unprocessable content - the request is correctly formed but contained semantic errors';
+        break;
+      case 500:
+        return 'Internal Server Error - generic server-side error';
+        break;
+      default:
+        return `Unexpected error occurred - status code: ${error.status}`;
+    }
   }
 
   /**
@@ -61,7 +109,7 @@ export class ApiBaseService {
   get<T>(url: string, params?: HttpParams): Observable<Response<T>> {
     return this.http.get<Response<T>>(`${this.baseUrl}${url}`, { params }).pipe(
       map((response) => this.handleResponse(response)),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleHttpError(error)),
     );
   }
 
@@ -87,7 +135,7 @@ export class ApiBaseService {
       .get<CollectionResponse<T>>(`${this.baseUrl}${url}`, { params })
       .pipe(
         map((response) => this.handleCollectionResponse(response)),
-        catchError((error) => this.handleError(error)),
+        catchError((error) => this.handleHttpError(error)),
       );
   }
 
@@ -100,7 +148,7 @@ export class ApiBaseService {
   post<T>(url: string, body: any): Observable<Response<T>> {
     return this.http.post<Response<T>>(`${this.baseUrl}${url}`, body).pipe(
       map((response) => this.handleResponse(response)),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleHttpError(error)),
     );
   }
 
@@ -113,7 +161,7 @@ export class ApiBaseService {
   put<T>(url: string, body: any): Observable<Response<T>> {
     return this.http.put<Response<T>>(`${this.baseUrl}${url}`, body).pipe(
       map((response) => this.handleResponse(response)),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleHttpError(error)),
     );
   }
 
@@ -126,7 +174,7 @@ export class ApiBaseService {
   patch<T>(url: string, body: any): Observable<Response<T>> {
     return this.http.patch<Response<T>>(`${this.baseUrl}${url}`, body).pipe(
       map((response) => this.handleResponse(response)),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleHttpError(error)),
     );
   }
 
@@ -137,7 +185,7 @@ export class ApiBaseService {
   delete<T>(url: string): Observable<Response<T>> {
     return this.http.delete<Response<T>>(`${this.baseUrl}${url}`).pipe(
       map((response) => this.handleResponse(response)),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleHttpError(error)),
     );
   }
 }

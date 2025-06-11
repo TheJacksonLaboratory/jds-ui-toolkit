@@ -1,7 +1,7 @@
 import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Ontology, OntologyConfig, OntologyTerm } from '../models/ontology';
+import { Ontology, OntologyConfig, OntologyTerm } from './ontology.model';
 import { CollectionResponse, Response } from '../models/response';
 import { OntologyService } from './ontology.service';
 

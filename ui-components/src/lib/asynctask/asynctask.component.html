@@ -1,8 +1,12 @@
 <div class="tw-flex-col tw-p-3 tw-bg-blue-50">
-  <div class="tw-flex tw-flex-col tw-justify-center">
-    <h3 class="tw-font-semibold tw-w-full text-2xl">
-      Task Tracker
-    </h3>
+  <!-- header section -->
+  <div class="tw-flex tw-justify-start tw-my-2">
+    <!-- [GIK 6/4/2025]: change to be a configurable variable -->
+    <h3 class="tw-font-semibold tw-text-2xl">Async Tasks Tracker</h3>
+  </div>
+
+  <div *ngIf="error" class="tw-flex tw-justify-start">
+    <lib-widget-error [errorMessage]="error" class="tw-w-full"></lib-widget-error>
   </div>
 
   <!-- search and chips section -->
@@ -32,16 +36,16 @@
 
     @for(filter of activeFilters; track filter.name) {
       @if(filter.selectedOptions.length > 0) {
-          <p-chip class="tw-mr-1 tw-bg-gray-200"
-                  [removable]="true"
-                  (onRemove)="removeFilter(filter)">
-            <div class="tw-flex tw-flex-wrap">
-              {{filter.name + ':'}}&nbsp;
-              @for (option of filter.selectedOptions; track $index; let j = $index) {
-                <span>{{option.label}}<ng-container *ngIf="j < filter.selectedOptions.length-1">,&nbsp;</ng-container></span>
-              }
-            </div>
-          </p-chip>
+        <p-chip class="tw-mr-1 tw-bg-gray-200"
+                [removable]="true"
+                (onRemove)="removeFilter(filter)">
+          <div class="tw-flex tw-flex-wrap">
+            {{filter.name + ':'}}&nbsp;
+            @for (option of filter.selectedOptions; track $index; let j = $index) {
+              <span>{{option.label}}<ng-container *ngIf="j < filter.selectedOptions.length-1">,&nbsp;</ng-container></span>
+            }
+          </div>
+        </p-chip>
       }
     }
 
@@ -53,6 +57,9 @@
               severity="info" />
   </div>
 
+
+
+  <!-- table section -->
   <p-table
     #taskTable
     [value]="filteredTasks"
@@ -101,7 +108,6 @@
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
           </p-button>
         </td>
-        <!-- <td class="tw-w-12 tw-text-center">{{ i + 1 }}</td> -->
         <td class="tw-w-1/12">{{ task.id }}</td>
         <td class="tw-w-1/6">{{ task.name }}</td>
         <td class="tw-w-1/3">{{ task.description }}</td>
@@ -110,20 +116,19 @@
           <span
             class="tw-p-2 tw-rounded-full tw-text-center tw-w-20 tw-text-xs"
             [ngClass]="{
-              'tw-text-purple-800 tw-bg-purple-100': task.status === 1,
-              'tw-text-green-800 tw-bg-green-100': task.status === 2,
-              'tw-text-red-800 tw-bg-red-100': task.status === 3,
-              'tw-text-gray-800 tw-bg-gray-100': task.status === 4,
-              'tw-text-orange-800 tw-bg-orange-100': task.status === 5,
-              'tw-text-yellow-800 tw-bg-yellow-100': task.status === 6,
-              'tw-text-blue-800 tw-bg-blue-100': task.status === 7
+              'tw-text-purple-800 tw-bg-purple-100': task.status === WorkflowExecutionStatus.RUNNING,
+              'tw-text-green-800 tw-bg-green-100': task.status === WorkflowExecutionStatus.COMPLETED,
+              'tw-text-red-800 tw-bg-red-100': task.status === WorkflowExecutionStatus.FAILED,
+              'tw-text-gray-800 tw-bg-gray-100': task.status === WorkflowExecutionStatus.CANCELED,
+              'tw-text-orange-800 tw-bg-orange-100': task.status === WorkflowExecutionStatus.TERMINATED,
+              'tw-text-yellow-800 tw-bg-yellow-100': task.status === WorkflowExecutionStatus.CONTINUED_AS_NEW,
+              'tw-text-blue-800 tw-bg-blue-100': task.status === WorkflowExecutionStatus.TIMED_OUT
             }">
             {{ WorkflowExecutionStatus[task.status] }}
           </span>
         </td>
         <td>
           <div class="tw-flex tw-justify-end">
-
             <p-button *ngIf="task.status === 2"
                       severity="info"
                       styleClass="tw-mx-2 tw-p-2"
@@ -180,6 +185,7 @@
     </ng-template>
   </p-table>
 </div>
+
 <p-drawer [(visible)]="filterVisible" position="right" header="Filter" styleClass="tw-w-1/4 tw-min-w-[400px]">
   <lib-asynctask-filter (closeFilter)="filterVisible = !filterVisible"></lib-asynctask-filter>
 </p-drawer>
