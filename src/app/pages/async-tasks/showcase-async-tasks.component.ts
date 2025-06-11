@@ -51,6 +51,7 @@ export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
   openTask(task: any) {
     console.log('Open Task:', task);
   }
+
   ngAfterViewInit() {
     this.tableConfiguration.detailsTemplate = this.detailsTemplate;
   }
