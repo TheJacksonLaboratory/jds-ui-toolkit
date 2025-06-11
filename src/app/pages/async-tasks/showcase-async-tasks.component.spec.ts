@@ -17,6 +17,7 @@ const mockAsyncTaskFacade = {
   getFilteredTasks$: jest.fn().mockReturnValue(of([])),
   getFilters$: jest.fn().mockReturnValue(of([])),
   setFilters: jest.fn(),
+  getResponseError$: jest.fn().mockReturnValue(of(null)),
 };
 
 const mockAuthService = {

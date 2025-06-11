@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-// PrimeNG
+import { map, of, Subscription, switchMap } from 'rxjs';
+
+// PrimeNG components
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { Chip } from 'primeng/chip';
@@ -20,6 +21,7 @@ import { Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients
 // components
 import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
 import { AsyncTaskDetailsComponent } from './asynctask-details/asynctask-details.component';
+import { WidgetErrorComponent } from '../widget-error/widget-error.component';
 
 /**
  * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it
@@ -61,6 +63,7 @@ export interface IFilterConfig {
     TableModule,
     InputIconModule,
     AsyncTaskDetailsComponent,
+    WidgetErrorComponent
   ],
   templateUrl: './asynctask.component.html',
   styleUrl: './asynctask.component.css',
@@ -80,9 +83,16 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     allowFilters: true,
   };
 
+  protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
+
+  // error: Error | null = null;
+  error: string | null = null; // used to show errors in the UI
+
+
+
   @ViewChild('taskTable') taskTable: Table | undefined;
 
-  protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
+
 
   tasks: RunInput[] = [];
   filteredTasks: RunInput[] = [];
@@ -114,51 +124,47 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
 
   /**
    * onInit: fetches all tasks and opens an SSE connection to get real-time updates
-   * about tasks that change status or get created; subscribes to the observable that
-   * stores the tasks and their status to show the data in the view.
+   * about tasks that might change status or get created; subscribes to the observable that
+   * stores the current tasks lists that needs to be shown in the UI view.
    */
   ngOnInit() {
-    this.asyncTaskFacade.fetchAsyncTasks(); // initial all tasks fetch
+    this.asyncTaskFacade.fetchAsyncTasks(); // fetch all tasks
 
-    // running tasks can change status to 'completed', 'failed', etc. and new
-    // tasks can be created - open an SSE connection to get real-time updates
-    this.subEvents = this.asyncTaskFacade
-      .openAsyncTasksEventStreaming(this.accessToken)
-      .subscribe({
-        next: (run: Run) => {
-          const runExists =
-            this.tasks.find((t) => t.id === run.id) !== undefined;
-
-          // either update an existing task or add a new task
-          if (runExists) {
-            this.asyncTaskFacade.updateTask(run);
-          } else {
-            this.asyncTaskFacade.addTask(run);
-          }
-
-          // update selected tasks based on the active filters
-          this.filteredTasks = this.asyncTaskFacade.filterTasks(
-            this.tasks,
-            this.activeFilters
-          );
-        },
-        error: (error) => {
-          // TODO [GIK 5/15/2025]: error handling to be implemented in G3-631
-          console.error('Error fetching async tasks:', error);
-        },
-      });
+    // subscribe to an SSE streaming observable, which allows to show real-time
+    // updates as existing tasks change status (to 'completed', 'failed', etc.) or
+    // new tasks get created; SSE connection is manually closed on component destroy
+    this.subEvents = this.asyncTaskFacade.openAsyncTasksEventStreaming(this.accessToken);
 
     // subscribe to observable that emits when the tasks collection updates
-    this.asyncTaskFacade.getTasks$().subscribe((tasks) => {
-      this.tasks = tasks;
-      this.filteredTasks = tasks;
+    this.asyncTaskFacade.getTasks$().pipe(
+      switchMap((tasks: RunInput[]) => {
+        if(tasks.length === 0) {
+          // check the errors observable when tasks are empty
+          return this.asyncTaskFacade.getResponseError$().pipe(
+            map((error: string | null) => ({ tasks: [], error: error }))
+          );
+        } else {
+          return of({ tasks: tasks, error: null });
+        }
+      })).subscribe({
+      next: ({tasks, error}) => {
+        this.tasks = tasks;
+        this.filteredTasks = tasks;
 
-      // set up filters based on tableConfig
-      this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
+        // set up filters based on tableConfig
+        this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
 
-      if (this.tableConfig.defaultExpandedRows) {
-        this.expandedRows = this.tableConfig.defaultExpandedRows;
+        if (this.tableConfig.defaultExpandedRows) {
+          this.expandedRows = this.tableConfig.defaultExpandedRows;
+        }
       }
+    });
+
+    // subscribe to observable that emits errors
+    this.asyncTaskFacade.getResponseError$().subscribe({
+      next: (error) => {
+        this.error = error;
+      },
     });
 
     // subscribe to observable that emits filter selection changes
@@ -177,8 +183,8 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
    * onDestroy: closes subscriptions
    */
   ngOnDestroy() {
-    if (this.subEvents) {
-      this.subEvents.unsubscribe();
+    if(this.subEvents) {
+      // this.subEvents.unsubscribe();
     }
   }
 

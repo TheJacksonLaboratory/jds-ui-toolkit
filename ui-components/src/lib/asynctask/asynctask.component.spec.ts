@@ -12,6 +12,7 @@ const mockAsyncTaskFacade = {
   addTask: jest.fn(),
   getActiveFilters$: jest.fn().mockReturnValue(of([])),
   getFilters$: jest.fn().mockReturnValue(of([])),
+  getResponseError$: jest.fn().mockReturnValue(of(null)),
 };
 
 describe('AsyncTaskComponent', () => {

@@ -15,9 +15,12 @@ import { Filter, RunInput } from './asynctask.model';
 })
 export class AsyncTaskState {
   private tasks$: BehaviorSubject<RunInput[]> = new BehaviorSubject<RunInput[]>([]);
+  // TO-DO: [GIK 6/10/2025] this could be replaced with a specified error structure
+  // because there could be more than one error (i.e. when multiple tasks have failed)
+  private responseError$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
   private filters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
   private activeFilters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
-
 
   /**
    * Loads initial RunInput[] tasks
@@ -44,19 +47,15 @@ export class AsyncTaskState {
    */
   updateTask(task: RunInput): boolean {
     const currentTasks: RunInput[] = this.tasks$.getValue();
-
-    // let t = currentTasks.find(t => t.id === task.id);
     const index = currentTasks.findIndex(t => t.id === task.id);
 
     if(index === -1) {
       return false;
     } else {
-      // t = task;
       currentTasks[index] = task;
 
       this.tasks$.next([...currentTasks]);
     }
-
     return true;
   }
 
@@ -67,7 +66,6 @@ export class AsyncTaskState {
    */
   addTask(task: RunInput): boolean {
     const currentTasks = this.tasks$.getValue();
-
     const t = currentTasks.find(t => t.id === task.id);
 
     if(!t) {
@@ -76,9 +74,17 @@ export class AsyncTaskState {
     } else {
       return false;
     }
-
     return true;
   }
+
+  setResponseError(error: string | null): void {
+    this.responseError$.next(error);
+  }
+
+  getResponseError$(): Observable<string | null> {
+    return this.responseError$.asObservable();
+  }
+
 
   getFilters$(): Observable<Filter[]> {
     return this.filters$.asObservable();
