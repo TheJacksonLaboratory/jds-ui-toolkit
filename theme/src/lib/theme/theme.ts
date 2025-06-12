@@ -7,16 +7,13 @@ import { semantic } from './semantic';
 const JdsPreset = definePreset(Lara, {
   primitive: primitive,
   semantic: semantic,
-  components: components,
+  components: components
 },
   `
   :root {
     --submenu-text-color: #fffff;
+    --button-secondary-background: #ffffff;
   }
-
-  .p-menubar-submenu .p-menubar-item-content {
-    color: black;
-    }
    `
 );
 

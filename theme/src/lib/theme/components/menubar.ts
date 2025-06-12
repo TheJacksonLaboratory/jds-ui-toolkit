@@ -11,11 +11,13 @@ export const menubar: MenubarDesignTokens = {
         color: '{surface.0}'
       },
       item: {
-        color: '{surface.0}'
+        color: '{surface.0}',
+        focusColor: '{gray.300}',
+        focusBackground: 'unset'
       },
       submenu: {
         background: '{surface.0}',
-        padding: '.5rem 1rem'
+        padding: '0 0 .25rem 0'
       },
       submenuIcon: {
         color: '{surface.400}'
@@ -23,17 +25,37 @@ export const menubar: MenubarDesignTokens = {
     }
   },
   css: () => `
+  
+        .p-menubar {
+          height: 64px;
+         }
+         
         .p-menubar-submenu .p-menubar-item-content {
           color: black;
           font-weight: normal;
         }
         
-        p-menubarsub {
-          margin: auto;
+        p-menubarsub:first-child {
+          flex: 1;
+          display: flex;
+          justify-content: center;
         }
         
-        .p-menubar-root-list {
-          font-weight: bold;
+        .p-menubar-start, .p-menubar-end {
+          flex: 1;
         }
+        
+        .p-menubar-end {
+          justify-content: flex-end;
+          display: flex;
+        }
+        
+        .p-menubar-submenu .p-menubar-item-content {
+            color: black;
+        }
+        
+        .p-menubar-logo {
+          display: flex;
+         }
     `
 }

@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
-// Auth0
 import { AuthService } from '@auth0/auth0-angular';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
+import { AuthenticationComponent} from '../auth/authentication.component';
 
 @Component({
   selector: 'lib-jds-navbar',
   imports: [CommonModule, ButtonModule, MenubarModule,
-    BadgeModule, AvatarModule],
+    BadgeModule, AvatarModule, AuthenticationComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
   standalone: true,
@@ -21,7 +21,8 @@ export class NavbarComponent implements OnInit {
 
   @Input() authentication = false;
   @Input() title = "JDS Angular Application";
-  @Input() logo = "";
+  @Input() logo = "https://media.jax.org/m/70a126ca6332fe5a/webimage-logo.png";
+  @Input() logoLink = "/";
   @Input() items: MenuItem[] = [
     {label: "Explore", icon: "", items: [
         {
@@ -39,8 +40,10 @@ export class NavbarComponent implements OnInit {
     {label: "Components", icon: ""},
     {label: "Contact", icon: "" }
   ];
+  @Input() externalLink = "www.google.com";
+  @Input() externalLinkLabel = "Link External";
 
-  private authService: AuthService | null = null;
+  authService: AuthService | null = null;
 
   constructor(public injector: Injector) { }
 
@@ -53,5 +56,9 @@ export class NavbarComponent implements OnInit {
     if (this.authentication) {
       this.authService = this.injector.get(AuthService);
     }
+  }
+
+  isSvg(): boolean {
+    return this.logo.endsWith(".svg");
   }
 }
