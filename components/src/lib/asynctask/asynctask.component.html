@@ -1,27 +1,101 @@
-<div class="tw-flex-col tw-p-3 tw-bg-gray-100">
-  <div class="tw-flex tw-justify-center tw-my-5">
-    <h3 class="tw-font-semibold tw-w-full text-2xl">
-      Task Runs Tracking
-    </h3>
+<div class="tw-flex-col tw-p-3 tw-bg-blue-50">
+  <!-- header section -->
+  <div class="tw-flex tw-justify-start tw-my-2">
+    <!-- [GIK 6/4/2025]: change to be a configurable variable -->
+    <h3 class="tw-font-semibold tw-text-2xl">Async Tasks Tracker</h3>
   </div>
+
+  <div *ngIf="error" class="tw-flex tw-justify-start">
+    <lib-widget-error [errorMessage]="error" class="tw-w-full"></lib-widget-error>
+  </div>
+
+  <!-- search and chips section -->
+  <div class="tw-flex tw-my-4">
+    <p-iconfield class="tw-w-1/3">
+      <input type="text"
+             placeholder="Search"
+             class="tw-w-full"
+             (input)="applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+             pInputText
+             #asyncTasksGlobalSearch
+      />
+      <p-inputicon styleClass="pi pi-times"
+                   class="cursor-pointer"
+                   *ngIf="asyncTasksGlobalSearch.value !== ''"
+                   (click)="asyncTasksGlobalSearch.value = ''; applyFilterGlobal(asyncTasksGlobalSearch, 'contains')"
+      />
+    </p-iconfield>
+
+    <p-button icon="pi pi-filter"
+              *ngIf="tableConfig.allowFilters"
+              [rounded]="true"
+              [text]="true"
+              (onClick)="openFilterPanel()"
+              label="Filter"
+              severity="info" />
+
+    @for(filter of activeFilters; track filter.name) {
+      @if(filter.selectedOptions.length > 0) {
+        <p-chip class="tw-mr-1 tw-bg-gray-200"
+                [removable]="true"
+                (onRemove)="removeFilter(filter)">
+          <div class="tw-flex tw-flex-wrap">
+            {{filter.name + ':'}}&nbsp;
+            @for (option of filter.selectedOptions; track $index; let j = $index) {
+              <span>{{option.label}}<ng-container *ngIf="j < filter.selectedOptions.length-1">,&nbsp;</ng-container></span>
+            }
+          </div>
+        </p-chip>
+      }
+    }
+
+    <p-button [rounded]="true"
+              *ngIf="activeFilters.length"
+              [text]="true"
+              (onClick)="clearFilters()"
+              label="clear all"
+              severity="info" />
+  </div>
+
+
+
+  <!-- table section -->
   <p-table
-    [value]="tasks"
-    [paginator]="tableConfig.isPaginated"
+    #taskTable
+    [value]="filteredTasks"
+    [paginatorPosition]="'top'"
+    paginator="true"
+    paginatorStyleClass="tw-bg-gray-100 tw-flex tw-border-x tw-border-t tw-border-gray-300 tw-justify-start"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Runs"
     [rows]="tableConfig.rowsPerPage"
+    [first]="first"
     [rowsPerPageOptions]="tableConfig.rowsPerPageOptions"
     [expandedRowKeys]="expandedRows"
     [stripedRows]="tableConfig.isStriped"
+    [globalFilterFields]="['name', 'description']"
+    styleClass="async-task-table"
     dataKey="id"
     class="tw-text-sm"
+    showGridlines
+    [dt]="tableDt"
   >
-    <ng-template pTemplate="header">
+    <ng-template #header>
       <tr>
         <th *ngIf="tableConfig.isExpandable" style="width: 3rem"></th>
-        <th class="tw-font-semibold tw-w-12">#</th>
-        <th class="tw-font-semibold tw-w-1/4">Name</th>
-        <th class="tw-font-semibold tw-w-1/3">Description</th>
-        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap">Run Initiated</th>
-        <th class="tw-font-semibold tw-w-1/12">Status</th>
+        <th class="tw-font-semibold tw-w-1/12 tw-text-nowrap">Run Id</th>
+        <th class="tw-font-semibold tw-w-1/6" pSortableColumn="name">
+          Name <p-sortIcon field="name" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/3" pSortableColumn="description">
+          Description <p-sortIcon field="description" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/6 tw-text-nowrap" pSortableColumn="initiated">
+          Run Initiated <p-sortIcon field="initiated" />
+        </th>
+        <th class="tw-font-semibold tw-w-1/12" pSortableColumn="status">
+          Status <p-sortIcon field="status" />
+        </th>
         <th class="tw-font-semibold tw-w-1/6">Actions</th>
       </tr>
     </ng-template>
@@ -34,45 +108,84 @@
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
           </p-button>
         </td>
-        <td class="tw-w-12 tw-text-center">{{ i + 1 }}</td>
-        <td class="tw-text-nowrap tw-w-1/5">{{ task.name }}</td>
+        <td class="tw-w-1/12">{{ task.id }}</td>
+        <td class="tw-w-1/6">{{ task.name }}</td>
         <td class="tw-w-1/3">{{ task.description }}</td>
         <td class="tw-w-1/6"></td>
         <td class="tw-w-1/12">
           <span
             class="tw-p-2 tw-rounded-full tw-text-center tw-w-20 tw-text-xs"
             [ngClass]="{
-              'tw-text-purple-800 tw-bg-purple-100': task.status === 1,
-              'tw-text-green-800 tw-bg-green-100': task.status === 2,
-              'tw-text-red-800 tw-bg-red-100': task.status === 3,
-              'tw-text-gray-800 tw-bg-gray-100': task.status === 4,
-              'tw-text-orange-800 tw-bg-orange-100': task.status === 5,
-              'tw-text-yellow-800 tw-bg-yellow-100': task.status === 6,
-              'tw-text-blue-800 tw-bg-blue-100': task.status === 7
+              'tw-text-purple-800 tw-bg-purple-100': task.status === WorkflowExecutionStatus.RUNNING,
+              'tw-text-green-800 tw-bg-green-100': task.status === WorkflowExecutionStatus.COMPLETED,
+              'tw-text-red-800 tw-bg-red-100': task.status === WorkflowExecutionStatus.FAILED,
+              'tw-text-gray-800 tw-bg-gray-100': task.status === WorkflowExecutionStatus.CANCELED,
+              'tw-text-orange-800 tw-bg-orange-100': task.status === WorkflowExecutionStatus.TERMINATED,
+              'tw-text-yellow-800 tw-bg-yellow-100': task.status === WorkflowExecutionStatus.CONTINUED_AS_NEW,
+              'tw-text-blue-800 tw-bg-blue-100': task.status === WorkflowExecutionStatus.TIMED_OUT
             }">
             {{ WorkflowExecutionStatus[task.status] }}
           </span>
         </td>
-        <td class="tw-w-1/6">
-          <span class="tw-text-blue-900 tw-text-sm tw-mx-2">
-            <i class="pi pi-pencil"></i> Edit Run
-          </span>
-          <span class="tw-text-red-900 tw-text-sm tw-mx-2">
-            <i class="pi pi-trash"></i> Delete
-          </span>
+        <td>
+          <div class="tw-flex tw-justify-end">
+            <p-button *ngIf="task.status === WorkflowExecutionStatus.COMPLETED"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="openTask(task)"
+                      title="Open Task"
+                      variant="text" >
+              <i class="pi pi-external-link"></i>
+              <span class="tw-hidden lg:tw-block">Open</span>
+            </p-button>
+
+            <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
+                      severity="info"
+                      styleClass="tw-mx-2 tw-p-2"
+                      (onClick)="editTask(task)"
+                      title="Edit Task"
+                      variant="text" >
+              <i class="pi pi-pencil"></i>
+              <span class="tw-hidden lg:tw-block">Edit</span>
+            </p-button>
+            @if (task.status === 1) {
+              <p-button *ngIf="task.status === WorkflowExecutionStatus.RUNNING"
+                        severity="contrast"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="cancelTask(task)"
+                        title="Cancel Task"
+                        variant="text" >
+                <i class="pi pi-times-circle"></i>
+                <span class="tw-hidden lg:tw-block">Cancel</span>
+              </p-button>
+            } @else {
+              <p-button *ngIf="task.status !== WorkflowExecutionStatus.RUNNING"
+                        severity="danger"
+                        styleClass="tw-mx-2 tw-p-2"
+                        (onClick)="deleteTask(task)"
+                        title="Delete Task"
+                        variant="text" >
+                <i class="pi pi-trash"></i>
+                <span class="tw-hidden lg:tw-block">Delete</span>
+              </p-button>
+            }
+          </div>
         </td>
       </tr>
     </ng-template>
 
-    <ng-template #expandedrow let-task *ngIf="tableConfig.isExpandable">
-      <tr>
-        <!-- <td colspan="7"> -->
+    <ng-template #expandedrow let-task>
+      <tr *ngIf="tableConfig.isExpandable">
         <td [attr.colspan]="tableConfig.isExpandable ? 7 : 6">
-          <div class="tw-p-4 tw-bg-gray-50">
-            <h4 class="tw-font-medium tw-mb-2">{{ task.name }} details</h4>
-          </div>
+          <lib-asynctask-details [task]="task"
+                                 [bodyTemplate]="tableConfig.detailsTemplate"
+          ></lib-asynctask-details>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<p-drawer [(visible)]="filterVisible" position="right" header="Filter" styleClass="tw-w-1/4 tw-min-w-[400px]">
+  <lib-asynctask-filter (closeFilter)="filterVisible = !filterVisible"></lib-asynctask-filter>
+</p-drawer>

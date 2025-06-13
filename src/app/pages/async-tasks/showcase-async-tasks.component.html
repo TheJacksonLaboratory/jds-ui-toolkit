@@ -1,1 +1,14 @@
-<lib-jds-async-tasks [tableConfig]="tableConfiguration"></lib-jds-async-tasks>
+<lib-jds-async-tasks *ngIf = "accessToken$ | async as accessToken"
+                     [tableConfig]="tableConfiguration"
+                     [accessToken]="accessToken"
+                     (editEmitter)="editTask($event)"
+                     (openEmitter)="openTask($event)">
+</lib-jds-async-tasks>
+
+<ng-template #detailsTemplate let-task>
+  <div>
+    <h2 class="tw-font-bold tw-mb-3">Custom Header</h2>
+    <h3>This is an example of a template that can be passed in the tableConfig.</h3>
+    <span class="tw-font-bold">{{task.name}}: </span><span>{{task.description}}</span>
+  </div>
+</ng-template>

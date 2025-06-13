@@ -11,7 +11,7 @@ import {
   ResultReference, 
   Run, 
   WorkflowExecutionStatus 
-} from '../models/asynctask';
+} from './asynctask.model';
 
 describe('AsyncTaskService', () => {
   let service: AsyncTaskService;
@@ -35,22 +35,22 @@ describe('AsyncTaskService', () => {
   });
 
   it('should have default base URL', () => {
-    expect(service.getBaseUrl()).toEqual(defaultBaseUrl);
+    expect(service.getApiBaseUrl()).toEqual(defaultBaseUrl);
   });
 
   it('should set base URL correctly with trailing slash', () => {
-    service.setBaseUrl('https://example.com/');
-    expect(service.getBaseUrl()).toEqual('https://example.com/asynctask/api');
+    service.setApiBaseUrl('https://example.com/');
+    expect(service.getApiBaseUrl()).toEqual('https://example.com/asynctask/api');
   });
 
   it('should set base URL correctly without trailing slash', () => {
-    service.setBaseUrl('https://example.com');
-    expect(service.getBaseUrl()).toEqual('https://example.com/asynctask/api');
+    service.setApiBaseUrl('https://example.com');
+    expect(service.getApiBaseUrl()).toEqual('https://example.com/asynctask/api');
   });
 
   it('should preserve existing path when setting base URL', () => {
-    service.setBaseUrl('https://example.com/asynctask/api');
-    expect(service.getBaseUrl()).toEqual('https://example.com/asynctask/api');
+    service.setApiBaseUrl('https://example.com/asynctask/api');
+    expect(service.getApiBaseUrl()).toEqual('https://example.com/asynctask/api');
   });
 
   // Input methods tests
@@ -251,7 +251,7 @@ describe('AsyncTaskService', () => {
         workflow_id: 'workflow-123' 
       };
 
-      service.getRunEvents().subscribe(response => {
+      service.getRunEvents("").subscribe(response => {
         expect(response).toEqual(mockResponse);
       });
       // TO-DO: [GIK 03/24/2025] `/runs/events` endpoint is passed as a parameter to fetchEventSource,
@@ -294,7 +294,7 @@ describe('AsyncTaskService', () => {
         } 
       };
       
-      service.getRunResults(runId).subscribe(response => {
+      service.getRunResult(runId).subscribe(response => {
         expect(response).toEqual(mockResponse);
       });
       
@@ -316,7 +316,7 @@ describe('AsyncTaskService', () => {
         } 
       };
       
-      service.getRunInputs(runId).subscribe(response => {
+      service.getRunInput(runId).subscribe(response => {
         expect(response).toEqual(mockResponse);
       });
       

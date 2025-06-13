@@ -5,26 +5,32 @@
 import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 
 /**
- * RunInput interface combines Run and InputReference properties
+ * The RunInput type combines properties from the Run and InputReference types
  */
 export interface RunInput {
-  /**
-   * Optional descriptive name (from InputReference)
-   */
-  name?: string | null;
-
-  /**
-   * Optional detailed description (from InputReference)
-   */
-  description?: string | null;
-
-  /**
-   * Primary key (from Run)
-   */
+  // primary key (from Run)
   id: number;
 
-  /**
-   * Current execution status from Temporal (from Run)
-   */
+  // optional descriptive name (from InputReference)
+  name?: string | null;
+
+  // optional detailed description (from InputReference)
+  description?: string | null;
+
+  // current execution status (from Run)
   status: WorkflowExecutionStatus;
+
+  // optional message
+  message?: string | null;
+}
+
+export interface Filter {
+  name: string;
+  options: FilterOption[];
+  selectedOptions: FilterOption[];
+}
+
+export interface FilterOption {
+  label: string;
+  value?: string;
 }

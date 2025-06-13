@@ -1,3 +1,6 @@
+// AsyncTask API client
 export * from './lib/asynctask/asynctask.service';
-export * from './lib/models/asynctask';
+export * from './lib/asynctask/asynctask.model';
+
+// Ontology API client
 export * from './lib/ontology/ontology.service';

@@ -14,7 +14,7 @@ practices and tools that promote code reuse, reduce duplication, and ensure arch
 across the *JAX Data Science* community.
 
 The workspace uses the Nx build system and has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects). 
-There are two libraries - *@jax-data-science/ui-components* and *@jax-data-science/api-clients* - and one root application.
+There are two libraries - *@jax-data-science/components* and *@jax-data-science/api-clients* - and one root application.
 
 The workspace is maintained by the JAX Data Science UI/UX team and undergoes continuous updates to keep up with the 
 latest technologies. This commitment to technological currency ensures that all shared UI components benefit from the latest performance 
@@ -36,16 +36,16 @@ npm install
 
 To test before pushing changes, use:
 
-To start implementing your shared components, create a new module/directory in the **ui-components** or **clients-api** 
-libraries (like */ui-components/my-new-component* or */api-clients/my-new-component*).
+To start implementing your shared components, create a new module/directory in the **components** or **api-clients** 
+libraries (like */components/my-new-component* or */api-clients/my-new-component*).
 
 You can use the below Nx command: 
 ```bash
 # ui-components
-npx nx g @nrwl/angular:component --path=ui-components/my-new-component --directory=ui-components 
+npx nx g @nrwl/angular:component --path=components/lib/my-new-component --export=true 
 
 # clients-api
-npx nx g @nrwl/angular:component --path=clients/my-new-component --directory=clients-api 
+npx nx g @nrwl/angular:component --path=api-clients/lib/my-new-component --export=true 
 ```
 
 You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
@@ -76,14 +76,14 @@ where the QA team will be able to test the component using the showcase applicat
 ## *Releasing*
 Once the component has been tested and approved by the QA team, you can proceed with releasing the component. 
 You will need to: 
-- update the version of the component in the **package.json** - each */ui-components* 
+- update the version of the component in the **package.json** - each */components* 
 and */api-clients* directory has its own **package.json** file.
 
 ```sh
 npx nx serve jax-data-science
 ```
 
-- update the **CHANGELOG.md** file - each */ui-components* and */api-clients* directory has its own **CHANGELOG.md** file.
+- update the **CHANGELOG.md** file - each */components* and */api-clients* directory has its own **CHANGELOG.md** file.
 
 ```sh
 npx nx build jax-data-science

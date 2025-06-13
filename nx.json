@@ -88,9 +88,9 @@
       "style": "css"
     }
   },
-  "defaultProject": "jds-ui-components",
+  "defaultProject": "jax-data-science",
   "release": {
-    "projects": ["ui-components", "api-clients"],
+    "projects": ["components", "api-clients", "theme"],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true

@@ -1,15 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShowcaseAsyncTasksComponent } from './showcase-async-tasks.component';
 import { AsyncTaskFacade } from '@jax-data-science/components';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+// import { provideHttpClient, withFetch } from '@angular/common/http';
+import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
 // Create mock for AsyncTaskFacade
 const mockAsyncTaskFacade = {
+  fetchAsyncTasks: jest.fn().mockReturnValue(of(null)),
+  openAsyncTasksEventStreaming: jest.fn().mockReturnValue(of(null)),
+  addTask: jest.fn().mockReturnValue(true),
+  updateTask: jest.fn().mockReturnValue(true),
   getTasks$: jest.fn().mockReturnValue(of(null)),
-  fetchAsyncTasks: jest.fn(),
-  openAsyncTaskEventListener: jest.fn(),
-  addTask: jest.fn(),
+  getActiveFilters$: jest.fn().mockReturnValue(of([])),
+  setActiveFilters: jest.fn(),
+  getFilteredTasks$: jest.fn().mockReturnValue(of([])),
+  getFilters$: jest.fn().mockReturnValue(of([])),
+  setFilters: jest.fn(),
+  getResponseError$: jest.fn().mockReturnValue(of(null)),
+};
+
+const mockAuthService = {
+  getAccessTokenSilently: jest.fn().mockReturnValue(of('mock-token'))
 };
 
 describe('ShowcaseAsyncTasksComponent', () => {
@@ -20,7 +32,7 @@ describe('ShowcaseAsyncTasksComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ShowcaseAsyncTasksComponent],
       providers: [
-        provideHttpClient(withFetch()), // Modern approach for HTTP in tests
+        { provide: AuthService, useValue: mockAuthService },
         { provide: AsyncTaskFacade, useValue: mockAsyncTaskFacade },
       ]
     }).compileComponents();
