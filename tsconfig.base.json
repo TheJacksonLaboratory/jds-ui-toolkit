@@ -17,7 +17,7 @@
     "paths": {
       "@jax-data-science/api-clients": ["api-clients/src/index.ts"],
       "@jax-data-science/components": ["components/src/index.ts"],
-      "@jax-data-science/theme": ["theme/src/index.ts"]
+      "@jax-data-science/themes": ["themes/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

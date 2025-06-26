@@ -90,7 +90,7 @@
   },
   "defaultProject": "jax-data-science",
   "release": {
-    "projects": ["components", "api-clients", "theme"],
+    "projects": ["components", "api-clients", "themes"],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true

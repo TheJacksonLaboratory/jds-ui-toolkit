@@ -1,5 +1,5 @@
 export default {
-  displayName: 'theme',
+  displayName: 'themes',
   preset: '../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../coverage/theme',

@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
-import { JdsPreset } from '@jax-data-science/theme';
+import { EchoPreset } from '@jax-data-science/themes';
 
 import { appRoutes } from './app.routes';
 
@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: JdsPreset,
+        preset: EchoPreset,
         options: {
           cssLayer: {
             name: 'primeng',

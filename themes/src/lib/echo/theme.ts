@@ -4,7 +4,7 @@ import { components } from './components';
 import { primitive } from './primitive';
 import { semantic } from './semantic';
 
-const JdsPreset = definePreset(Lara, {
+const EchoPreset = definePreset(Lara, {
   primitive: primitive,
   semantic: semantic,
   components: components
@@ -17,4 +17,4 @@ const JdsPreset = definePreset(Lara, {
    `
 );
 
-export {JdsPreset};
+export {EchoPreset};
