@@ -1,5 +1,5 @@
 {
-  "name": "@jds-ui-components/source",
+  "name": "@jax-data-science/demo",
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "nx run-many -t build --parallel",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint --parallel",
-    "e2e": "nx run-many -t e2e"
+    "e2e": "nx run-many -t e2e",
+    "run": "nx run"
   },
   "private": true,
   "dependencies": {

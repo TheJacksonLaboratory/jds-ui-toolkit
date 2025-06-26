@@ -17,7 +17,7 @@ import { Table, TableModule } from 'primeng/table';
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
 import { Filter, RunInput } from './asynctask.model';
-import { Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { Run, WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 // components
 import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
 import { AsyncTaskDetailsComponent } from './asynctask-details/asynctask-details.component';

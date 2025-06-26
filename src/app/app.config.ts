@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
-import Lara from '@primeng/themes/lara'
+import { EchoPreset } from '@jax-data-science/themes';
 
 import { appRoutes } from './app.routes';
 
@@ -19,12 +19,13 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Lara,
+        preset: EchoPreset,
         options: {
           cssLayer: {
             name: 'primeng',
-            order: 'tailwind-base, primeng, tailwind-utilities'
-          }
+            order:  'tailwind-base, primeng, tailwind-utilities'
+          },
+          darkModeSelector: '.my-app-dark'
         }
       }
     }),

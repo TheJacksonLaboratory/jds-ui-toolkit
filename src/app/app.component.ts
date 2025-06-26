@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-// components
-import { HeaderComponent } from './components/header/header.component';
+import { NavbarComponent } from '@jax-data-science/components';
 
 @Component({
   imports: [
     RouterModule,
-    HeaderComponent
+    NavbarComponent
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,5 +13,26 @@ import { HeaderComponent } from './components/header/header.component';
   standalone: true,
 })
 export class AppComponent {
-  title = 'jds-ui-components';
+  title = 'jax-data-science';
+  items = [{label: "Components", icon: "", items: [
+      {
+        label: "Navbar",
+        url: "docs/components/navbar",
+      },
+      {
+        label: "Ontology Search",
+        routerLink: "docs/components/search"
+      }
+    ]
+  }, {label: "Services", icon: "", items: [
+      {
+        label: "Async Task",
+        url: "docs/services/navbar",
+      },
+      {
+        label: "Ontology Service",
+        routerLink: "docs/services/search"
+      }
+    ]
+  }, {label: "Help", icon: ""}]
 }

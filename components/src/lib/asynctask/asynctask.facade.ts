@@ -15,7 +15,7 @@ import { AsyncTaskState } from './asynctask.state';
 // models
 import { Filter, RunInput } from './asynctask.model';
 // services
-import { AsyncTaskService, Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService, Run, WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 import { IFilterConfig } from './asynctask.component';
 
 @Injectable({
