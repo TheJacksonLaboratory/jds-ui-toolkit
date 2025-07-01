@@ -1,5 +1,5 @@
 {
-  "name": "@jax-data-science-demo/api-clients",
+  "name": "@jax-data-science/api-clients",
   "version": "0.0.2-8",
   "dependencies": {
     "@microsoft/fetch-event-source": "^2.0.1",

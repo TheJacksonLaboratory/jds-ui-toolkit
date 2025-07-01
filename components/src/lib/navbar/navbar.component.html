@@ -1,0 +1,28 @@
+<p-menubar [model]="items">
+  <ng-template #start>
+    <a aria-label="Logo" class="p-menubar-logo tw-mr-2" [href]="logoLink">
+      <img *ngIf="isSvg()" [src]="logo" alt="Logo" class="tw-w-[24px] tw-h-[32px]" />
+      <i class="pi pi-cog tw-text-2xl"></i>
+    </a>
+    <h1 class="tw-text-xl">{{title}}</h1>
+  </ng-template>
+  <ng-template #item let-item let-root="root">
+    <div class="margin-auto">
+      <a pRipple class="flex items-center p-menubar-item-link">
+        <span>{{ item.label }}</span>
+        <p-badge *ngIf="item.badge" [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
+        <span *ngIf="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+        <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+      </a>
+    </div>
+  </ng-template>
+  <ng-template #end>
+    <div class="tw-flex tw-items-center">
+      <a *ngIf="externalLink" class="p-button-link tw-mr-4" [href]="externalLink" target="_blank">{{externalLinkLabel}}</a>
+      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+      <div *ngIf="!authentication" class="tw-ml-4">
+        <lib-jds-auth></lib-jds-auth>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>

@@ -1,0 +1,16 @@
+<p-button
+  *ngIf="(auth.isAuthenticated$ | async) === false"
+  id="jds-login-btn"
+  label="Login"
+  severity="secondary"
+  size="small"
+  (click)="login()"
+/>
+<p-button
+  *ngIf="auth.isAuthenticated$ | async"
+  id="jds-logout-btn"
+  label="Logout"
+  severity="secondary"
+  size="small"
+  (click)="logout()"
+/>

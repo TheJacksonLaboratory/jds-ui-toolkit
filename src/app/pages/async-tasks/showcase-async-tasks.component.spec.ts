@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShowcaseAsyncTasksComponent } from './showcase-async-tasks.component';
-import { AsyncTaskFacade } from '@jax-data-science-demo/ui-components';
+import { AsyncTaskFacade } from '@jax-data-science/components';
 // import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';

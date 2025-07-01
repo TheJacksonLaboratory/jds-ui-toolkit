@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AsyncTaskFacade } from './asynctask.facade';
-import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
+import { AsyncTaskService } from '@jax-data-science/api-clients';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { of } from 'rxjs';
 import { Filter, RunInput } from './asynctask.model';

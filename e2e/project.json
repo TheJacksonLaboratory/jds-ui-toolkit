@@ -4,7 +4,7 @@
   "projectType": "application",
   "sourceRoot": "e2e/src",
   "tags": [],
-  "implicitDependencies": ["jds-ui-components"],
+  "implicitDependencies": ["jax-data-science"],
   "// targets": "to see all targets run: nx show project e2e --web",
   "targets": {}
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
 
-import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science-demo/ui-components';
+import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science/components';
 
 @Component({
   selector: 'app-showcase-async-tasks',
