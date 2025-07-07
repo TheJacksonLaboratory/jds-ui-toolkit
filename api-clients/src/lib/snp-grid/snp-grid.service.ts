@@ -64,7 +64,7 @@ export class SnpGridService {
 
   /**
    * Returns strains available in the API and takes an optional limit; by default the limit is set
-   * to 1000 to get all strains
+   * to 5000 to get all strains
    * @param limit - maximum number of strains to be returned
    */
   getStrains(limit = 5000): Observable<Strain[]> {
@@ -74,11 +74,12 @@ export class SnpGridService {
   }
 
   /**
-   * Returns list of known genes which includes symbols and genomic coordinates
-   * @param searchValue - value to use to filter the search results
+   * Returns a list of known genes whose symbols/coordinates start with the specified value.
+   * @param searchValue - value to use for the "starts with" filter
+   * @param limit - maximum number of genes to return, default is 20
    */
-  getGenes(searchValue: string): Observable<Gene[]> {
-    return this.http.get<Gene[]>(`${this.api}/genes/?symbol=${searchValue}%&limit=20`);
+  getGenes(searchValue: string, limit = 20): Observable<Gene[]> {
+    return this.http.get<Gene[]>(`${this.api}/genes/?symbol=${searchValue}%&limit=${limit}`);
   }
 
   /**
@@ -104,9 +105,10 @@ export class SnpGridService {
   /**
    * Returns list of known reference SNP (RS) data which includes IDs and coordinates
    * @param searchValue - value to use to filter the search results
+   * @param limit - maximum number of results to return, default is 20
    */
-  getReferenceSNPs(searchValue: string): Observable<ReferenceSNP[]> {
-    return this.http.get<ReferenceSNP[]>(`${this.api}/rsids/?rsid=${searchValue}%&limit=20`);
+  getReferenceSNPs(searchValue: string, limit = 20): Observable<ReferenceSNP[]> {
+    return this.http.get<ReferenceSNP[]>(`${this.api}/rsids/?rsid=${searchValue}%&limit=${limit}`);
   }
 
   /**
@@ -187,6 +189,7 @@ export class SnpGridService {
    */
   getGenotypeDownloadURLForCurrentData(strains: number[], regions: SNPSearchRegion[], dataset_id: number | undefined, is_unique_row = false,  limit: number): string {
     if (!dataset_id) {
+      // default to the GenomeMuster dataset id
       dataset_id = 2;
     }
     const stringifiedRegions = `regions=${regions
