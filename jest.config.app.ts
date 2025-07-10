@@ -1,8 +1,8 @@
 export default {
-  displayName: 'jds-ui-components',
+  displayName: 'jax-data-science',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/jds-ui-components',
+  coverageDirectory: './coverage/jax-data-science',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable, map, catchError, of } from 'rxjs';
 // components
-import { FacetSearchComponent, FacetSearchFacade } from '@jax-data-science-demo/ui-components';
+import { FacetSearchComponent, FacetSearchFacade } from '@jax-data-science/components';
 // models
-import { IFacetSearchCategory, IFacetOption } from '@jax-data-science-demo/ui-components';
+import { IFacetSearchCategory, IFacetOption } from '@jax-data-science/components';
 
 // API Response interfaces
 interface FilterOption {

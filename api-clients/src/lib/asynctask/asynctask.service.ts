@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, Subscriber, throwError } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { fetchEventSource, EventSourceMessage } from '@microsoft/fetch-event-source';
 // services
 import { ApiBaseService, ApiBaseServiceFactory } from '../base.service';
