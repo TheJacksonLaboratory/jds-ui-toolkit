@@ -19,7 +19,8 @@ import { ErrorResponse } from '../models/error';
   providedIn: 'root'
 })
 export class AsyncTaskService {
-  private apiBaseUrl = '/asynctask/api';
+  // TO-DO [GIK 7/9/2025]: move 'https://astra-dev.jax.org' to an environment variable
+  private apiBaseUrl = 'https://astra-dev.jax.org/asynctask/api';
 
   private apiServiceFactory: ApiBaseServiceFactory = inject(ApiBaseServiceFactory);
 
@@ -30,7 +31,7 @@ export class AsyncTaskService {
     this.apiBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
     // ensure the URL ends with '/asynctask/api'
-    if(!this.apiBaseUrl.endsWith('/asynctask/api')) {
+    if(!this.apiBaseUrl.endsWith('asynctask/api')) {
       this.apiBaseUrl = `${this.apiBaseUrl}/asynctask/api`;
     }
 
@@ -68,7 +69,6 @@ export class AsyncTaskService {
       url += `description=${description}`;
     }
 
-    console.log(`Updating input with ID ${inputId} using URL: ${url}`);
     return this.apiBaseService.patch<InputReference>(url, null);
   }
 
@@ -115,7 +115,7 @@ export class AsyncTaskService {
    * Calls the fetchEventSource() function, which is a wrapper around the native
    * EventSource API. This function is used to establish connection to an API
    * endpoint and listen to event streaming data associated with task runs.
-   *
+   * TO-DO [GIK 7/9/2025]: needs to add a reconnect logic
    * @return an observable that emits run events
    */
   getRunEvents(accessToken: string): Observable<Run> {

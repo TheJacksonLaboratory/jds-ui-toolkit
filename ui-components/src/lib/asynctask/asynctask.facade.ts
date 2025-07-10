@@ -13,10 +13,10 @@ import { catchError } from 'rxjs/operators';
 // states
 import { AsyncTaskState } from './asynctask.state';
 // models
-import { Filter, RunInput } from './asynctask.model';
+import { RunInput } from './asynctask.model';
+import { Run } from '@jax-data-science-demo/api-clients';
 // services
-import { AsyncTaskService, Run, WorkflowExecutionStatus } from '@jax-data-science-demo/api-clients';
-import { IFilterConfig } from './asynctask.component';
+import { AsyncTaskService } from '@jax-data-science-demo/api-clients';
 
 @Injectable({
   providedIn: 'root'
@@ -131,7 +131,7 @@ export class AsyncTaskFacade {
             (this.asyncTaskState.getTasks$() as BehaviorSubject<RunInput[]>).getValue();
           const existingTask: RunInput | undefined = existingTasks.find(t => t.id === run.id);
 
-          if (existingTask) {
+          if(existingTask) {
             this.asyncTaskState.updateTask(run);
             return EMPTY; // No further processing needed
           } else {
@@ -189,102 +189,7 @@ export class AsyncTaskFacade {
     return this.asyncTaskState.getResponseError$();
   }
 
-  getFilters$(): Observable<Filter[]> {
-    return this.asyncTaskState.getFilters$();
-  }
 
-  setFilters(filters: Filter[]): void {
-    this.asyncTaskState.setFilters(filters);
-  }
-
-  getActiveFilters$(): Observable<Filter[]> {
-    return this.asyncTaskState.getActiveFilters$();
-  }
-
-  setActiveFilters(filters: Filter[]): void {
-    this.asyncTaskState.setActiveFilters(filters);
-  }
-
-  /**
-   * Sets up filters for the AsyncTask table. Status is the only default filter. The rest are defined in the tableConfig.filterConfigs array.
-   * @param filterConfigs
-   */
-  setUpFilters(filterConfigs?: IFilterConfig[]): void {
-    const filters: Filter[] = [];
-
-    // Status
-    const statusFilter: Filter = {
-      name: 'Status',
-      options: [],
-      selectedOptions: [],
-    }
-    for (let i = 0; i < Object.values(WorkflowExecutionStatus).length/2; i++) {
-      statusFilter.options.push({
-        label: Object.values(WorkflowExecutionStatus)[i] as string
-      })
-    }
-    filters.push(statusFilter);
-
-    // Config filters
-    if (filterConfigs) {
-      filterConfigs.forEach(filterConfig => {
-        const filter: Filter = {
-          name: filterConfig.displayName,
-          options: filterConfig.filterOptions.map(option => ({label: option})),
-          selectedOptions: [],
-        }
-        filters.push(filter);
-      });
-    }
-
-    this.asyncTaskState.setFilters(filters);
-  }
-
-  /**
-   * Filters tasks based on the selected options in the filters.
-   * @param tasks
-   * @param filters
-   */
-  filterTasks(tasks: RunInput[], filters: Filter[]): RunInput[] {
-    return tasks.filter((task) => {
-      for (const filter of filters) {
-        const selectedOptions = filter.selectedOptions.map(option => option.label);
-        if (filter.name === 'Status') {
-          if (!selectedOptions.includes(WorkflowExecutionStatus[task.status])) {
-            return false;
-          }
-        } else {
-          if (!selectedOptions.includes(task[filter.name.toLowerCase() as keyof RunInput] as string)) {
-            return false;
-          }
-        }
-      }
-      // if all filters are satisfied, return true
-      return true;
-    });
-  }
-
-  /**
-   * Removes a filter from the active filters list and clears its selected options.
-   * @param activeFilters
-   * @param filter
-   */
-  removeFilter(activeFilters: Filter[], filter: Filter) {
-    filter.selectedOptions = [];
-    const newActiveFilters = activeFilters.filter((f) => f.name !== filter.name);
-    this.setActiveFilters(newActiveFilters);
-  }
-
-  /**
-   * Clears all selected options in the filters and sets the active filters to an empty array.
-   * @param filters
-   */
-  clearAllFilters(filters: Filter[]) {
-    filters.forEach((filter) => {
-      filter.selectedOptions = [];
-    });
-    this.setActiveFilters([]);
-  }
 
   deleteTask(task: RunInput): void {
     // this.asyncTaskService.deleteTask(task);

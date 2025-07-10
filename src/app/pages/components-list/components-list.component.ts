@@ -41,6 +41,13 @@ export class ComponentsListComponent implements OnInit {
         isAuthRequired: false,
         status: "In Progress",
         route: 'authentication'
+      },
+      {
+        name: 'FacetSearch',
+        description: 'FacetSearch component description',
+        isAuthRequired: false,
+        status: "Completed",
+        route: 'facet-search'
       }
     ];
   }
