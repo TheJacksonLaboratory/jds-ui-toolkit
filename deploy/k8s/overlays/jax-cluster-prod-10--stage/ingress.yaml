@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  jds-angular-ui-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - "jds-echo-stage.jax.org"
+      secretName: jds-echo-stage-jax-org-tls
+  rules:
+  - host: "jds-echo-stage.jax.org"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: jds-angular-ui
+              port:
+                number: 80
