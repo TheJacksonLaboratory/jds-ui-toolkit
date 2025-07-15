@@ -10,8 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class ShowcaseOntologySearchComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
     console.log('ShowcaseOntologySearchComponent initialized');
   }

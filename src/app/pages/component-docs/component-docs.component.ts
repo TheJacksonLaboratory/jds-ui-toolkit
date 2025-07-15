@@ -24,7 +24,7 @@ interface IComponentDocs {
 export class ComponentDocsComponent implements OnInit {
   uiComponentDocs: Record<string, IComponentDocs> = {};
   currentComponent: IComponentDocs | null = null;
-  currentRouteSegment: string = '';
+  currentRouteSegment = '';
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 

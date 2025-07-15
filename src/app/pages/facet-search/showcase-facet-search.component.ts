@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, computed } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
-import { Observable, map, catchError, of } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 // components
 import { FacetSearchComponent, FacetSearchFacade } from '@jax-data-science/components';
 // models
@@ -191,16 +191,13 @@ export class ShowcaseFacetSearchComponent implements OnInit {
   private createSearchSummary(appliedSearches: Record<string, string[]>): string[] {
     const summary: string[] = [];
 
-    for (const categoryName in appliedSearches) {
-      if (appliedSearches.hasOwnProperty(categoryName)) {
-        const selectedOptions = appliedSearches[categoryName];
-        if (selectedOptions.length > 0) {
-          const categoryLabel = this.getCategoryDisplayLabel(categoryName);
-          const optionsText = selectedOptions.join(', ');
-          summary.push(`${categoryLabel}: ${optionsText}`);
-        }
+    Object.entries(appliedSearches).forEach(([categoryName, selectedOptions]) => {
+      if (selectedOptions.length > 0) {
+        const categoryLabel = this.getCategoryDisplayLabel(categoryName);
+        const optionsText = selectedOptions.join(', ');
+        summary.push(`${categoryLabel}: ${optionsText}`);
       }
-    }
+    });
 
     return summary;
   }

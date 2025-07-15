@@ -68,7 +68,9 @@ export class FacetSearchFacade {
         }
       });
 
-      checkedOptions.length && (appliedSearches[category.name] = checkedOptions);
+      if(checkedOptions.length > 0) {
+        appliedSearches[category.name] = checkedOptions;
+      }
     });
 
     this.state.setAppliedSearches(appliedSearches);

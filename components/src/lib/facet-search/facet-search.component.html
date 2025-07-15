@@ -61,7 +61,14 @@
           <div
             class="tw-p-4 tw-flex tw-items-center tw-justify-between tw-cursor-pointer tw-transition-colors tw-hover:bg-gray-50 tw-border-b tw-border-gray-100"
             [ngClass]="{ 'tw-bg-blue-50 tw-border-blue-200': category.isOpen, 'tw-bg-white': !category.isOpen }"
-            (click)="category.isOpen = !category.isOpen"
+            (click)="onToggleCategory(category)"
+            (keyup.enter)="onToggleCategory(category)"
+            (keyup.space)="onToggleCategory(category)"
+            [attr.tabindex]="0"
+            [attr.role]="'button'"
+            [attr.aria-expanded]="category.isOpen"
+            [attr.aria-controls]="'category-options-' + i"
+            [attr.aria-label]="'Toggle ' + (category.label || category.name) + ' category'"
           >
             <div class="tw-flex tw-items-center tw-gap-3">
               <i class="pi pi-folder tw-text-gray-500"

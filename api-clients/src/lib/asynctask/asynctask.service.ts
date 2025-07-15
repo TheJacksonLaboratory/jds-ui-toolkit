@@ -20,7 +20,7 @@ import { ErrorResponse } from '../models/error';
 })
 export class AsyncTaskService {
   // TO-DO [GIK 7/9/2025]: move 'https://astra-dev.jax.org' to an environment variable
-  private apiBaseUrl = 'https://astra-dev.jax.org/asynctask/api';
+  private apiBaseUrl = '/asynctask/api';
 
   private apiServiceFactory: ApiBaseServiceFactory = inject(ApiBaseServiceFactory);
 

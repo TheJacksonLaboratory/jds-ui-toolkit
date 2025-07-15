@@ -13,8 +13,8 @@ import { catchError } from 'rxjs/operators';
 // states
 import { AsyncTaskState } from './asynctask.state';
 // models
+import { Run } from '@jax-data-science/api-clients';
 import { RunInput } from './asynctask.model';
-import { Run, WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 // services
 import { AsyncTaskService } from '@jax-data-science/api-clients';
 

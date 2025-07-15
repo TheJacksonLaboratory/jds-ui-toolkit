@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { WidgetErrorComponent } from '@jax-data-science/components';
@@ -11,8 +11,6 @@ import { WidgetErrorComponent } from '@jax-data-science/components';
   standalone: true
 })
 export class ShowcaseErrorWidgetComponent implements OnInit {
-
-  constructor() { }
 
   ngOnInit() {
     console.log('ShowcaseErrorWidgetComponent initialized');

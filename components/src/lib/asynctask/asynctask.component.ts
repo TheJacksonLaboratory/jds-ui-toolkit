@@ -7,8 +7,7 @@ import {
   OnDestroy,
   ViewChild,
   EventEmitter,
-  Output,
-  TemplateRef
+  Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,8 +24,8 @@ import { Table, TableModule } from 'primeng/table';
 // facades
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
-import { IFacetSearchConfig, IFacetSearchCategory, IFacetOption } from '@jax-data-science/components';
 import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
+import { IFacetSearchConfig, IFacetSearchCategory, IFacetOption } from '../facet-search/facet-search.model';
 import { IAsyncTableConfig, RunInput } from './asynctask.model';
 
 // components
@@ -95,21 +94,17 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     // every time the applied searches change, we need to filter the tasks
     const appliedSearches = this.facetSearchFacade.getAppliedSearches$()();
 
-    for(const categoryName in appliedSearches) {
-      if(appliedSearches.hasOwnProperty(categoryName)) {
-        const selectedOptionIds = appliedSearches[categoryName];
-
-        if(selectedOptionIds.length > 0) {
-          tempVisibleTasks = tempVisibleTasks.filter((task: RunInput) => {
-            const taskStatus = task.status?.toString() || '';
-            return selectedOptionIds.includes(taskStatus);
-          });
-        }
+    Object.values(appliedSearches).forEach(selectedOptionIds => {
+      if(selectedOptionIds.length > 0) {
+        tempVisibleTasks = tempVisibleTasks.filter((task: RunInput) => {
+          const taskStatus = task.status?.toString() || '';
+          return selectedOptionIds.includes(taskStatus);
+        });
       }
-    }
+    });
 
     return tempVisibleTasks;
-  })
+  });
 
   @Output() editEmitter = new EventEmitter<RunInput>();
   @Output() openEmitter = new EventEmitter<RunInput>();

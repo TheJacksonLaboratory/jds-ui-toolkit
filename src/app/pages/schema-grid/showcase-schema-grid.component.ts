@@ -10,8 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class ShowcaseSchemaGridComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
     console.log('ShowcaseSchemaGridComponent initialized');
   }

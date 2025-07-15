@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 // components
-import { AuthenticationComponent} from '@jax-data-science/components';
+import { AuthenticationComponent } from '../auth/authentication.component';
 
 @Component({
   selector: 'lib-jds-navbar',
