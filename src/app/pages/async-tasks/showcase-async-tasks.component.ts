@@ -23,16 +23,6 @@ export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
     isStriped: false,
     showActions: true,
     allowFilters: true,
-    filterConfigs: [
-      {
-        displayName: 'Description',
-        filterOptions: ['test', 'test2', 'test3']
-      },
-      {
-        displayName: 'Name',
-        filterOptions: ['data', 'hello']
-      }
-    ],
     detailsTemplate: this.detailsTemplate
   };
 

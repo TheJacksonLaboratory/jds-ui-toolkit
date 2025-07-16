@@ -8,6 +8,7 @@ import { Divider } from 'primeng/divider';
   imports: [CommonModule, Divider],
   templateUrl: './asynctask-details.component.html',
   styleUrl: './asynctask-details.component.css',
+  standalone: true
 })
 export class AsyncTaskDetailsComponent {
   // TODO [BW 2025/5/21] This will be replaced in another ticket that adds error handling
