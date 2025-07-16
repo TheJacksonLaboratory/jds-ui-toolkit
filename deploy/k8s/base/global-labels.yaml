@@ -8,8 +8,8 @@ labels:
   jax.org/billing-group: TODO
   jax.org/system-group: jds-angular-ui
   jax.org/component: jds-angular-ui
-  jax.org/component-id: TODO
-  jax.org/component-tier: 3
+  jax.org/component-id: 66a92229-231e-4b0c-a192-650b7bc319e5
+  jax.org/component-tier: 4
   jax.org/grant-name: TODO
 fieldSpecs:
 - path: metadata/labels
