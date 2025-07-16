@@ -1,0 +1,22 @@
+
+name: Pull Request Test, Build and Deploy
+on:
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  test:
+   name: "Run Linter & Test"
+   strategy:
+     matrix:
+       os: [ubuntu-latest]
+   uses: ./.github/workflows/_lint-test.yml
+   with:
+     runner-os: ${{ matrix.os }}
+  deploy:
+    name: "Deploy: Dev"
+    needs: [test]
+    uses: ./.github/workflows/_skaffold-deploy-k8s.yml
+    secrets: inherit
+    with:
+      environment: "jax-cluster-dev-10--dev"

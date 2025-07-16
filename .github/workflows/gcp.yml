@@ -4,14 +4,21 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - 'package.json'
 
 permissions:
   contents: write
 
 jobs:
+  test:
+   name: "Run Linter & Test"
+   strategy:
+     matrix:
+       os: [ubuntu-latest]
+   uses: ./.github/workflows/_lint-test.yml
+   with:
+     runner-os: ${{ matrix.os }}
   version:
+    needs: test
     runs-on: ubuntu-latest
     outputs:
       should_release: ${{ steps.version_check.outputs.should_release }}
@@ -20,16 +27,15 @@ jobs:
       schedule_prod_release: ${{ steps.version_check.outputs.schedule_prod_release }}
     steps:
     - name: Check out code
-      uses: actions/checkout@v3
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        pip install toml
     - name: Check for version change
       id: version_check
       run: |
-        # Extract version from package.json
-        version=$(node -p "require('./package.json').version")
+        # Extract version from pyproject.toml
+        version=$(python -c "import toml; print(toml.load('pyproject.toml')['tool']['poetry']['version'])")
         echo "Version=$version"
         echo "version=$version" >> $GITHUB_OUTPUT
 
