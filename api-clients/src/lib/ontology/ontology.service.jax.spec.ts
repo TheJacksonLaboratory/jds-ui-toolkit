@@ -1,20 +1,21 @@
 import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Ontology, OntologyConfig, OntologyTerm } from './ontology.model';
+import { Ontology, OntologyConfig, OntologyTerm} from './ontology.model';
 import { CollectionResponse, Response } from '../models/response';
-import { OntologyService } from './ontology.service';
+import { JaxOntologyService } from './ontology.service.jax';
+import { ontologyFromCurie } from './ontology.shared';
 
-describe('OntologyService', () => {
-  let service: OntologyService;
+describe('JaxOntologyService', () => {
+  let service: JaxOntologyService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [OntologyService, provideHttpClient(), provideHttpClientTesting()],
+      providers: [JaxOntologyService, provideHttpClient(), provideHttpClientTesting()],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(OntologyService);
+    service = TestBed.inject(JaxOntologyService);
   });
 
   afterEach(() => {httpTestingController.verify();})
@@ -29,14 +30,14 @@ describe('OntologyService', () => {
   it('should get ontology from curie', () => {
     flushFakeHpConfig(httpTestingController, service);
     const id = "HP:0000001"
-    const ontology = service.ontologyFromCurie(id);
+    const ontology = ontologyFromCurie(id);
     expect(ontology).toEqual(Ontology.HP);
   });
 
   it('should fail to get ontology from curie', () => {
     flushFakeHpConfig(httpTestingController, service);
     const id = "BAD:0000001"
-    const ontology = service.ontologyFromCurie(id);
+    const ontology = ontologyFromCurie(id);
     expect(ontology).toBeUndefined();
   });
 
@@ -154,13 +155,13 @@ const testOntologyConfig: OntologyConfig[] = [{
   description: "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease."
 }];
 
-function flushFakeHpConfig(httpTestingController: HttpTestingController, service: OntologyService) {
+function flushFakeHpConfig(httpTestingController: HttpTestingController, service: JaxOntologyService) {
   const req = httpTestingController.expectOne(service.config_location);
   expect(req.request.method).toEqual('GET');
   req.flush(testOntologyConfig);
 }
 
-function flushBrokenConfig(httpTestingController: HttpTestingController, service: OntologyService) {
+function flushBrokenConfig(httpTestingController: HttpTestingController, service: JaxOntologyService) {
   const req = httpTestingController.expectOne(service.config_location);
   expect(req.request.method).toEqual('GET');
   req.flush('Error occurred', { status: 500, statusText: 'Internal Server Error'});
