@@ -82,7 +82,3 @@ export interface OLSResponse {
   elements: OLSTerm[];
   facetFieldsToCounts?: Record<string, any>;
 }
-
-export interface OLSChildrenResponse extends OLSResponse {
-  elements: OLSTerm[];
-}

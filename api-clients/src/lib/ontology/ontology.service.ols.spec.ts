@@ -39,7 +39,6 @@ describe('OLSOntologyService', () => {
     const id = "HP:0001166";
     const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "Arachnodactyly"}};
     service.term(id).subscribe(term => {
-      console.log(term);
       expect(term).toEqual(fakeResponse);
       done()
     });
@@ -71,7 +70,7 @@ describe('OLSOntologyService', () => {
   });
 
   it('should get the fake term children', (done) => {
-  const id = "HP:0100807";
+    const id = "HP:0100807";
     const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0001182', name: "Tapered finger"}, { id: 'HP:0001166', name: "Arachnodactyly"}], paging: { page: 0, total_pages: 1, total_items: 2 }};
     service.children(id).subscribe(term => {
       expect(term).toEqual(fakeResponse);
@@ -82,31 +81,45 @@ describe('OLSOntologyService', () => {
     req.flush(testOLSResponseChildren);
   });
 
-  // it('should get the fake term ancestors', () => {
-  //   flushFakeHpConfig(httpTestingController, service);
-  //   const id = "HP:0000004";
-  //   const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000001', name: "All"},
-  //       { id: 'HP:0000002', name: "Term 2"}]};
-  //   service.ancestors(id).subscribe(term => {
-  //     expect(term).toEqual(fakeResponse);
-  //   });
-  //   const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/ancestors`);
-  //   expect(req.request.method).toEqual('GET');
-  //   req.flush(fakeResponse);
-  // });
+  it('should get the fake term ancestors', (done) => {
+    const id = "HP:0001166";
+    const fakeResponse: CollectionResponse<OntologyTerm> = {data: [
+      { id: "HP:0001238", name: "Slender finger" },
+      { id: "HP:0001167", name: "Abnormal finger morphology" },
+      { id: "HP:0001155", name: "Abnormality of the hand" },
+      { id: "HP:0002817", name: "Abnormality of the upper limb" },
+      { id: "HP:0040064", name: "Abnormality of limbs" },
+      { id: "HP:0000118", name: "Phenotypic abnormality" },
+      { id: "HP:0000001", name: "All" },
+      { id: "HP:0011297", name: "Abnormal digit morphology" },
+      { id: "HP:0002813", name: "Abnormal limb bone morphology" },
+      { id: "HP:0011844", name: "Abnormal appendicular skeleton morphology" },
+      { id: "HP:0011842", name: "Abnormal skeletal morphology" },
+      { id: "HP:0000924", name: "Abnormality of the skeletal system" },
+      { id: "HP:0033127", name: "Abnormality of the musculoskeletal system" },
+      { id: "HP:0040068", name: "Abnormality of limb bone" },
+      { id: "HP:0100807", name: "Long fingers" }
+    ], paging: { page: 1, total_pages: 1, total_items: 15 }};
+    service.ancestors(id).subscribe(term => {
+      expect(term).toEqual(fakeResponse);
+      done();
+    });
+    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0001166?includeObsoleteEntities=false`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(testOLSResponseTerm);
+  });
 
-  // it('should get the fake term descendants', () => {
-  //   flushFakeHpConfig(httpTestingController, service);
-  //   const id = "HP:0000001";
-  //   const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000002', name: "Term 2"},
-  //       { id: 'HP:0000003', name: "Children Term"}, { id: 'HP:0000004', name: "Sister Children Term"}]};
-  //   service.descendants(id).subscribe(term => {
-  //     expect(term).toEqual(fakeResponse);
-  //   });
-  //   const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/descendants`);
-  //   expect(req.request.method).toEqual('GET');
-  //   req.flush(fakeResponse);
-  // });
+  it('should get the fake term descendants', (done) => {
+      const id = "HP:0100807";
+    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0001182', name: "Tapered finger"}, { id: 'HP:0001166', name: "Arachnodactyly"}], paging: { page: 0, total_pages: 1, total_items: 2 }};
+    service.descendants(id).subscribe(term => {
+      expect(term).toEqual(fakeResponse);
+      done();
+    });
+    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0100807/hierarchicalChildren?includeObsoleteEntities=false&size=100&lang=en`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(testOLSResponseChildren);
+  });
 });
 
 
@@ -915,20 +928,310 @@ const testOLSResponseTerm = {
   "isPreferredRoot" : false,
   "label" : [ "Arachnodactyly" ],
   "linkedEntities" : {
-      "http://purl.obolibrary.org/obo/HP_0001238" : {
+    "http://purl.obolibrary.org/obo/HP_0000118" : {
       "definedBy" : [ "hp" ],
-      "numAppearsIn" : 2.0,
+      "numAppearsIn" : 23.0,
       "hasLocalDefinition" : true,
-      "label" : [ "Slender finger" ],
-      "curie" : "HP:0001238",
+      "label" : [ "Phenotypic abnormality" ],
+      "curie" : "HP:0000118",
       "type" : [ "class", "entity" ]
     },
-     "http://purl.obolibrary.org/obo/HP_0100807" : {
+    "https://w3id.org/babelon/comment" : {
+      "numAppearsIn" : 1.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "comment" ],
+      "curie" : "comment",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0002813" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 8.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormal limb bone morphology" ],
+      "curie" : "HP:0002813",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0002817" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 8.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of the upper limb" ],
+      "curie" : "HP:0002817",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0001167" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 7.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormal finger morphology" ],
+      "curie" : "HP:0001167",
+      "type" : [ "class", "entity" ]
+    },
+    "https://w3id.org/babelon/translation_language" : {
+      "numAppearsIn" : 3.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translation_language" ],
+      "curie" : "translation_language",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://w3id.org/babelon/translator" : {
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translator" ],
+      "curie" : "translator",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://w3id.org/babelon/source_value" : {
+      "numAppearsIn" : 3.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "source_value" ],
+      "curie" : "source_value",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "UMLS:C0003706" : {
+      "url" : "https://uts.nlm.nih.gov/uts/umls/concept/C0003706",
+      "source" : "https://raw.githubusercontent.com/biopragmatics/bioregistry/main/exports/registry/registry.json",
+      "curie" : "UMLS:C0003706"
+    },
+    "http://purl.obolibrary.org/obo/HP_0100807" : {
       "definedBy" : [ "hp" ],
       "numAppearsIn" : 7.0,
       "hasLocalDefinition" : true,
       "label" : [ "Long fingers" ],
       "curie" : "HP:0100807",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/IAO_0000115" : {
+      "definedBy" : [ "ido", "omo", "pato", "ogms", "ro", "iao" ],
+      "numAppearsIn" : 225.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "definition" ],
+      "curie" : "IAO:0000115",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://orcid.org/0000-0002-0736-9199" : {
+      "source" : "ORCID",
+      "url" : "https://orcid.org/0000-0002-0736-9199",
+      "label" : "Robinson, Peter"
+    },
+    "https://w3id.org/babelon/source_version" : {
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "source_version" ],
+      "curie" : "source_version",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0000924" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 13.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of the skeletal system" ],
+      "curie" : "HP:0000924",
+      "type" : [ "class", "entity" ]
+    },
+    "https://w3id.org/babelon/translation_confidence" : {
+      "numAppearsIn" : 1.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translation_confidence" ],
+      "curie" : "translation_confidence",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0000001" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 7.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "All" ],
+      "curie" : "HP:0000001",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/hp#layperson" : {
+      "numAppearsIn" : 4.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "layperson term" ],
+      "curie" : "layperson",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "HP:0001505" : {
+      "url" : "http://purl.obolibrary.org/obo/HP_0001505",
+      "source" : "https://raw.githubusercontent.com/biopragmatics/bioregistry/main/exports/registry/registry.json",
+      "curie" : "HP:0001505"
+    },
+    "https://w3id.org/babelon/translation_status" : {
+      "numAppearsIn" : 3.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translation_status" ],
+      "curie" : "translation_status",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "HP:0001166" : {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0001166",
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Arachnodactyly" ],
+      "curie" : "HP:0001166",
+      "type" : [ "class", "entity" ],
+      "url" : "http://purl.obolibrary.org/obo/HP_0001166",
+      "source" : "https://raw.githubusercontent.com/biopragmatics/bioregistry/main/exports/registry/registry.json"
+    },
+    "http://purl.obolibrary.org/obo/HP_0001155" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 6.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of the hand" ],
+      "curie" : "HP:0001155",
+      "type" : [ "class", "entity" ]
+    },
+    "http://www.w3.org/2000/01/rdf-schema#label" : {
+      "definedBy" : [ "rdfs" ],
+      "numAppearsIn" : 198.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "label" ],
+      "curie" : "RDFS:label",
+      "type" : [ "property", "entity" ]
+    },
+    "https://w3id.org/babelon/source" : {
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "source" ],
+      "curie" : "source",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://www.geneontology.org/formats/oboInOwl#hasAlternativeId" : {
+      "definedBy" : [ "pato", "oio" ],
+      "numAppearsIn" : 145.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "has_alternative_id" ],
+      "curie" : "OIO:hasAlternativeId",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://w3id.org/babelon/translation_date" : {
+      "numAppearsIn" : 1.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translation_date" ],
+      "curie" : "translation_date",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0011297" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 9.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormal digit morphology" ],
+      "curie" : "HP:0011297",
+      "type" : [ "class", "entity" ]
+    },
+    "http://www.geneontology.org/formats/oboInOwl#hasSynonymType" : {
+      "definedBy" : [ "oio" ],
+      "numAppearsIn" : 93.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "has_synonym_type" ],
+      "curie" : "OIO:hasSynonymType",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0033127" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 11.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of the musculoskeletal system" ],
+      "curie" : "HP:0033127",
+      "type" : [ "class", "entity" ]
+    },
+    "http://www.geneontology.org/formats/oboInOwl#id" : {
+      "definedBy" : [ "ohmi", "pato", "ecto" ],
+      "numAppearsIn" : 177.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "id" ],
+      "curie" : "id",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://www.w3.org/2000/01/rdf-schema#subClassOf" : {
+      "definedBy" : [ "rdfs" ],
+      "numAppearsIn" : 8.0,
+      "hasLocalDefinition" : false,
+      "label" : [ "subClassOf" ],
+      "curie" : "RDFS:subClassOf",
+      "type" : [ "property", "entity" ]
+    },
+    "https://w3id.org/babelon/translation_precision" : {
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translation_precision" ],
+      "curie" : "translation_precision",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0011842" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 12.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormal skeletal morphology" ],
+      "curie" : "HP:0011842",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0040064" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 10.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of limbs" ],
+      "curie" : "HP:0040064",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0011844" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 8.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormal appendicular skeleton morphology" ],
+      "curie" : "HP:0011844",
+      "type" : [ "class", "entity" ]
+    },
+    "http://purl.obolibrary.org/obo/HP_0040068" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 8.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Abnormality of limb bone" ],
+      "curie" : "HP:0040068",
+      "type" : [ "class", "entity" ]
+    },
+    "http://www.geneontology.org/formats/oboInOwl#hasExactSynonym" : {
+      "definedBy" : [ "ohmi", "omo", "pato", "ro", "oio", "ecto" ],
+      "numAppearsIn" : 205.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "has_exact_synonym" ],
+      "curie" : "hasExactSynonym",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "http://www.geneontology.org/formats/oboInOwl#hasDbXref" : {
+      "definedBy" : [ "ohmi", "omo", "pato", "ro", "oio", "ecto" ],
+      "numAppearsIn" : 204.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "database_cross_reference" ],
+      "curie" : "hasDbXref",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://w3id.org/babelon/translator_expertise" : {
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "translator_expertise" ],
+      "curie" : "translator_expertise",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "https://w3id.org/babelon/source_language" : {
+      "numAppearsIn" : 3.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "source_language" ],
+      "curie" : "source_language",
+      "type" : [ "property", "annotationProperty", "entity" ]
+    },
+    "SNOMEDCT_US:62250003" : {
+      "url" : "http://snomed.info/id/62250003",
+      "source" : "https://raw.githubusercontent.com/biopragmatics/bioregistry/main/exports/registry/registry.json",
+      "curie" : "SNOMEDCT_US:62250003"
+    },
+    "http://purl.obolibrary.org/obo/HP_0001238" : {
+      "definedBy" : [ "hp" ],
+      "numAppearsIn" : 2.0,
+      "hasLocalDefinition" : true,
+      "label" : [ "Slender finger" ],
+      "curie" : "HP:0001238",
       "type" : [ "class", "entity" ]
     }
   },

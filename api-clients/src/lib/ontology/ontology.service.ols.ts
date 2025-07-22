@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OntologyService } from './ontology.service.base';
 import { Observable, map, pipe } from 'rxjs';
-import { OLSResponse, OLSTerm, Ontology, OntologyTerm, OLSChildrenResponse } from './ontology.model';
+import { OLSResponse, OLSTerm, Ontology, OntologyTerm } from './ontology.model';
 import { CollectionResponse, Response } from '../models/response';
 import { ontologyFromCurie } from './ontology.shared';
 
@@ -78,9 +78,9 @@ export class OLSOntologyService extends OntologyService {
         const ontology = ontologyFromCurie(id);
         const params = new URLSearchParams;
         params.set('includeObsoleteEntities', 'false');
-        params.set('size', '100'); // max size for children endpoint
+        params.set('size', '100');
         params.set('lang', 'en');
-        return this.httpClient.get<OLSChildrenResponse>(`${this.OLS_ENTITY_BASE}/${ontology.toLowerCase()}/classes/${this.PURL_BASE}/${id.replace(':', '_')}/children?${params.toString()}`).pipe(map(childrenResponse => {
+        return this.httpClient.get<OLSResponse>(`${this.OLS_ENTITY_BASE}/${ontology.toLowerCase()}/classes/${this.PURL_BASE}/${id.replace(':', '_')}/children?${params.toString()}`).pipe(map(childrenResponse => {
             const data =  childrenResponse.elements.map(olsTerm => this.mapOLSTermToOntologyTerm(olsTerm));
             return {
                 data: data,
@@ -94,11 +94,47 @@ export class OLSOntologyService extends OntologyService {
     }
 
     ancestors(id: string): Observable<CollectionResponse<OntologyTerm>> {
-        return this.httpClient.get<CollectionResponse<OntologyTerm>>(`${this.OLS_ENTITY_BASE}/terms/${id}/ancestors`);
+                const ontology = ontologyFromCurie(id);
+        const params = new URLSearchParams;
+        params.set('includeObsoleteEntities', 'false');
+        return this.httpClient.get<OLSTerm>(`${this.OLS_ENTITY_BASE}/${ontology.toLowerCase()}/classes/${this.PURL_BASE}/${id.replace(':', '_')}?${params.toString()}`).pipe(map(olsTerm => {
+            const data =  olsTerm.directAncestor
+                    ? olsTerm.directAncestor
+                        .map(ancestor =>
+                            olsTerm.linkedEntities && olsTerm.linkedEntities[ancestor]
+                                ? this.mapOLSTermToOntologyTerm(olsTerm.linkedEntities[ancestor])
+                                : ""
+                        ).filter(ancestor => ancestor !== "")
+                    : []
+            return {
+                data: data,
+                paging: {
+                    page: 1,
+                    total_pages: 1,
+                    total_items: data.length
+                }
+            };
+        }));
     }
 
+    // finish testing this method
     descendants(id: string): Observable<CollectionResponse<OntologyTerm>> {
-        return this.httpClient.get<CollectionResponse<OntologyTerm>>(`${this.OLS_ENTITY_BASE}/terms/${id}/descendants`);
+        const ontology = ontologyFromCurie(id);
+        const params = new URLSearchParams;
+        params.set('includeObsoleteEntities', 'false');
+        params.set('size', '100'); // max size for children endpoint
+        params.set('lang', 'en');
+        return this.httpClient.get<OLSResponse>(`${this.OLS_ENTITY_BASE}/${ontology.toLowerCase()}/classes/${this.PURL_BASE}/${id.replace(':', '_')}/hierarchicalChildren?${params.toString()}`).pipe(map(childrenResponse => {
+            const data =  childrenResponse.elements.map(olsTerm => this.mapOLSTermToOntologyTerm(olsTerm));
+            return {
+                data: data,
+                paging: {
+                    page: childrenResponse.page,
+                    total_pages: childrenResponse.totalPages,
+                    total_items: data.length
+                }
+            };
+        }));
     }
 
     mapOLSTermToOntologyTerm(olsTerm: OLSTerm): OntologyTerm {
