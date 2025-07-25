@@ -41,6 +41,13 @@ export class ComponentsListComponent implements OnInit {
         isAuthRequired: false,
         status: "In Progress",
         route: 'authentication'
+      },
+      {
+        name: 'OntologySearch',
+        description: 'OntologySearch components description',
+        isAuthRequired: false,
+        status: "In Progress",
+        route: 'ontology-search'
       }
     ];
   }
