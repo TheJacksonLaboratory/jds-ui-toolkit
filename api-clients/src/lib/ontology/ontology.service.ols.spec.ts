@@ -1,9 +1,8 @@
 import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { OLSResponse, Ontology, OntologyConfig, OntologyTerm} from './ontology.model';
+import { OLSResponse, Ontology, OntologyTerm} from './ontology.model';
 import { CollectionResponse, Response } from '../models/response';
-import { ontologyFromCurie } from './ontology.shared';
 import { OLSOntologyService } from './ontology.service.ols'
 
 describe('OLSOntologyService', () => {

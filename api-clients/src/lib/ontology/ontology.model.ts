@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-import { CollectionResponse, Response } from '../models/response';
 export interface OntologyConfig {
   name: string;
   prefix: string;
