@@ -4,3 +4,4 @@ export * from './lib/asynctask/asynctask.state';
 export * from './lib/auth/authentication.component';
 export * from './lib/widget-error/widget-error.component';
 export * from './lib/navbar/navbar.component';
+export * from './lib/ontology-search/ontology-search.component';
