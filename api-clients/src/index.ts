@@ -3,7 +3,9 @@ export * from './lib/asynctask/asynctask.service';
 export * from './lib/asynctask/asynctask.model';
 
 // Ontology API client
-export * from './lib/ontology/ontology.service';
+export * from './lib/ontology/ontology.service.base';
+export * from './lib/ontology/ontology.service.jax';
+export * from './lib/ontology/ontology.service.ols';
 
 // MVar API client
 export * from './lib/mvar/mvar.service';

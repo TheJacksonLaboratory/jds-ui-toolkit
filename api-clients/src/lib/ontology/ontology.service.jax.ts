@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Ontology, OntologyConfig, OntologyTerm } from './ontology.model';
 import { CollectionResponse, Response } from '../models/response';
-
+import { ontologyFromCurie } from './ontology.shared';
+import { OntologyService } from './ontology.service.base';
 @Injectable({
   providedIn: 'root'
 })
-export class OntologyService {
+export class JaxOntologyService extends OntologyService {
   config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies-internal.json'
   private config!: OntologyConfig[];
 
@@ -15,6 +16,7 @@ export class OntologyService {
    * Get the configuration file from the source for the backend api service
    */
   constructor(private httpClient: HttpClient) {
+    super();
     this.httpClient.get<OntologyConfig[]>(this.config_location).subscribe({
       next: (config) => this.config = config,
       error: () => {
@@ -39,10 +41,10 @@ export class OntologyService {
    */
   term(id: string): Observable<Response<OntologyTerm>>  {
     try {
-      const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}`;
+      const url = `${this.ontologyBaseResolver(ontologyFromCurie(id))}/${id}`;
       return this.httpClient.get<Response<OntologyTerm>>(url);
     } catch (error) {
-      return throwError(error);
+      return throwError(() => error);
     }
   }
 
@@ -52,10 +54,10 @@ export class OntologyService {
    */
   parents(id: string): Observable<CollectionResponse<OntologyTerm>> {
     try {
-      const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/parents`;
+      const url = `${this.ontologyBaseResolver(ontologyFromCurie(id))}/${id}/parents`;
       return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
     } catch (error) {
-      return throwError(error)
+      return throwError(() => error);
     }
   }
 
@@ -65,10 +67,10 @@ export class OntologyService {
    */
   children(id: string): Observable<CollectionResponse<OntologyTerm>> {
     try {
-      const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/children`;
+      const url = `${this.ontologyBaseResolver(ontologyFromCurie(id))}/${id}/children`;
       return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
-    } catch (error) {
-      return throwError(error);
+    } catch (error: any) {
+      return throwError(() => error);
     }
   }
 
@@ -78,10 +80,10 @@ export class OntologyService {
    */
   ancestors(id: string): Observable<CollectionResponse<OntologyTerm>> {
     try {
-      const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/ancestors`;
+      const url = `${this.ontologyBaseResolver(ontologyFromCurie(id))}/${id}/ancestors`;
       return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
     } catch (error) {
-      return throwError(error);
+       return throwError(() => error);
     }
   }
 
@@ -91,18 +93,11 @@ export class OntologyService {
    */
   descendants(id: string): Observable<CollectionResponse<OntologyTerm>> {
     try {
-      const url = `${this.ontologyBaseResolver(this.ontologyFromCurie(id))}/${id}/descendants`;
+      const url = `${this.ontologyBaseResolver(ontologyFromCurie(id))}/${id}/descendants`;
       return this.httpClient.get<CollectionResponse<OntologyTerm>>(url);
     } catch (error) {
-      return throwError(error);
+       return throwError(() => error);
     }
-  }
-
-  /**
-   * Get the ontology from curie
-   */
-  ontologyFromCurie(curie: string): Ontology {
-    return Ontology[curie.split(':')[0] as keyof typeof Ontology];
   }
 
   /**
