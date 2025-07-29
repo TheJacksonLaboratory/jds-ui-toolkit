@@ -4,6 +4,7 @@
   "peerDependencies": {
     "@angular/common": "^19.1.0",
     "@angular/core": "^19.1.0",
+    "@angular/router": "~19.1.0",
     "@nx/angular": "^20.4.2",
     "@auth0/auth0-angular": "^2.2.3",
     "primeng": "^19.0.6",

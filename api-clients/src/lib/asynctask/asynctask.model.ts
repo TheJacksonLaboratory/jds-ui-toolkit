@@ -186,4 +186,9 @@ export interface Run {
    * Current execution status from Temporal
    */
   status: WorkflowExecutionStatus;
+
+  /**
+   * Run start time in ISO 8601 format
+   */
+  init_time?: string | null; // ISO 8601 format
 }

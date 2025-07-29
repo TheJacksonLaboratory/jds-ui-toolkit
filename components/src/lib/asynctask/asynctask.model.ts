@@ -1,7 +1,8 @@
-/**
- * Types specific to the AsyncTasks UI component
- */
+import { TemplateRef } from '@angular/core';
 
+/**
+ * AsyncTasks UI component specific model.
+ */
 import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
 
 /**
@@ -24,13 +25,17 @@ export interface RunInput {
   message?: string | null;
 }
 
-export interface Filter {
-  name: string;
-  options: FilterOption[];
-  selectedOptions: FilterOption[];
-}
-
-export interface FilterOption {
-  label: string;
-  value?: string;
+export interface IAsyncTableConfig {
+  isExpandable: boolean;
+  defaultExpandedRows?: Record<string, boolean>;
+  rowsPerPage?: number;
+  rowsPerPageOptions?: number[];
+  isPaginated?: boolean;
+  isStriped?: boolean;
+  showActions: boolean;
+  allowFilters: boolean;
+  // an HTML template for the body of the expandable row - to work properly,
+  // the template must be resolved in ngAfterViewInit of the component that
+  // creates the config object
+  detailsTemplate?: TemplateRef<null>;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 // models
-import { Filter, RunInput } from './asynctask.model';
+import { RunInput } from './asynctask.model';
 
 /**
  * State management service for async tasks
@@ -18,9 +18,6 @@ export class AsyncTaskState {
   // TO-DO: [GIK 6/10/2025] this could be replaced with a specified error structure
   // because there could be more than one error (i.e. when multiple tasks have failed)
   private responseError$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-
-  private filters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
-  private activeFilters$: BehaviorSubject<Filter[]> = new BehaviorSubject<Filter[]>([]);
 
   /**
    * Loads initial RunInput[] tasks
@@ -83,22 +80,5 @@ export class AsyncTaskState {
 
   getResponseError$(): Observable<string | null> {
     return this.responseError$.asObservable();
-  }
-
-
-  getFilters$(): Observable<Filter[]> {
-    return this.filters$.asObservable();
-  }
-
-  setFilters(filters: Filter[]): void {
-    this.filters$.next(filters);
-  }
-
-  getActiveFilters$(): Observable<Filter[]> {
-    return this.activeFilters$.asObservable();
-  }
-
-  setActiveFilters(activeFilters: Filter[]): void {
-    this.activeFilters$.next(activeFilters);
   }
 }
