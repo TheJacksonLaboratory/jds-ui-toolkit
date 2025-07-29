@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: EchoPreset,
         options: {
+          prefix: 'echo',
           cssLayer: {
             name: 'primeng',
             order:  'tailwind-base, primeng, tailwind-utilities'
