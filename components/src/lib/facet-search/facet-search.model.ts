@@ -1,4 +1,4 @@
-export interface IFacetSearchConfig {
+ export interface IFacetSearchConfig {
   // whether the search is toggable (true) or always visible (false)
   isToggable?: boolean;
   // whether the search is visible by default

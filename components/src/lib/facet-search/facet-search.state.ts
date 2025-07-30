@@ -6,8 +6,6 @@ import { IFacetSearchCategory } from './facet-search.model';
   providedIn: 'root'
 })
 export class FacetSearchState {
-  // private isSearchVisible$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
   // search categories (and options) state
   private categoriesSignal = signal<IFacetSearchCategory[]>([]);
   public categories$ = this.categoriesSignal.asReadonly();

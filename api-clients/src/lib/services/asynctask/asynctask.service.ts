@@ -12,8 +12,8 @@ import {
   ResultReference,
   Run
 } from './asynctask.model';
-import { CollectionResponse, Response } from '../models/response';
-import { ErrorResponse } from '../models/error';
+import { CollectionResponse, Response } from '../../models/response';
+import { ErrorResponse } from '../../models/error';
 
 @Injectable({
   providedIn: 'root'
