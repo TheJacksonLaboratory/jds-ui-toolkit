@@ -1,15 +1,18 @@
 import { Route } from '@angular/router';
 import { AuthGuard } from '@auth0/auth0-angular';
 
-import { ComponentDocsComponent } from './pages/component-docs/component-docs.component';
+import { ComponentDocsComponent } from './components/pages/docs/component-docs.component';
+import { ServiceDocsComponent } from './services/pages/docs/service-docs.component';
 
 // showcase components
-import { ShowcaseAsyncTasksComponent } from './pages/async-tasks/showcase-async-tasks.component';
-import { ShowcaseAuthComponent } from './pages/auth/showcase-auth.component';
-import { ShowcaseErrorWidgetComponent } from './pages/error-widget/showcase-error-widget.component';
-import { ShowcaseFacetSearchComponent } from './pages/facet-search/showcase-facet-search.component';
-import { ShowcaseOntologySearchComponent } from './pages/ontology-search/showcase-ontology-search.component';
-import { ShowcaseSchemaGridComponent } from './pages/schema-grid/showcase-schema-grid.component';
+import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/showcase-async-tasks.component';
+import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
+import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
+import { ShowcaseFacetSearchComponent } from './components/pages/facet-search/showcase-facet-search.component';
+import { ShowcaseOntologySearchComponent } from './components/pages/ontology-search/showcase-ontology-search.component';
+import { ShowcaseSchemaGridComponent } from './components/pages/schema-grid/showcase-schema-grid.component';
+// showcase services
+import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa-data.component';
 
 export const appRoutes: Route[] = [
   {
@@ -18,7 +21,7 @@ export const appRoutes: Route[] = [
     pathMatch: 'full'
   },
   {
-    path: 'docs/components',
+    path: 'components/docs',
     component: ComponentDocsComponent,
     children: [
       {
@@ -47,6 +50,14 @@ export const appRoutes: Route[] = [
         component: ShowcaseSchemaGridComponent
       }
     ]
+  },
+  {
+    path: 'services/docs',
+    component: ServiceDocsComponent,
+    children: [{
+      path: 'isa-data',
+      component: ShowcaseISADataComponent
+    }]
   },
   {
     path: '**',

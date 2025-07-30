@@ -1,16 +1,20 @@
 // AsyncTask API client
-export * from './lib/asynctask/asynctask.service';
-export * from './lib/asynctask/asynctask.model';
+export * from './lib/services/asynctask/asynctask.service';
+export * from './lib/services/asynctask/asynctask.model';
+
+// ISA Data API client
+export * from './lib/services/isa-data/isa-data.service';
+export * from './lib/models/isa-data/measurement.model';
+
+// MVAR API client
+export * from './lib/services/mvar/mvar.service';
+export * from './lib/services/mvar/models/response/dtos';
+export * from './lib/services/mvar/mvar-client.module';
 
 // Ontology API client
-export * from './lib/ontology/ontology.service';
-
-// MVar API client
-export * from './lib/mvar/mvar.service';
-export * from './lib/mvar/models/response/dtos';
-export * from './lib/mvar/mvar-client.module';
+export * from './lib/services/ontology/ontology.service';
 
 // SNP Grid API client
-export * from './lib/snp-grid/snp-grid-client.module';
-export * from './lib/snp-grid/models/response/dtos';
-export * from './lib/snp-grid/snp-grid.service';
+export * from './lib/services/snp-grid/snp-grid-client.module';
+export * from './lib/services/snp-grid/models/response/dtos';
+export * from './lib/services/snp-grid/snp-grid.service';
