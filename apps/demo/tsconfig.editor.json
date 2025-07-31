@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["demo/src/**/*.ts"],
+  "compilerOptions": {},
+  "exclude": ["jest.config.ts", "demo/src/**/*.test.ts", "demo/src/**/*.spec.ts"]
+}

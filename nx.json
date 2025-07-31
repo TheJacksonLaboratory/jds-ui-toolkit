@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "master",
+  "defaultBase": "simplify-repo",
+  "packageManager": "pnpm",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -54,6 +55,9 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "build": {
+      "dependsOn": ["^build"]
     }
   },
   "plugins": [
@@ -90,7 +94,7 @@
   },
   "defaultProject": "jax-data-science",
   "release": {
-    "projects": ["components", "api-clients", "themes"],
+    "projects": ["api-clients", "components", "themes"],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true

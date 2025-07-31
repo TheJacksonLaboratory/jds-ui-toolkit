@@ -1,0 +1,4 @@
+# filepath: /Users/gargam/Develop/jds-ui-components/pnpm-workspace.yaml
+packages:
+  - 'apps/*'
+  - 'libs/*'
