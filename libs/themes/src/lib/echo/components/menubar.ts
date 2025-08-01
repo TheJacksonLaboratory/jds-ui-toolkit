@@ -18,9 +18,6 @@ export const menubar: MenubarDesignTokens = {
       submenu: {
         background: '{surface.0}',
         padding: '0 0 .25rem 0'
-      },
-      submenuIcon: {
-        color: '{surface.400}'
       }
     }
   },

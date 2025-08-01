@@ -1,16 +1,32 @@
 {
   "name": "themes",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "themes/src",
+  "sourceRoot": "lib/themes/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
   "targets": {
+     "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/themes"],
+      "options": {
+        "project": "libs/themes/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/themes/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/themes/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "themes/jest.config.ts"
+        "jestConfig": "libs/themes/jest.config.ts"
       }
     },
     "lint": {

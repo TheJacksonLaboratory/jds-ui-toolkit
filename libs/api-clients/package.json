@@ -1,16 +1,11 @@
 {
   "name": "@jax-data-science/api-clients",
   "version": "0.0.1-1",
-  "dependencies": {
+  "peerDependencies": {
+    "@angular/common": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "rxjs": "^7.8.0",
     "@microsoft/fetch-event-source": "^2.0.1"
   },
-  "peerDependencies": {
-    "@angular/common": "^19.1.0",
-    "@angular/core": "^19.1.0",
-    "rxjs": "^7.8.0"
-  },
-  "sideEffects": false,
-  "publishConfig": {
-    "access": "public"
-  }
+  "sideEffects": false
 }

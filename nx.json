@@ -21,7 +21,7 @@
   },
   "nxCloudId": "67a8cfbf7e4d4f192a00af17",
   "targetDefaults": {
-    "@angular-devkit/build-angular:browser": {
+    "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
@@ -47,9 +47,6 @@
           "codeCoverage": true
         }
       }
-    },
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
     },
     "@nx/angular:package": {
       "cache": true,
@@ -92,17 +89,11 @@
       "style": "css"
     }
   },
-  "defaultProject": "jax-data-science",
   "release": {
     "projects": ["api-clients", "components", "themes"],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true
-    }
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default"
     }
   },
   "neverConnectToCloud": true

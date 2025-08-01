@@ -11,21 +11,23 @@
   },
   "private": true,
    "dependencies": {
-    "@angular/animations": "~19.1.0",
-    "@angular/common": "~19.1.0",
-    "@angular/compiler": "~19.1.0",
-    "@angular/core": "~19.1.0",
-    "@angular/forms": "~19.1.0",
-    "@angular/platform-browser": "~19.1.0",
-    "@angular/platform-browser-dynamic": "~19.1.0",
-    "@angular/router": "~19.1.0",
+    "@angular/animations": "~19.2.14",
+    "@angular/common": "~19.2.14",
+    "@angular/compiler": "~19.2.14",
+    "@angular/core": "~19.2.14",
+    "@angular/forms": "~19.2.14",
+    "@angular/platform-browser": "~19.2.14",
+    "@angular/platform-browser-dynamic": "~19.2.14",
+    "@angular/router": "~19.2.14",
     "@auth0/auth0-angular": "^2.2.3",
     "@primeng/themes": "^19.0.6",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.6",
     "rxjs": "~7.8.0",
     "zone.js": "~0.15.0",
-    "@jax-data-science/components": "*",
-    "@jax-data-science/api-clients": "*"
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "@jax-data-science/components": "workspace:*",
+    "@jax-data-science/api-clients": "workspace:*",
+    "@jax-data-science/themes": "workspace:*"
   }
 }
