@@ -17,11 +17,11 @@ import { MeasurementSet } from '@jax-data-science/api-clients';
 export class ShowcaseISADataComponent implements OnInit {
 
   constructor(private isaDataService: ISADataService) {
-    this.isaDataService.setApiBaseUrl('http://localhost:28080/api/v1/studies/740/visualization-data');
+    this.isaDataService.setApiBaseUrl('http://localhost:28080/api/v1/visualization');
   }
 
   ngOnInit() {
-    this.isaDataService.getMeaurementSetMetadata([], '130479').subscribe(
+    this.isaDataService.getMeasurementSetMetadata([], '130479').subscribe(
       (response) => {
         console.log('Measurement Set Metadata:', response);
       },

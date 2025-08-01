@@ -28,55 +28,55 @@ export class ISADataService {
   }
 
   // MEASUREMENT SETS
-  getMeaurementSetMetadata(
-    measurementIds?: string[],
-    measurementSeriesId?: string
+  getMeasurementSetMetadata(
+    measureIds?: string[],
+    measureSeriesId?: string
   ): Observable<Response<MeasurementSetMetadata>> {
     let url = '/measures/metadata';
 
     // parameters check: either measurementIds or measurementSeriesId must be provided
-    if(!measurementIds?.length && !measurementSeriesId) {
+    if(!measureIds?.length && !measureSeriesId) {
       const errorResponse: ErrorResponse = {
         code: 'INVALID_PARAMETERS',
         num_code: 0,
-        message: 'Either \'measurementIds\' or \'measurementSeriesId\' must be provided.'
+        message: 'Either \'measureIds\' or \'measureSeriesId\' must be provided.'
       }
 
       throw errorResponse;
     }
 
-    // measurementIds take precedence over measurementSeriesId
-    if(measurementIds?.length) {
-      url += `?measureIds=${measurementIds.join(',')}`;
+    // measureIds take precedence over measureSeriesId
+    if(measureIds?.length) {
+      url += `?measureIds=${measureIds.join(',')}`;
     } else {
-      url += `?measurementSeriesId=${measurementSeriesId}`;
+      url += `?measureSeriesIds=${measureSeriesId}&studyId=740`;
     }
 
     return this.apiBaseService!.get<MeasurementSetMetadata>(url);
   }
 
   getMeasurementSetSearchCharacteristics(
-    measurementIds?: string[],
-    measurementSeriesId?: string
+    measureIds?: string[],
+    measureSeriesId?: string
   ): Observable<CollectionResponse<MeasurementSetCharacteristic>> {
     let url = '/measures/characteristics';
 
-    // parameters check: either measurementIds or measurementSeriesId must be provided
-    if(!measurementIds?.length && !measurementSeriesId) {
+    // parameters check: either measureIds or measureSeriesId must be provided
+    if(!measureIds?.length && !measureSeriesId) {
       const errorResponse: ErrorResponse = {
         code: 'INVALID_PARAMETERS',
         num_code: 0,
-        message: 'Either \'measurementIds\' or \'measurementSeriesId\' must be provided.'
+        message: 'Either \'measureIds\' or \'measureSeriesId\' must be provided.'
       }
 
       throw errorResponse;
     }
 
-    // measurementIds take precedence over measurementSeriesId
-    if(measurementIds?.length) {
-      url += `?measureIds=${measurementIds.join(',')}`;
+    // measureIds take precedence over measureSeriesId
+    if(measureIds?.length) {
+      url += `?measureIds=${measureIds.join(',')}`;
     } else {
-      url += `?measurementSeriesId=${measurementSeriesId}`;
+      url += `?measureSeriesIds=${measureSeriesId}&studyId=740`;
     }
 
     return this.apiBaseService!.getCollection<MeasurementSetCharacteristic>(url);
