@@ -140,10 +140,6 @@ export class ISADataService {
     return queryParams ? `${endpoint}?${queryParams}` : endpoint;
   }
 
-  // private buildUrl(path: string, params?: Record<string, string | number | boolean>): string {
-  //  let url = `$
-
-
   // HEALTH CHECK
   // TO-DO [GIK 05/30/2025]: should be moved outside this service
   getHealthCheck(): Observable<any> {
