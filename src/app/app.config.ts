@@ -11,7 +11,7 @@ import { appRoutes } from './app.routes';
 
 import { environment } from '../environments/environment';
 
-import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '../../api-clients/src/lib/tokens/isa-data-config.token';
+import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '@jax-data-science/api-clients';
 
 export const appConfig: ApplicationConfig = {
   providers: [

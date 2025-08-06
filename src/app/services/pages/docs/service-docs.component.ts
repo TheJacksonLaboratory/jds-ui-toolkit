@@ -17,7 +17,7 @@ interface IApiClientDocs {
 }
 
 @Component({
-  selector: 'api-client-docs-component',
+  selector: 'app-client-docs-component',
   imports: [CommonModule, CardModule, RouterModule, TableModule],
   templateUrl: './service-docs.component.html',
   styleUrl: './service-docs.component.css',

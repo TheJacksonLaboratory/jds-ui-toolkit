@@ -9,7 +9,7 @@ import {
   MeasureSeriesMetadata,
   MeasureMetadata,
   IsaCharacteristic
-} from '../../models/isa-data/measure.model';
+} from '../../models/isa-data/isa-data.model';
 // tokens
 import {
   ISA_DATA_SERVICE_CONFIG,
@@ -57,7 +57,7 @@ export class ISADataService {
       throw errorResponse;
     }
 
-    const url = this.buildUrl('/measures/metadata', {
+    const url = this.buildUrl('/visualization/measures/metadata', {
       measureSeriesIds: measureSeriesIds.join(','),
       studyId: studyIds.join(',')
     });
@@ -94,7 +94,7 @@ export class ISADataService {
       throw errorResponse;
     }
 
-    const url = this.buildUrl('/measures/characteristics', {
+    const url = this.buildUrl('/visualization/measures/characteristics', {
       measureSeriesIds: measureSeriesIds.join(','),
       studyIds: studyIds.join(',')
     });

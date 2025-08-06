@@ -11,7 +11,7 @@ export const environment: Environment = {
   urls: {
     geneWeaver: 'https://geneweaver-dev.jax.org',
     strainRecommender: 'https://astra-dev.jax.org',
-    ISAModelData: 'http://localhost:28080/api/v1/visualization',
+    ISAModelData: 'https://jds-apps-dev.jax.org/api/v1',
   },
   showDevelopmentFeatures: true,
 };
