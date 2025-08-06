@@ -6,9 +6,7 @@ import { provideAuth0, authHttpInterceptorFn } from '@auth0/auth0-angular';
 
 import { providePrimeNG } from 'primeng/config';
 import { EchoPreset } from '@jax-data-science/themes';
-
 import { appRoutes } from './app.routes';
-
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {

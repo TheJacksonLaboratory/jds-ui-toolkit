@@ -28,7 +28,6 @@ ${toCssVars(primitive)}
   --button-secondary-background: #ffffff;
 }
 `;
-console.log('Echo CSS Variables:', echoCSSVars);
 
 const EchoPreset = definePreset(Lara, {
   primitive: primitive,
