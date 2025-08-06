@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ISADataService } from '@jax-data-science/api-clients';
 
 // models
-import { Measure } from '@jax-data-science/api-clients';
+import { MeasureSeriesMetadata } from '@jax-data-science/api-clients';
 
 @Component({
   selector: 'app-showcase-isa-data',
@@ -21,7 +21,7 @@ export class ShowcaseISADataComponent implements OnInit {
   ngOnInit() {
     this.isaDataService.getMeasureSeriesMetadata(['130499'], ['740']).subscribe(
       (response) => {
-        console.log('Measurement Set Metadata:', response);
+        console.log('Measurement Set Metadata:', response.object);
       },
       (error) => {
         console.error('Error fetching measurement set metadata:', error);

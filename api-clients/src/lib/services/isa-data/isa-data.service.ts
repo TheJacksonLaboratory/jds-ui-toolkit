@@ -52,15 +52,17 @@ export class ISADataService {
         code: 'BAD_REQUEST',
         num_code: 400,
         message: 'missing required parameter: measureSeriesIds',
-      }
+      };
 
       throw errorResponse;
     }
+
 
     const url = this.buildUrl('/visualization/measures/metadata', {
       measureSeriesIds: measureSeriesIds.join(','),
       studyId: studyIds.join(',')
     });
+
 
     return this.apiBaseService.get<MeasureSeriesMetadata>(url);
   }
@@ -98,6 +100,7 @@ export class ISADataService {
       measureSeriesIds: measureSeriesIds.join(','),
       studyIds: studyIds.join(',')
     });
+
 
     return this.apiBaseService.get(url);
   }
