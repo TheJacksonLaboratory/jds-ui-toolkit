@@ -1,7 +1,7 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { CollectionResponse, Response } from '../models/response';
+import { CollectionResponse, Response } from '../../models/response';
 import { AsyncTaskService } from './asynctask.service';
 import { 
   Input, 

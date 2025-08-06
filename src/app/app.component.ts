@@ -23,44 +23,52 @@ export class AppComponent {
           [
             {
               label: "Async Tasks",
-              routerLink: "docs/components/async-tasks"
+              routerLink: "components/docs/async-tasks"
             },
             {
               label: "Authentication",
-              routerLink: "docs/components/authentication"
+              routerLink: "components/docs/authentication"
             },
             {
               label: "Error Widget",
-              routerLink: "docs/components/error-widget"
+              routerLink: "components/docs/error-widget"
             },
             {
               label: "Facet Search",
-              routerLink: "docs/components/facet-search"
+              routerLink: "components/docs/facet-search"
             },
             {
               label: "Navbar",
-              routerLink: "docs/components/navbar"
+              routerLink: "components/docs/navbar"
             },
             {
               label: "Ontology Search",
-              routerLink: "docs/components/ontology-search"
+              routerLink: "components/docs/ontology-search"
             },
             {
               label: "Schema Based Grid",
-              routerLink: "docs/components/schema-grid"
+              routerLink: "components/docs/schema-grid"
             }
           ]
       },
-    {
-      label: "Services", icon: "", items: [
       {
-        label: "Async Task",
-        url: "docs/services/navbar",
+        label: "Services",
+        icon: "",
+        items:
+          [
+            {
+              label: "ISA Data",
+              routerLink: "services/docs/isa-data",
+            },
+            {
+              label: "Ontology Service",
+              routerLink: "services/docs/search"
+            }
+          ]
       },
       {
-        label: "Ontology Service",
-        routerLink: "docs/services/search"
+        label: "Help",
+        icon: ""
       }
     ]
-  }, {label: "Help", icon: ""}]
 }

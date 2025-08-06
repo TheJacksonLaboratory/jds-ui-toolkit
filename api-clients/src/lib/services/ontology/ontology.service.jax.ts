@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Ontology, OntologyConfig, OntologyTerm } from './ontology.model';
-import { CollectionResponse, Response } from '../models/response';
+
+import { CollectionResponse, Response } from '../../models/response';
 import { ontologyFromCurie } from './ontology.shared';
 import { OntologyService } from './ontology.service.base';
+
 @Injectable({
   providedIn: 'root'
 })

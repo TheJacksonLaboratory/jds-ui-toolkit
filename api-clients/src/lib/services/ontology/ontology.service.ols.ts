@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { OntologyService } from './ontology.service.base';
 import { Observable, map, pipe } from 'rxjs';
 import { OLSResponse, OLSTerm, Ontology, OntologyTerm } from './ontology.model';
-import { CollectionResponse, Response } from '../models/response';
+import { CollectionResponse, Response } from '../../models/response';
 import { ontologyFromCurie } from './ontology.shared';
 
 @Injectable({

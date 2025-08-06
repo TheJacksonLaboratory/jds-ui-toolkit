@@ -2,7 +2,7 @@ import {HttpTestingController, provideHttpClientTesting } from '@angular/common/
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { OLSResponse, Ontology, OntologyTerm} from './ontology.model';
-import { CollectionResponse, Response } from '../models/response';
+import { CollectionResponse, Response } from '../../models/response';
 import { OLSOntologyService } from './ontology.service.ols'
 
 describe('OLSOntologyService', () => {

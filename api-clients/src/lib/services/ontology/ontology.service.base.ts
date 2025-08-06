@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Ontology, OntologyTerm } from './ontology.model';
-import { CollectionResponse, Response } from '../models/response';
+import { CollectionResponse, Response } from '../../models/response';
 
 export abstract class OntologyService {
   abstract search(query: string, limit: number, ontology: Ontology): Observable<CollectionResponse<OntologyTerm>>;

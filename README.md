@@ -1,20 +1,17 @@
 # Jax Data Science Components
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
-
 <a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
     <img src="public/JAX-logo-helix-only-blue.png" width="45">
 </a> 
 
 ## *Overview*
 
-The *JAX Data Science UI Components* repository is a development workspace that streamlines the creation, testing and 
-deployment of **shareable** UI components across the *JAX Data Science* community. The workspace utilizes development 
-practices and tools that promote code reuse, reduce duplication, and ensure architectural consistency 
-across the *JAX Data Science* community.
+The *JAX Data Science UI Components* repository is a development workspace designed to streamline the creation, testing and 
+deployment of shareable UI components across the JAX Data Science community. This workspace employs development 
+practices and tools that promote code reuse, reduce duplication, and ensure architectural consistency throughout the organization.
 
 The workspace uses the Nx build system and has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects). 
-There are two libraries - *@jax-data-science/components* and *@jax-data-science/api-clients* - and one root application.
+There are two libraries - *@jax-data-science/components* and *@jax-data-science/api-clients*, one theme - *@jax-data-science/themes*, and one root application.
 
 The workspace is maintained by the JAX Data Science UI/UX team and undergoes continuous updates to keep up with the 
 latest technologies. This commitment to technological currency ensures that all shared UI components benefit from the latest performance 
