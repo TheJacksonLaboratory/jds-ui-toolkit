@@ -11,6 +11,8 @@ import { appRoutes } from './app.routes';
 
 import { environment } from '../environments/environment';
 
+import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '../../api-clients/src/lib/tokens/isa-data-config.token';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -43,6 +45,12 @@ export const appConfig: ApplicationConfig = {
           `${environment.urls.strainRecommender}/*`,
         ]
       }
-    })
+    }),
+    {
+      provide: ISA_DATA_SERVICE_CONFIG,
+      useValue: {
+        baseUrl: environment.urls.ISAModelData
+      } as IsaDataServiceConfig
+    }
   ],
 };

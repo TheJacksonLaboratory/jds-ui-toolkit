@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ISADataService } from '@jax-data-science/api-clients';
 
 // models
-import { MeasurementSet } from '@jax-data-science/api-clients';
+import { Measure } from '@jax-data-science/api-clients';
 
 @Component({
   selector: 'app-showcase-isa-data',
@@ -16,12 +16,10 @@ import { MeasurementSet } from '@jax-data-science/api-clients';
 })
 export class ShowcaseISADataComponent implements OnInit {
 
-  constructor(private isaDataService: ISADataService) {
-    this.isaDataService.setApiBaseUrl('http://localhost:28080/api/v1/studies/740/visualization-data');
-  }
+  constructor(private isaDataService: ISADataService) { }
 
   ngOnInit() {
-    this.isaDataService.getMeaurementSetMetadata([], '130479').subscribe(
+    this.isaDataService.getMeasureSeriesMetadata(['130499'], ['740']).subscribe(
       (response) => {
         console.log('Measurement Set Metadata:', response);
       },

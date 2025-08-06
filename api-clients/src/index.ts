@@ -4,7 +4,7 @@ export * from './lib/services/asynctask/asynctask.model';
 
 // ISA Data API client
 export * from './lib/services/isa-data/isa-data.service';
-export * from './lib/models/isa-data/measurement.model';
+export * from './lib/models/isa-data/measure.model';
 
 // MVAR API client
 export * from './lib/services/mvar/mvar.service';
