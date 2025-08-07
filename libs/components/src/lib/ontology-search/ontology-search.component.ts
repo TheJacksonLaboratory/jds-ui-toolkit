@@ -46,7 +46,6 @@ import { CheckboxModule } from 'primeng/checkbox';
   encapsulation: ViewEncapsulation.None
 })
 export class OntologySearchComponent {
-  // TODO: multiple selection not working yet
   @Input() multiple = false;
   @Input() ontology: Ontology = Ontology.HP;
   @Input() placeholder = 'Search ontology terms...';
