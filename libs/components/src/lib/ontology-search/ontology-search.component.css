@@ -29,6 +29,12 @@ lib-ontology-search {
             background-color: var(--echo-slate-100, inherit);
             color: var(--echo-slate-800, inherit);
             padding: .225rem .475rem;
+            font-size: .75rem;
+        }
+
+        .p-checkbox-checked .p-checkbox-box {
+            background-color: var(--echo-cyan-700, inherit);
+            border-color: var(--echo-cyan-700, inherit);
         }
     }
 }
