@@ -5,6 +5,7 @@
     "@angular/common": "^19.2.14",
     "@angular/core": "^19.2.14",
     "@angular/forms": "^19.2.14",
+    "@angular/platform-browser": "^19.2.14",
     "@auth0/auth0-angular": "^2.2.3",
     "primeng": "^19.0.6",
     "@primeng/themes": "^19.0.6",
