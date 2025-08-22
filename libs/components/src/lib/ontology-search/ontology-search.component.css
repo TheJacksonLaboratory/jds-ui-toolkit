@@ -34,7 +34,7 @@ lib-ontology-search {
 
         .p-checkbox-checked .p-checkbox-box {
             background-color: var(--echo-cyan-700, inherit);
-            border-color: var(--echo-cyan-700, inherit);
+            border-color: var(white, inherit);
         }
     }
 }
