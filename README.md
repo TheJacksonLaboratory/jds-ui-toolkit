@@ -25,13 +25,13 @@ improvements, security patches, and feature enhancements while also keeping back
 
 Clone the repository, move to a branch and install the dependencies:
 
-- Install the dependencies using [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm)
+- Install the dependencies using [Node.js](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/installation)
 ```bash
-npm install
+  pnpm install
 ```
 - Start the development server locally
 ```bash
-  npm run start
+  pnpm run start
 ```
 
 To test before pushing changes, use:
@@ -80,19 +80,19 @@ You will need to:
 and */api-clients* directory has its own **package.json** file.
 
 ```sh
-npx nx serve jax-data-science
+  npx nx serve jax-data-science
 ```
 
 - update the **CHANGELOG.md** file - each */components* and */api-clients* directory has its own **CHANGELOG.md** file.
 
 ```sh
-npx nx build jax-data-science
+  npx nx build jax-data-science
 ```
 
 - commit and push the updated to the GitHub repository
 
 ```sh
-npx nx show project jax-data-science
+  npx nx show project jax-data-science
 ```
 
 - do <u>not</u> run the NPM RELEASE pipeline!! The UX/UI team will publish the package.  
