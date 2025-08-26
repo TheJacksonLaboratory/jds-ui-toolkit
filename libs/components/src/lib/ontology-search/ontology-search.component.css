@@ -1,0 +1,13 @@
+lib-ontology-search {
+    .p-autocomplete-input{
+        color: black;
+    }
+    .p-autocomplete-option {
+        justify-content: space-between;
+        color: black;
+    }
+    .p-focus {
+        background-color: var(--echo-cyan-700, inherit);
+        color: white;
+    }
+}
