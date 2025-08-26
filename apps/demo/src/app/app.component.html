@@ -1,12 +1,15 @@
-<lib-jds-navbar title="Jax Data Science Components" [items]="items"></lib-jds-navbar>
-<div class="tw-flex tw-flex-col tw-items-center tw-full">
-  <div class="tw-w-3/4 tw-mt-10 tw-text-center">
-    <h1 class="tw-text-2xl">Components</h1>
+<div class="tw-flex tw-flex-col tw-items-center tw-w-full tw-h-screen">
+  <div class="tw-w-full" style="background: #1e40af">
+    <lib-jds-navbar title="Jax Data Science Components" [items]="navbarItems"></lib-jds-navbar>
   </div>
 
-  <div class="tw-w-3/4 tw-mt-5">
-    <div class="router-outlet-wh">
-      <router-outlet></router-outlet>
-    </div>
+  <!-- GIK 7/14/2025 this might be changed to breadcrumbs - keep here as an example -->
+  <!--
+  <div class="tw-flex-shrink-0 tw-w-full md:tw-w-3/4 tw-text-left tw-px-5 md:tw-text-center">
+    <h1 class="tw-text-2xl tw-py-5">Components</h1>
+  </div> -->
+
+  <div class="tw-flex-1 tw-w-full xl:tw-w-3/4 tw-relative">
+    <router-outlet></router-outlet>
   </div>
 </div>

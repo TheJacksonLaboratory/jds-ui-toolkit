@@ -9,7 +9,8 @@ export const environment: Environment = {
   },
   urls: {
     geneWeaver: 'https://geneweaver-dev.jax.org',
-    strainRecommender: 'https://astra-dev.jax.org'
+    strainRecommender: 'https://astra-dev.jax.org',
+    ISAModelData: 'https://jds-apps-dev.jax.org/api/v1'
   },
   // feature flag
   showDevelopmentFeatures: true,
@@ -26,6 +27,7 @@ export interface Environment {
   urls: {
     geneWeaver: string;
     strainRecommender: string;
+    ISAModelData: string;
   };
   // feature flag
   showDevelopmentFeatures: boolean;

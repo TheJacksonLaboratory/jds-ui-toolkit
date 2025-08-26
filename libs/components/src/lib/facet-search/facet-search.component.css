@@ -1,0 +1,79 @@
+.applied-search-chip {
+    background-color: #1e40af !important;
+    color: white !important;
+}
+
+.applied-search-chip .p-chip-text {
+    color: white !important;
+    font-weight: 500;
+}
+
+.applied-search-chip .p-chip-remove-icon {
+    color: white !important;
+}
+
+.applied-search-chip:hover {
+    background-color: #1d4ed8 !important;
+}
+
+.disabled-option {
+    opacity: 0.5;
+}
+
+.disabled-text {
+    color: #9ca3af;
+}
+
+.disabled-count {
+    background-color: #e5e7eb;
+    color: #6b7280;
+}
+
+
+.custom-checkbox .p-checkbox-box {
+    border-radius: 4px;
+    border: 2px solid #d1d5db;
+    transition: all 0.2s ease;
+}
+
+.custom-checkbox .p-checkbox-box:hover {
+    border-color: #3b82f6;
+}
+
+.custom-checkbox .p-checkbox-box.p-highlight {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.custom-checkbox .p-checkbox-icon {
+    color: white;
+}
+
+.custom-checkbox.p-disabled .p-checkbox-box {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+}
+
+/* Smooth transitions */
+.tw-transition-transform {
+    transition: transform 0.2s ease;
+}
+
+/* custom scrollbar for options */
+.tw-overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tw-overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.tw-overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.tw-overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

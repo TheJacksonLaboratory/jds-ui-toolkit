@@ -1,65 +1,50 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, EventEmitter, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  Input,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  EventEmitter,
+  Output
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { map, of, Subscription, switchMap } from 'rxjs';
 
 // PrimeNG components
-import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
-import { Chip } from 'primeng/chip';
+import { ChipModule } from 'primeng/chip';
 import { DataTableDesignTokens } from '@primeng/themes/types/datatable';
-import { Drawer } from 'primeng/drawer';
-import { InputText } from 'primeng/inputtext';
-import { IconField } from 'primeng/iconfield';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Table, TableModule } from 'primeng/table';
 // facades
 import { AsyncTaskFacade } from './asynctask.facade';
 // models
-import { Filter, RunInput } from './asynctask.model';
-import { Run, WorkflowExecutionStatus } from '@jax-data-science/api-clients';
+import { WorkflowExecutionStatus } from '@jax-data-science/api-clients';
+import { IFacetSearchConfig, IFacetSearchCategory, IFacetOption } from '../facet-search/facet-search.model';
+import { IAsyncTableConfig, RunInput } from './asynctask.model';
+
 // components
-import { AsyncTaskFilterComponent } from './asynctask-filter/asynctask-filter.component';
 import { AsyncTaskDetailsComponent } from './asynctask-details/asynctask-details.component';
+import { FacetSearchComponent } from '../facet-search/facet-search.component';
 import { WidgetErrorComponent } from '../widget-error/widget-error.component';
-
-/**
- * TODO: [GIK 4/16/2025] added here (instead of in asynctask.model.ts) so it
- * could easily be exported to the parent: it should be moved away from here
- * once we decide if we will do a dynamic-table shared component.
- */
-export interface IAsyncTableConfig {
-  isExpandable: boolean;
-  defaultExpandedRows?: Record<string, boolean>;
-  rowsPerPage?: number;
-  rowsPerPageOptions?: number[];
-  isPaginated?: boolean;
-  isStriped?: boolean;
-  showActions: boolean;
-  allowFilters: boolean;
-  filterConfigs?: IFilterConfig[];
-  // An HTML template for the body of the expandable row. To work properly, the template must be resolved in
-  // ngAfterViewInit of the component that creates the config object.
-  detailsTemplate?: TemplateRef<null>;
-}
-
-export interface IFilterConfig {
-  displayName: string;
-  filterOptions: string[];
-}
+// services
+import { FacetSearchFacade } from '../facet-search/facet-search.facade';
 
 @Component({
   selector: 'lib-jds-async-tasks',
   imports: [
-    AsyncTaskFilterComponent,
-    AccordionModule,
     ButtonModule,
-    Chip,
+    ChipModule,
     CommonModule,
-    Drawer,
+    FacetSearchComponent,
     FormsModule,
-    IconField,
-    InputText,
+    IconFieldModule,
+    InputTextModule,
     TableModule,
     InputIconModule,
     AsyncTaskDetailsComponent,
@@ -83,19 +68,43 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     allowFilters: true,
   };
 
+  // facet search configuration
+  searchConfig: IFacetSearchConfig = {
+    isToggable: true,
+    isVisible: false
+  };
+  // facet search categories (will be passed to the FacetSearchComponent)
+  searchCategories: IFacetSearchCategory[] = [];
+
   protected readonly WorkflowExecutionStatus = WorkflowExecutionStatus;
 
-  // error: Error | null = null;
-  error: string | null = null; // used to show errors in the UI
-
-
+  // TODO [GIK 2025-06-20]: use an array of errors instead of a single string
+  error: string | null = null; // UI error message
 
   @ViewChild('taskTable') taskTable: Table | undefined;
-
-
+  @ViewChild('taskTableContainer') taskTableContainer!: ElementRef<HTMLDivElement>;
 
   tasks: RunInput[] = [];
-  filteredTasks: RunInput[] = [];
+
+  isDataLoading = true; // tracks whether the data is loading
+
+  // computed property to get visible tasks based on applied filters
+  visibleTasks = computed(() => {
+    let tempVisibleTasks = [...this.tasks];
+    // every time the applied searches change, we need to filter the tasks
+    const appliedSearches = this.facetSearchFacade.getAppliedSearches$()();
+
+    Object.values(appliedSearches).forEach(selectedOptionIds => {
+      if(selectedOptionIds.length > 0) {
+        tempVisibleTasks = tempVisibleTasks.filter((task: RunInput) => {
+          const taskStatus = task.status?.toString() || '';
+          return selectedOptionIds.includes(taskStatus);
+        });
+      }
+    });
+
+    return tempVisibleTasks;
+  });
 
   @Output() editEmitter = new EventEmitter<RunInput>();
   @Output() openEmitter = new EventEmitter<RunInput>();
@@ -105,9 +114,7 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
   subEvents: Subscription = new Subscription();
 
   // pagination
-  first = 0;
-  // filter panel
-  filterVisible = false;
+  first = 0; // TODO [GIK 2025-06-20]: rename variable
 
   tableDt: DataTableDesignTokens = {
     header: {
@@ -118,14 +125,15 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     },
   };
 
-  activeFilters: Filter[] = [];
-
-  constructor(private asyncTaskFacade: AsyncTaskFacade) {}
+  constructor(
+    private asyncTaskFacade: AsyncTaskFacade,
+    private facetSearchFacade: FacetSearchFacade
+  ) {}
 
   /**
    * onInit: fetches all tasks and opens an SSE connection to get real-time updates
-   * about tasks that might change status or get created; subscribes to the observable that
-   * stores the current tasks lists that needs to be shown in the UI view.
+   * about tasks that might change status or get created; subscribes to the observable
+   * that stores the current tasks list to be displayed in the UI.
    */
   ngOnInit() {
     this.asyncTaskFacade.fetchAsyncTasks(); // fetch all tasks
@@ -149,34 +157,30 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
       })).subscribe({
       next: ({tasks, error}) => {
         this.tasks = tasks;
-        this.filteredTasks = tasks;
 
-        // set up filters based on tableConfig
-        this.asyncTaskFacade.setUpFilters(this.tableConfig.filterConfigs);
+        this.isDataLoading = false;
 
-        if (this.tableConfig.defaultExpandedRows) {
+        // init the facet search categories - there's only one category: 'Status'
+        this.initializeSearchCategories();
+        this.updateSearchCategoryOptionCounts();
+
+        if(this.tableConfig.defaultExpandedRows) {
           this.expandedRows = this.tableConfig.defaultExpandedRows;
         }
       }
     });
 
     // subscribe to observable that emits errors
+    // TODO: [GIK 2025-06-20] check whtehr this subscription is necessary: SSE?
     this.asyncTaskFacade.getResponseError$().subscribe({
       next: (error) => {
+        this.isDataLoading = false;
         this.error = error;
       },
     });
 
-    // subscribe to observable that emits filter selection changes
-    this.asyncTaskFacade.getActiveFilters$().subscribe({
-      next: (filters) => {
-        this.activeFilters = filters;
-        this.filteredTasks = this.asyncTaskFacade.filterTasks(
-          this.tasks,
-          this.activeFilters
-        );
-      },
-    });
+    // initialize search categories
+    this.initializeSearchCategories();
   }
 
   /**
@@ -189,34 +193,101 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Searches the table to find matches for the given search term -
-   * only name and description fields are currently supported.
-   *
-   * @param target - the input element that has the search value
-   * @param searchMode - the search mode ('contains', 'startsWith', 'endsWith, etc.)
+   * Initializes the 'Status' search category with options based on the
+   * WorkflowExecutionStatus enum - each option's counts will be updated later.
+   * @private
+   * @return {void}
    */
-  applyFilterGlobal(target: HTMLInputElement, searchMode: string): void {
-    this.taskTable?.filterGlobal(target.value, searchMode);
-  }
+  private initializeSearchCategories(): void {
+    const statusOptions: IFacetOption[] = [];
+    // convert the WorkflowExecutionStatus enum to an object for easier manipulation
+    const enumObject = WorkflowExecutionStatus as Record<string, string | number>;
 
-  openFilterPanel() {
-    this.filterVisible = true;
-  }
+    // due to TypeScript's numeric enum bidirectional mapping, enumObject looks like this:
+    // { '1': 'RUNNING', '2': 'COMPLETED', '3': 'FAILED', ..., 'RUNNING': 1, 'COMPLETED': 2, 'FAILED': 3, ... }
+    // we need to filter out the numeric keys and only keep the string keys
+    Object.keys(enumObject)
+      .filter(key => isNaN(Number(key)))
+      .forEach(key => {
+        const enumValue = enumObject[key].toString();
 
-  clearFilters() {
-    this.asyncTaskFacade.clearAllFilters(this.activeFilters);
+        const displayName = this.formatEnumKeyForDisplay(key);
+        statusOptions.push({
+          id: enumValue,
+          label: displayName,
+          selected: false, // might be updated in updatedSearchCategoryOptionCounts()
+          count: 0 // might be updated in updateSearchCategoryOptionCounts()
+        });
+      });
+
+    this.searchCategories = [{
+      name: 'status',
+      label: 'Status',
+      isOpen: true,
+      showZeroCount: false,
+      options: statusOptions
+    }];
   }
 
   /**
-   * Removes a filter from the active filters list and clears its selected options.
-   * @param filter
+   * Updates the counts of each option in the 'Status' search category
+   * based on the current tasks' collection.
+   * @private
    */
-  removeFilter(filter: Filter) {
-    filter.selectedOptions = [];
-    const myActiveFilters = this.activeFilters.filter(
-      (f) => f.name !== filter.name
-    );
-    this.asyncTaskFacade.setActiveFilters(myActiveFilters);
+  private updateSearchCategoryOptionCounts(): void {
+    const statusSearchCategory = this.searchCategories.find(cat => cat.name === 'status');
+
+    if(statusSearchCategory && statusSearchCategory.options) {
+      // reset each option's count to 0
+      statusSearchCategory.options.forEach(option => option.count = 0);
+
+      // update each option's counts based on current async tasks' collection
+      this.tasks.forEach(task => {
+        const optionToUpdate = statusSearchCategory.options.find(option => option.id === task.status?.toString());
+        if(optionToUpdate) {
+          optionToUpdate.count++;
+        }
+      });
+
+      // update each option's checked state depending on its counts
+      statusSearchCategory.options.forEach(option => {
+        option.selected = option.count > 0; // mark checked when count is more than 0
+      });
+    }
+  }
+
+  /**
+   * Formats the enum keys to a more user-friendly display format.
+   * For example, "RUNNING" becomes "Running", "TIMED_OUT" becomes "Timed Out", etc.
+   * @param key - the enum key to format
+   * @private
+   */
+  private formatEnumKeyForDisplay(key: string): string {
+    return key
+      .toLowerCase()
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+
+  /**
+   * Signals to open the facet search panel.
+   */
+  onOpenFacetSearchPanel() {
+    this.facetSearchFacade.setIsSearchVisible(true);
+  }
+
+  isFacetSearchEnabled(): boolean {
+    return this.tasks.length > 0 && !this.isDataLoading && !this.error;
+  }
+
+  /**
+   * Cancels a running task.
+   * @param task
+   */
+  cancelTask(task: RunInput) {
+    this.asyncTaskFacade.cancelTask(task);
   }
 
   /**
@@ -242,13 +313,5 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
    */
   openTask(task: RunInput) {
     this.openEmitter.emit(task);
-  }
-
-  /**
-   * Cancels a running task.
-   * @param task
-   */
-  cancelTask(task: RunInput) {
-    this.asyncTaskFacade.cancelTask(task);
   }
 }

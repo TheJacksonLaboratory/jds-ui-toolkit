@@ -14,25 +14,57 @@ import { NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
-  items = [{label: "Components", icon: "", items: [
+  navbarItems =
+    [
       {
-        label: "Navbar",
-        url: "docs/components/navbar",
+        label: "Components",
+        icon: "",
+        items:
+          [
+            {
+              label: "Async Tasks",
+              routerLink: "components/docs/async-tasks"
+            },
+            {
+              label: "Authentication",
+              routerLink: "components/docs/authentication"
+            },
+            {
+              label: "Error Widget",
+              routerLink: "components/docs/error-widget"
+            },
+            {
+              label: "Facet Search",
+              routerLink: "components/docs/facet-search"
+            },
+            {
+              label: "Navbar",
+              routerLink: "components/docs/navbar"
+            },
+            {
+              label: "Ontology Search",
+              routerLink: "components/docs/ontology-search"
+            },
+            {
+              label: "Schema Based Grid",
+              routerLink: "components/docs/schema-grid"
+            }
+          ]
       },
       {
-        label: "Ontology Search",
-        routerLink: "docs/components/search"
-      }
-    ]
-  }, {label: "Services", icon: "", items: [
-      {
-        label: "Async Task",
-        url: "docs/services/navbar",
+        label: "Services",
+        icon: "",
+        items:
+          [
+            {
+              label: "ISA Data",
+              routerLink: "services/docs/isa-data",
+            }
+          ]
       },
       {
-        label: "Ontology Service",
-        routerLink: "docs/services/search"
+        label: "Help",
+        icon: ""
       }
     ]
-  }, {label: "Help", icon: ""}]
 }

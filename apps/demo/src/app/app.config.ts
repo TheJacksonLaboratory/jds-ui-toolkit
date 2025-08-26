@@ -9,6 +9,8 @@ import { EchoPreset } from '@jax-data-science/themes';
 import { appRoutes } from './app.routes';
 import { environment } from '../environments/environment';
 
+import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '@jax-data-science/api-clients';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -42,6 +44,12 @@ export const appConfig: ApplicationConfig = {
           `${environment.urls.strainRecommender}/*`,
         ]
       }
-    })
+    }),
+    {
+      provide: ISA_DATA_SERVICE_CONFIG,
+      useValue: {
+        baseUrl: environment.urls.ISAModelData
+      } as IsaDataServiceConfig
+    }
   ],
 };

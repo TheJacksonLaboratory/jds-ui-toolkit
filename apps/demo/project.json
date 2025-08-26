@@ -16,11 +16,10 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/demo/tsconfig.app.json",
         "assets": [
-          "apps/demo/src/favicon.ico",
           "apps/demo/src/assets",
           {
             "glob": "**/*",
-            "input": "public"
+            "input": "assets"
           },
           {
             "glob": "**/*",
