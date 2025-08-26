@@ -6,27 +6,28 @@ import { OntologyService } from 'api-clients/src/lib/ontology/ontology.service.b
 import { Ontology, OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
 import { FormsModule } from '@angular/forms';
 import { distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { HighlightPipe } from '../highlight/highlight.pipe';
 @Component({
   selector: 'lib-ontology-search',
-  imports: [CommonModule, AutoCompleteModule, AutoCompleteModule, FormsModule, ChipModule],
+  imports: [CommonModule, AutoCompleteModule, AutoCompleteModule, FormsModule, ChipModule, HighlightPipe],
   template: `
-    <p-autoComplete
-      class="ontology-search"
-      [multiple]="multiple"
-      [suggestions]="filteredOptions"
-      (completeMethod)="filterOptions($event)"
-      [(ngModel)]="selectedValues"
-      (onSelect)="onSelect($event)" minLength="3" delay="750"
-      showClear="true"
-      [field]="'name'">
-      <ng-template let-term #item>
-            <div class="tw-text-ellipsis">{{ term.name }}</div>
-            <div><p-chip label="{{term.id}}"/></div>
-      </ng-template>
-    </p-autoComplete>
+    <div class="card flex justify-center">
+      <p-autoComplete
+        class="ontology-search"
+        [multiple]="multiple"
+        [suggestions]="filteredOptions"
+        (completeMethod)="filterOptions($event)"
+        (onSelect)="onSelect($event)" minLength="3" delay="250"
+        showClear="true" optionLabel="name">
+        <ng-template let-term #item>
+              <span class="tw-text-ellipsis"[innerHTML]="term.name | highlight: query$.getValue()"></span>
+              <span><p-chip label="{{term.id}}"/></span>
+        </ng-template>
+      </p-autoComplete>
+    </div>  
   `,
-  styleUrls: ['./ontology-search.component.scss'],
+  styleUrls: ['./ontology-search.component.css'],
   standalone: true,
   encapsulation: ViewEncapsulation.None
 })
@@ -34,11 +35,14 @@ export class OntologySearchComponent {
   @Input() multiple = false;
   @Input() options: string[] = [];
   @Input() ontology: Ontology = Ontology.HP;
+  @Input() placeholder = 'Search ontology terms...';
+  @Input() extended = false;
   @Output() selected = new EventEmitter<OntologyTerm[]>();
-
+  items: string[] = [];
+  value: string | undefined;
   selectedValues: OntologyTerm[] = [];
   filteredOptions: OntologyTerm[] = [];
-  private query$ = new Subject<string>();
+  query$ = new BehaviorSubject<string>("");
 
   constructor(private ontologyService: OntologyService) {
     this.query$.pipe(
