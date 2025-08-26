@@ -1,16 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
 import { CommonModule } from '@angular/common';
+import { OntologySearchComponent } from '@jax-data-science/components';
+import { OLSOntologyService, OntologyService } from '@jax-data-science/api-clients';
 
 @Component({
-  selector: 'app-showcase-ontology-search',
-  imports: [CommonModule],
+  selector: 'app-ontology-search',
   templateUrl: './showcase-ontology-search.component.html',
-  styleUrl: './showcase-ontology-search.component.css',
-  standalone: true
+  styleUrls: ['./showcase-ontology-search.component.css'],
+  standalone: true,
+  imports: [OntologySearchComponent],
+  providers: [
+    {
+      provide: OntologyService,
+      useClass: OLSOntologyService // Use the OLSOntologyService for ontology operations
+    }
+  ]
 })
-export class ShowcaseOntologySearchComponent implements OnInit {
-
-  ngOnInit() {
-    console.log('ShowcaseOntologySearchComponent initialized');
+export class ShowcaseOntologySearchComponent {
+  onSelected(selected: OntologyTerm[]) {
+    // Handle selected ontology terms here
+    console.log('Selected terms:', selected);
   }
 }
