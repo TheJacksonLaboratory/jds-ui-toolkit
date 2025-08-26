@@ -17,3 +17,5 @@ export * from './lib/navbar/navbar.component';
 // Widget Error UI component
 export * from './lib/widget-error/widget-error.component';
 
+// Ontology Search UI component
+export * from './lib/ontology-search/ontology-search.component';
