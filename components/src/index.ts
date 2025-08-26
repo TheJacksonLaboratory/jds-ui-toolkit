@@ -17,3 +17,7 @@ export * from './lib/navbar/navbar.component';
 // Widget Error UI component
 export * from './lib/widget-error/widget-error.component';
 
+// Bar chart component
+export * from './lib/bar-chart/bar-chart.component';
+export * from './lib/bar-chart/bar-chart.model';
+

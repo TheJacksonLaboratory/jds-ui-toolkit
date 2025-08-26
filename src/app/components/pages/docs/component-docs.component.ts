@@ -87,6 +87,14 @@ export class ComponentDocsComponent implements OnInit {
         contact: 'npm@jax.org',
         docsUrl: 'https://jax.org/docs/components/async-tasks'
       },
+      'bar-chart': {
+        name: 'Bar Chart',
+        description: 'Something something',
+        isAuthRequired: true,
+        status: 'In Progress',
+        contact: 'npm@jax.org',
+        docsUrl: 'https://jax.org/docs/components/bar-chart'
+      },
       'error-widget': {
         name: 'Error Widget',
         description: 'A reusable Angular component designed to display error ' +

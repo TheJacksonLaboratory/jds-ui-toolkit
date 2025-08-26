@@ -30,6 +30,10 @@ export class AppComponent {
               routerLink: "components/docs/authentication"
             },
             {
+              label: "Bar Chart",
+              routerLink: "components/docs/bar-chart"
+            },
+            {
               label: "Error Widget",
               routerLink: "components/docs/error-widget"
             },

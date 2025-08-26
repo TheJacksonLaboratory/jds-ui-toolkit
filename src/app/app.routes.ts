@@ -7,6 +7,7 @@ import { ServiceDocsComponent } from './services/pages/docs/service-docs.compone
 // showcase components
 import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/showcase-async-tasks.component';
 import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
+import { ShowcaseBarChartComponent } from './components/pages/bar-chart/showcase-bar-chart.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseFacetSearchComponent } from './components/pages/facet-search/showcase-facet-search.component';
 import { ShowcaseOntologySearchComponent } from './components/pages/ontology-search/showcase-ontology-search.component';
@@ -32,6 +33,10 @@ export const appRoutes: Route[] = [
       {
         path: 'authentication',
         component: ShowcaseAuthComponent
+      },
+      {
+        path: 'bar-chart',
+        component: ShowcaseBarChartComponent
       },
       {
         path: 'error-widget',

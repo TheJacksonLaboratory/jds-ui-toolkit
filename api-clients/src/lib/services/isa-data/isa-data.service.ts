@@ -76,6 +76,11 @@ export class ISADataService {
     return this.apiBaseService.get<MeasureMetadata>(reqUrl);
   }
 
+  // getMeasureSeriesData(measureSeriesIds: string[], studyIds: string[]):
+  //   Observable<Response<MeasureMetadata>> {
+  //
+  // }
+
   /**
    * Fetches measure series characteristics for the given measure series IDs and study IDs.
    *
