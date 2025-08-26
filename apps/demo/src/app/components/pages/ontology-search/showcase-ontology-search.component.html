@@ -1,3 +1,7 @@
 <div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100 tw-p-5">
-  <lib-ontology-search (selected)="onSelected($event)"></lib-ontology-search>
+    <div class="tw-flex">
+      <div class="tw-w-[20%]">
+        <lib-ontology-search (selected)="onSelected($event)" [ontology]="ontology"></lib-ontology-search>
+      </div>
+    </div>
 </div>

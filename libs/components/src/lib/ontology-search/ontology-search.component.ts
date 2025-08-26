@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { ChipModule } from 'primeng/chip';
 import { OntologyService } from 'api-clients/src/lib/ontology/ontology.service.base';
 import { Ontology, OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
 import { FormsModule } from '@angular/forms';
-import { distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { HighlightPipe } from '../highlight/highlight.pipe';
 @Component({
@@ -14,15 +14,22 @@ import { HighlightPipe } from '../highlight/highlight.pipe';
   template: `
     <div class="card flex justify-center">
       <p-autoComplete
+        #osearch 
         class="ontology-search"
+        [(ngModel)]="selectedValues"
         [multiple]="multiple"
         [suggestions]="filteredOptions"
         (completeMethod)="filterOptions($event)"
-        (onSelect)="onSelect($event)" minLength="3" delay="250"
-        showClear="true" optionLabel="name">
+        (onSelect)="onSelect($event, osearch)" minLength="3" delay="250"
+        [placeholder]="placeholder"
+        showClear="true" optionLabel="name"
+        (onFocus)="showOptions(osearch)"
+        (onClear)="query$.next(''); osearch.hide();" [virtualScrollItemSize]="10">
         <ng-template let-term #item>
-              <span class="tw-text-ellipsis"[innerHTML]="term.name | highlight: query$.getValue()"></span>
-              <span><p-chip label="{{term.id}}"/></span>
+              <span class="tw-truncate flex-1"[innerHTML]="term.name | highlight: query$.getValue()"></span>
+              <span class="tw-ml-1"><p-chip label="{{term.id}}"/></span>
+        </ng-template>
+        <ng-template #footer *ngIf="extended">
         </ng-template>
       </p-autoComplete>
     </div>  
@@ -32,6 +39,8 @@ import { HighlightPipe } from '../highlight/highlight.pipe';
   encapsulation: ViewEncapsulation.None
 })
 export class OntologySearchComponent {
+  // TODO: multiple selection not working yet
+  // TODO: extended mode not implemented yet
   @Input() multiple = false;
   @Input() options: string[] = [];
   @Input() ontology: Ontology = Ontology.HP;
@@ -43,13 +52,20 @@ export class OntologySearchComponent {
   selectedValues: OntologyTerm[] = [];
   filteredOptions: OntologyTerm[] = [];
   query$ = new BehaviorSubject<string>("");
+  private skipNextFocus = false;
 
   constructor(private ontologyService: OntologyService) {
     this.query$.pipe(
       distinctUntilChanged(),
-      switchMap(query => this.ontologyService.search(query, 100, this.ontology))
+      filter(query => query.trim() !== ''), // Only proceed if query is not empty 
+      switchMap(query => {
+        return this.ontologyService.search(query, 100, this.ontology);
+      })
     ).subscribe(options => {
-      this.filteredOptions = options.data;
+      // Only update if options.data exists (i.e., not a focus/empty query)
+      if (options && options.data) {
+        this.filteredOptions = options.data;
+      }
     });
   }
 
@@ -60,7 +76,16 @@ export class OntologySearchComponent {
 
   }
 
-  onSelect(event: any) {
+  onSelect(event: any, osearch: AutoComplete) {
+    this.skipNextFocus = true;
+    osearch.hide();
     this.selected.emit(this.selectedValues);
+  }
+
+  showOptions(osearch: AutoComplete) {
+    if (this.query$.getValue().trim() != '' && !this.skipNextFocus) {
+      osearch.show();
+      this.skipNextFocus = false;
+    } 
   }
 }

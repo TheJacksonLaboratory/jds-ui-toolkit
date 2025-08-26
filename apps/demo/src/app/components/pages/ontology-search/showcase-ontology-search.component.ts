@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
 import { CommonModule } from '@angular/common';
 import { OntologySearchComponent } from '@jax-data-science/components';
-import { OLSOntologyService, OntologyService } from '@jax-data-science/api-clients';
-
+import { JaxOntologyService, OLSOntologyService, OntologyService, OntologyTerm, Ontology } from '@jax-data-science/api-clients';
 @Component({
   selector: 'app-ontology-search',
   templateUrl: './showcase-ontology-search.component.html',
@@ -18,6 +17,7 @@ import { OLSOntologyService, OntologyService } from '@jax-data-science/api-clien
   ]
 })
 export class ShowcaseOntologySearchComponent {
+  ontology = Ontology.MAXO; // Ontology to use
   onSelected(selected: OntologyTerm[]) {
     // Handle selected ontology terms here
     console.log('Selected terms:', selected);

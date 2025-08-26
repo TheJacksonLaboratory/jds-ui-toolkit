@@ -4,13 +4,14 @@ lib-ontology-search {
         width: 100%;
 
         .p-autocomplete-input {
-            color: black;
+            color: var(--echo-slate-800, inherit);
             width: 100%;
         }
 
         .p-autocomplete-option {
             justify-content: space-between;
-            color: black;
+            color: var(--echo-slate-800, inherit);
+            font-size: .85rem;
         }
 
         .p-focus {
@@ -27,7 +28,7 @@ lib-ontology-search {
         .p-chip {
             background-color: var(--echo-slate-100, inherit);
             color: var(--echo-slate-800, inherit);
-            padding: 0.225rem 0.475rem;
+            padding: .225rem .475rem;
         }
     }
 }
