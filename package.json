@@ -4,10 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve demo",
-    "build": "nx run-many -t build --parallel",
-    "test": "nx run-many -t test",
-    "lint": "nx run-many -t lint --parallel",
-    "e2e": "nx run-many -t e2e",
+    "build": "nx run-many -t build --parallel --no-cloud",
+    "test": "nx run-many -t test --no-cloud",
+    "lint": "nx run-many -t lint --parallel --no-cloud",
+    "e2e": "nx run-many -t e2e --no-cloud",
     "run": "nx run"
   },
   "private": true,

@@ -29,8 +29,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint affected
-        run: npx nx affected -t lint
+        run: pnpm run lint
       - name: Test affected
-        run: npx nx affected -t test --configuration=ci
+        run: pnpm run test --configuration=ci
       - name: Build affected
-        run: npx nx affected -t build
+        run: pnpm run build

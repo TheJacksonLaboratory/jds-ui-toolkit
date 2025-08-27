@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "simplify-repo",
+  "defaultBase": "main",
   "packageManager": "pnpm",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
@@ -19,7 +19,6 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
-  "nxCloudId": "67a8cfbf7e4d4f192a00af17",
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,
