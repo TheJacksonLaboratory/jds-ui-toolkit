@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation, input } from
 import { CommonModule } from '@angular/common';
 import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { ChipModule } from 'primeng/chip';
-import { OntologyService } from 'api-clients/src/lib/ontology/ontology.service.base';
-import { Ontology, OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
+import { OntologyService } from '@jax-data-science/api-clients';
+import { Ontology, OntologyTerm } from '@jax-data-science/api-clients';
 import { FormsModule } from '@angular/forms';
 import { distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';

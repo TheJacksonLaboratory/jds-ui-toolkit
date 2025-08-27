@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { OntologyTerm } from 'api-clients/src/lib/ontology/ontology.model';
-import { CommonModule } from '@angular/common';
 import { OntologySearchComponent } from '@jax-data-science/components';
-import { JaxOntologyService, OLSOntologyService, OntologyService, OntologyTerm, Ontology } from '@jax-data-science/api-clients';
+import { JaxOntologyService, OLSOntologyService, OntologyService, OntologyTerm, Ontology} from '@jax-data-science/api-clients';
 @Component({
   selector: 'app-ontology-search',
   templateUrl: './showcase-ontology-search.component.html',
