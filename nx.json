@@ -93,6 +93,11 @@
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true
+    },
+    "version": {
+      "generatorOptions": {
+        "skipLockFileUpdate": true
+      }
     }
   },
   "neverConnectToCloud": true
