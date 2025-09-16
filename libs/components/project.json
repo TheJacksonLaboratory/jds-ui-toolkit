@@ -40,7 +40,7 @@
     },
     "nx-release-publish": {
       "options":{
-        "packageRoot": "dist/components"
+        "packageRoot": "dist/libs/components"
       }
     }
   }
