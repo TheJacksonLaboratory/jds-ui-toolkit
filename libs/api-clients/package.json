@@ -7,5 +7,18 @@
     "rxjs": "^7.8.0",
     "@microsoft/fetch-event-source": "^2.0.1"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "publishConfig": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "directory": "../../dist/libs/api-clients",
+    "linkDirectory": false
+=======
+     "directory": "../../dist/libs/components"
+>>>>>>> 48d5846 (update)
+=======
+     "directory": "../../dist/libs/api-clients",
+     "linkDirectory": false
+>>>>>>> f1b83a3 (fixing release/deployment)
+  }
 }

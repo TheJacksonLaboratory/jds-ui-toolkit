@@ -1,6 +1,15 @@
 packages:
-  - 'apps/*'
-  - 'libs/*'
-nodeLinker: hoisted
-hoistPattern:
-- "@angular/*"
+  - apps/**
+  - libs/**
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@swc/core'
+  - browser-tabs-lock
+  - cypress
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - nx
+  - oxc-resolver
+  - unrs-resolver

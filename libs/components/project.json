@@ -37,11 +37,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
-    },
-    "nx-release-publish": {
-      "options":{
-        "packageRoot": "dist/libs/components"
-      }
     }
   }
 }
