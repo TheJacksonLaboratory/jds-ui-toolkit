@@ -88,7 +88,7 @@
       "style": "css"
     },
     "nx-release-publish": {
-      "options":{
+      "options": {
         "packageRoot": "dist/libs/{projectName}"
       }
     }
