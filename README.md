@@ -83,6 +83,13 @@ where the QA team will be able to test the component using the showcase applicat
 </a> 
 
 ### *Releasing*
-Once the component has been tested and approved by the QA team, you can proceed with merging the PR and notifying the UI time that a release is necessary.
+Once the component has been tested and approved by the QA team, you can proceed with merging the PR and notifying the UI time that a release is necessary. See if any other changes are almost ready to be released by other developers.
 
-TODO: Configure the release pipeline to accept a version/tag and update the pipeline to pnpm publish
+1. Determine the next best version for libraries affected using [Semver](https://semver.org/)
+2. Pull the new updates from `main` branch. 
+3. Update versions for your libraries, either define --projects or remove flag for all. Additionally try a dry-run first to see what will happen:
+   - `nx release --projects=api-clients,components,themes --skip-publish --dry-run`
+   - You may get a "first release" just add --first-release
+4. Push back to main
+   -  `git push origin main --tags`
+5. Run release github action to deploy
