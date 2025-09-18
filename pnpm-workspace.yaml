@@ -1,7 +1,11 @@
 packages:
   - apps/**
   - libs/**
-
+publicHoistPattern:
+- "*angular*"
+- "*primeng*"
+- "*auth0*"
+- "*@microsoft*"
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@swc/core'
