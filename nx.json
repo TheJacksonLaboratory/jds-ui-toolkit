@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "master",
+  "defaultBase": "main",
+  "packageManager": "pnpm",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -18,9 +19,8 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
-  "nxCloudId": "67a8cfbf7e4d4f192a00af17",
   "targetDefaults": {
-    "@angular-devkit/build-angular:browser": {
+    "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
@@ -47,13 +47,13 @@
         }
       }
     },
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
-    },
     "@nx/angular:package": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "build": {
+      "dependsOn": ["^build"]
     }
   },
   "plugins": [
@@ -86,19 +86,18 @@
     },
     "@nx/angular:component": {
       "style": "css"
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/libs/{projectName}"
+      }
     }
   },
-  "defaultProject": "jax-data-science",
   "release": {
-    "projects": ["components", "api-clients", "themes"],
+    "projects": ["api-clients", "components", "themes"],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": true
-    }
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default"
     }
   },
   "neverConnectToCloud": true

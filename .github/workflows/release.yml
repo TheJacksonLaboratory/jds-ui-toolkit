@@ -24,7 +24,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
         shell: bash
 
       - name: Print Environment Info
@@ -32,11 +32,11 @@ jobs:
         shell: bash
 
       - name: Build affected
-        run: npx nx run-many --target=build --all
+        run: pnpm run build
         shell: bash
 
       - name: Publish packages
-        run: npx nx release publish
+        run: pnpm nx release publish
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}

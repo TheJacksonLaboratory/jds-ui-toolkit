@@ -1,7 +1,7 @@
 # Jax Data Science Components
 
 <a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
-    <img src="public/JAX-logo-helix-only-blue.png" width="45">
+    <img src="assets/JAX-logo-helix-only-blue.png" width="45">
 </a> 
 
 ## *Overview*
@@ -11,85 +11,85 @@ deployment of shareable UI components across the JAX Data Science community. Thi
 practices and tools that promote code reuse, reduce duplication, and ensure architectural consistency throughout the organization.
 
 The workspace uses the Nx build system and has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects). 
-There are two libraries - *@jax-data-science/components* and *@jax-data-science/api-clients*, one theme - *@jax-data-science/themes*, and one root application.
+There are three libraries - *@jax-data-science/components* and *@jax-data-science/api-clients*, one theme - *@jax-data-science/themes*, and one demo application.
 
 The workspace is maintained by the JAX Data Science UI/UX team and undergoes continuous updates to keep up with the 
 latest technologies. This commitment to technological currency ensures that all shared UI components benefit from the latest performance 
 improvements, security patches, and feature enhancements while also keeping backward compatibility.
 
-## *Local Setup*
+## Usage
+
+API Clients
+```bash
+npm install @jax-data-science/api-clients
+```
+Components
+```bash
+npm install @jax-data-science/components @jax-data-science/themes
+```
+
+## Development
+### Setup
 - Clone the workspace from the [GitHub](https://github.com/TheJacksonLaboratory/jds-ui-components) repository
 
-Clone the repository, move to a branch and install the dependencies:
-
-- Install the dependencies using [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm)
+- Install the required [Node.js](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/installation)
+  
+### Get Started
 ```bash
-npm install
+  pnpm install
 ```
-- Start the development server locally
+You can use the below Nx command to: 
+
+### Create New Component
 ```bash
-  npm run start
-```
-
-To test before pushing changes, use:
-
-To start implementing your shared components, create a new module/directory in the **components** or **api-clients** 
-libraries (like */components/my-new-component* or */api-clients/my-new-component*).
-
-You can use the below Nx command: 
-```bash
-# ui-components
-npx nx g @nrwl/angular:component --path=components/lib/my-new-component --export=true 
-
-# clients-api
-npx nx g @nrwl/angular:component --path=api-clients/lib/my-new-component --export=true 
+nx g @nx/angular:component --path=libs/components/src/lib/my-new-component/my-new-component --export=true 
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+### Create New API Client
+```bash
+nx g @schematics/angular:service --name test-service --project api-clients --flat=false --path=libs/api-clients/src/lib/services
+```
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin.
 
+### View Demo App
+```bash
+  pnpm run start
+```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Testing
+```bash
+pnpm run test
+```
+### Linting
+```bash
+pnpm run lint
+```
 
-- create */src/pages/my-new-component* and update the */src/app/app-routing.module.ts* file to include the new component
+### Building
+```bash
+pnpm run build
+```
 
+### Pull Requests
 
-- update the table in */src/app/pages/components-list/components-list.component.html* to include and link to your new component
+Include your service or component in the demo application under `apps/demo`. 
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/WMyxahRqU7)
-
-- once the PR is approved, you will need to deploy the branch to the GCP instance, 
+Once PR is approved, you will need to deploy the branch to the GCP instance
 where the QA team will be able to test the component using the showcase application
 
 <a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
-    <img src="public/release-process-jax-data-science-ui-components.png" width="100%">
+    <img src="assets/release-process-jax-data-science-ui-components.png" width="100%">
 </a> 
 
-## *Releasing*
-Once the component has been tested and approved by the QA team, you can proceed with releasing the component. 
-You will need to: 
-- update the version of the component in the **package.json** - each */components* 
-and */api-clients* directory has its own **package.json** file.
+### *Releasing*
+Once the component has been tested and approved by the QA team, you can proceed with merging the PR and notifying the UI time that a release is necessary. See if any other changes are almost ready to be released by other developers.
 
-```sh
-npx nx serve jax-data-science
-```
-
-- update the **CHANGELOG.md** file - each */components* and */api-clients* directory has its own **CHANGELOG.md** file.
-
-```sh
-npx nx build jax-data-science
-```
-
-- commit and push the updated to the GitHub repository
-
-```sh
-npx nx show project jax-data-science
-```
-
-- do <u>not</u> run the NPM RELEASE pipeline!! The UX/UI team will publish the package.  
+1. Determine the next best version for libraries affected using [Semver](https://semver.org/)
+2. Pull the new updates from `main` branch. 
+3. Update versions for your libraries, either define --projects or remove flag for all. Additionally try a dry-run first to see what will happen:
+   - `nx release --projects=api-clients,components,themes --skip-publish --dry-run`
+   - You may get a "first release" just add --first-release
+4. Push back to main
+   -  `git push origin main --tags`
+5. Run release github action to deploy

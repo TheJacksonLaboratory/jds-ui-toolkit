@@ -1,0 +1,15 @@
+{
+  "name": "@jax-data-science/api-clients",
+  "version": "0.0.1-a",
+  "peerDependencies": {
+    "@angular/common": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "rxjs": "^7.8.0",
+    "@microsoft/fetch-event-source": "^2.0.1"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "directory": "../../dist/libs/api-clients",
+    "linkDirectory": false
+  }
+}

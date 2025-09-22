@@ -1,0 +1,12 @@
+{
+  "name": "@jax-data-science/themes",
+  "version": "0.0.1-1",
+  "peerDependencies": {
+    "@primeng/themes": "^19.0.6"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "directory": "../../dist/libs/themes",
+    "linkDirectory": false
+  }
+}

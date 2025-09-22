@@ -16,11 +16,21 @@ jobs:
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v3
-      - name: Install deps
-        run: npm ci
+
+      - name: Setup pnpm (optional, if you want a specific version not managed by corepack)
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.13.1
+          run_install: false
+
+      - uses: nrwl/nx-set-shas@v3
+
+      - name: Install dependencies with pnpm
+        run: pnpm install --frozen-lockfile
+
       - name: Lint affected
-        run: npx nx affected -t lint
+        run: pnpm run lint
       - name: Test affected
-        run: npx nx affected -t test --configuration=ci
+        run: pnpm run test --configuration=ci
       - name: Build affected
-        run: npx nx affected -t build
+        run: pnpm run build

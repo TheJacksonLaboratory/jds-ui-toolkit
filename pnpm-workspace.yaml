@@ -1,0 +1,19 @@
+packages:
+  - apps/**
+  - libs/**
+publicHoistPattern:
+- "*angular*"
+- "*primeng*"
+- "*auth0*"
+- "*@microsoft*"
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@swc/core'
+  - browser-tabs-lock
+  - cypress
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - nx
+  - oxc-resolver
+  - unrs-resolver
