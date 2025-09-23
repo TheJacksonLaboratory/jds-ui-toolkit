@@ -1,3 +1,7 @@
+## 0.0.1-a.1 (2025-09-23)
+
+This was a version bump only for api-clients to align it with other projects, there were no code changes.
+
 # Changelog
 
 All notable changes to the @jax-data-science/api-clients library will be documented in this file.

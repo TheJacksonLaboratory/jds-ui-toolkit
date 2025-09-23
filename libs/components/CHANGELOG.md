@@ -1,3 +1,9 @@
+## 0.0.1-2 (2025-09-23)
+
+### 🧱 Updated Dependencies
+
+- Updated api-clients to 0.0.1-a.1
+
 
 # Changelog
 
