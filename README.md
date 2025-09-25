@@ -1,40 +1,44 @@
 # Jax Data Science Components
+# <img src="assets/JAX-logo-helix-only-blue.png" width="45" alt="The Jackson Laboratory Logo">
+## Overview
 
-<a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
-    <img src="assets/JAX-logo-helix-only-blue.png" width="45">
-</a> 
-
-## *Overview*
-
-The *JAX Data Science UI Components* repository is a development workspace designed to streamline the creation, testing and 
+The **JAX Data Science UI Components** repository is a development workspace designed to streamline the creation, testing and 
 deployment of shareable UI components across the JAX Data Science community. This workspace employs development 
 practices and tools that promote code reuse, reduce duplication, and ensure architectural consistency throughout the organization.
 
-The workspace uses the Nx build system and has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects). 
-There are three libraries - *@jax-data-science/components* and *@jax-data-science/api-clients*, one theme - *@jax-data-science/themes*, and one demo application.
+The workspace has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects) and uses the Nx build system. 
+There are three libraries: 
+- `@jax-data-science/components` 
+- `*@jax-data-science/api-clients*`
+- `*@jax-data-science/themes*` 
+
+and one `demo` application for showcasing the components.
 
 The workspace is maintained by the JAX Data Science UI/UX team and undergoes continuous updates to keep up with the 
 latest technologies. This commitment to technological currency ensures that all shared UI components benefit from the latest performance 
 improvements, security patches, and feature enhancements while also keeping backward compatibility.
 
-## Usage
+## Installation
 
-API Clients
+#### @jax-data-science/api-clients
 ```bash
 npm install @jax-data-science/api-clients
 ```
-Components
+#### @jax-data-science/components
 ```bash
 npm install @jax-data-science/components @jax-data-science/themes
 ```
 
 ## Development
-### Setup
-- Clone the workspace from the [GitHub](https://github.com/TheJacksonLaboratory/jds-ui-components) repository
 
-- Install the required [Node.js](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/installation)
-  
-### Get Started
+### Prerequisites
+- [Node.js](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/installation)
+
+### Setup
+- Clone the workspace from the [GitHub repository](https://github.com/TheJacksonLaboratory/jds-ui-components)
+
+- Install dependencies:
+
 ```bash
   pnpm install
 ```
@@ -71,25 +75,34 @@ pnpm run lint
 pnpm run build
 ```
 
+## Contribution Workflow
+
 ### Pull Requests
 
-Include your service or component in the demo application under `apps/demo`. 
+- Include your service or component in the demo application under `apps/demo`. 
 
-Once PR is approved, you will need to deploy the branch to the GCP instance
-where the QA team will be able to test the component using the showcase application
+- Once PR is approved, deploy the branch to the GCP instance
+where the QA team can test the component using the showcase application
 
 <a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
     <img src="assets/release-process-jax-data-science-ui-components.png" width="100%">
 </a> 
 
-### *Releasing*
-Once the component has been tested and approved by the QA team, you can proceed with merging the PR and notifying the UI time that a release is necessary. See if any other changes are almost ready to be released by other developers.
+### Releasing
+Once the component has been tested and approved by the QA team:
 
-1. Determine the next best version for libraries affected using [Semver](https://semver.org/)
-2. Pull the new updates from `main` branch. 
-3. Update versions for your libraries, either define --projects or remove flag for all. Additionally try a dry-run first to see what will happen:
+1. **Merge PR**: Proceed with merging the PR and notifying the UX/UI team that a release is necessary. 
+Check if any other changes are ready to be released by other developers.
+2. **Version Planning**: Determine the next best version for libraries affected using [Semver](https://semver.org/)
+3. **Update Local**: Pull the new updates from `main` branch. 
+4. **Version Update**: Update versions for your libraries, either define `--projects` or remove flag for all. 
+Try a dry-run first:
    - `nx release --projects=api-clients,components,themes --skip-publish --dry-run`
-   - You may get a "first release" just add --first-release
-4. Push back to main
+   - You may get a "first release" just add `--first-release`
+5. **Push Changes**
    -  `git push origin main --tags`
-5. Run release github action to deploy
+6. **Deploy**: Run the `RELEASE` GitHub action to deploy (to NPM) - _**DO NOT DEPLOY!!** - 
+NPM deployments are done only by the QA team_
+
+---
+*Maintained by the JAX Data Science UI/UX Team*
