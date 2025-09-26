@@ -1041,6 +1041,20 @@ video {
   transition-duration: 150ms;
 }
 
+@keyframes enter {
+  from {
+    opacity: var(--p-enter-opacity, 1);
+    transform: translate3d(var(--p-enter-translate-x, 0), var(--p-enter-translate-y, 0), 0) scale3d(var(--p-enter-scale, 1), var(--p-enter-scale, 1), var(--p-enter-scale, 1)) rotate(var(--p-enter-rotate, 0));
+  }
+}
+
+@keyframes leave {
+  to {
+    opacity: var(--p-leave-opacity, 1);
+    transform: translate3d(var(--p-leave-translate-x, 0), var(--p-leave-translate-y, 0), 0) scale3d(var(--p-leave-scale, 1), var(--p-leave-scale, 1), var(--p-leave-scale, 1)) rotate(var(--p-leave-rotate, 0));
+  }
+}
+
 @media (min-width: 1024px) {
   .lg\:tw-block {
     display: block;

@@ -5,7 +5,7 @@ const fs = require('fs');
 execSync(`npx tailwindcss \
   -i ./src/styles/tailwind.css \
   -o ./src/styles/temp.css \
-  --config ./tailwind.config.js \
+  --config ../../tailwind.config.js \
   --content "./src/**/*.{html,ts}"`, {
   cwd: __dirname,
   stdio: 'inherit'
