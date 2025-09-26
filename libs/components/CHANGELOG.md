@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.2] - 2025-09-23
+## [0.0.1-a.2] - 2025-09-23
 
 ### Fixed
 - **Styling Issues**: Resolved component styling problems when library was installed in consuming applications
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-alpha.1] - 2025-08-14
+## [0.0.1-a.1] - 2025-08-14
 
 ### Added
 - Initial prerelease version of the components library
