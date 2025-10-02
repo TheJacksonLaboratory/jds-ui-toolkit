@@ -10,6 +10,7 @@ export default [
         'error',
         {
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}'],
+          ignoredDependencies: ['fs-extra'] // 'fs-extra' is used at build time, and not at run time, to move files to /dist/libs/components
         },
       ],
     },
