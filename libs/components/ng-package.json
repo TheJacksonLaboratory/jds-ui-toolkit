@@ -5,10 +5,14 @@
       "entryFile": "src/index.ts"
     },
     "assets": [
-      "./src/styles.css",
+      {
+        "input": "./src",
+        "glob": "styles.css",
+        "output": "styles"
+      },
       {
         "input": "./src/styles",
-        "glob": "**/*.css",
+        "glob": "components-tailwind.css",
         "output": "styles"
       }
     ]

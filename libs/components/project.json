@@ -6,6 +6,20 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "compile-css": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node compile-styles.js",
+        "cwd": "libs/components"
+      }
+    },
+    "copy-styles": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node copy-styles.js",
+        "cwd": "libs/components"
+      }
+    },
     "build": {
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/libs/components"],
@@ -16,6 +30,14 @@
         {
           "target": "build",
           "projects": ["api-clients"]
+        },
+        {
+          "target": "compile-css",
+          "projects": "self"
+        },
+        {
+          "target": "copy-styles",
+          "projects": "self"
         }
       ],
       "configurations": {
