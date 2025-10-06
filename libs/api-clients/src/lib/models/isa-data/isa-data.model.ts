@@ -46,12 +46,14 @@ export interface MeasureMetadata {
 export interface MeasureSeriesMetadata {
   assay_id: number;
   description: string;
+  initiated_at_units: string;
   measure_ids: string[];
   measure_series_id: string;
+  measurement_units: string;
   method: string;
   study_id?: number;
-  units: string;
   treatment: string;
+  treatment_units: string;
   variable_name: string;
 
   characteristics?: Record<string, string[]>;
