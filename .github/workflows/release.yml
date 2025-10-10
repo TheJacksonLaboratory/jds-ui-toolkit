@@ -1,5 +1,5 @@
 # ./.github/workflows/publish.yml
-name: PUBLISH
+name: PUBLISH - NPM
 
 on: [workflow_dispatch]
 
@@ -17,14 +17,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Node
+      - name: Install Node (necessary to handle NPM authentication properly)
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.13.1
+          run_install: false
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
         shell: bash
 
       - name: Print Environment Info
