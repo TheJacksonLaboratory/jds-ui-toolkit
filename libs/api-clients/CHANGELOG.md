@@ -1,6 +1,6 @@
-## 0.0.1-a.1 (2025-09-23)
+## 0.0.1-a.1 (2025-10-10)
 
-This was a version bump only for api-clients to align it with other projects, there were no code changes.
+- updated the MeasureSeriesMetadata model to include units for the measurement, treatment, and initiated at age.
 
 # Changelog
 
