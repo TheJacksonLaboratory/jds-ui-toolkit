@@ -1,3 +1,9 @@
+## 0.0.1 (2025-10-16)
+
+### 🧱 Updated Dependencies
+
+- Updated api-clients to 0.0.1
+
 # Changelog
 
 All notable changes to the @jax-data-science/components library will be documented in this file.
