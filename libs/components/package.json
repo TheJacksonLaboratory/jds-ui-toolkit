@@ -1,6 +1,6 @@
 {
   "name": "@jax-data-science/components",
-  "version": "0.0.1-a.2",
+  "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^19.2.14",
     "@angular/core": "^19.2.14",
