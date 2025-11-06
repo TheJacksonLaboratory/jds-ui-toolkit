@@ -1,6 +1,11 @@
 name: CI - APPS/LIBS
-on: 
-  workflow_dispatch:
+on:
+  push:
+    branches:
+      - '*'
+      - '*/*'
+      - '**'
+      - '!main'
 jobs:
   main:
     runs-on: ubuntu-latest

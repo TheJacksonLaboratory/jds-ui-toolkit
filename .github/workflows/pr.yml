@@ -6,7 +6,6 @@ on:
 jobs:
   deploy:
     name: "Deploy Demo Application to GKE"
-    needs: ["ci"]
     uses: ./.github/workflows/_gcp_deploy.yml
     secrets: inherit
     with:
