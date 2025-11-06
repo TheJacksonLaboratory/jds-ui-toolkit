@@ -1,0 +1,13 @@
+name: Deploy JDS UI Demo
+on:
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  deploy:
+    name: "Deploy Demo Application to GKE"
+    needs: ["ci"]
+    uses: ./.github/workflows/_gcp_deploy.yml
+    secrets: inherit
+    with:
+      environment: "jax-cluster-dev-10--dev"

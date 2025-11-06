@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name:  jds-angular-ui-ingress
+  name:  jds-ui-demo-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
@@ -18,7 +18,7 @@ spec:
           path: "/"
           backend:
             service:
-              name: jds-angular-ui
+              name: jds-ui-demo
               port:
                 number: 80
   - host: "astra.jax.org"
@@ -28,6 +28,6 @@ spec:
           path: "/"
           backend:
             service:
-              name: jds-angular-ui
+              name: jds-ui-demo
               port:
                 number: 80

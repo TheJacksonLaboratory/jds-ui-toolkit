@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jds-angular-ui
+  name: jds-ui-demo
   labels:
-    app: jds-angular-ui
+    app: jds-ui-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jds-angular-ui
+      app: jds-ui-demo
   template:
     metadata:
       labels:
-        app: jds-angular-ui
+        app: jds-ui-demo
     spec:
       serviceAccountName: workload-identity-jds-angular
       volumes:
@@ -20,7 +20,7 @@ spec:
           emptyDir: {}
         - name: nginx-conf
           configMap:
-            name: jds-angular-ui-nginx-conf
+            name: jds-ui-demo-nginx-conf
             items:
               - key: default.conf
                 path: default.conf
@@ -34,7 +34,7 @@ spec:
             - name: INIT_BUCKET
               valueFrom:
                 configMapKeyRef:
-                  name: jds-angular-ui-bucket
+                  name: jds-ui-demo-bucket
                   key: CLOUD_STORAGE_BUCKET
           command: [ "bash" ]
           args:

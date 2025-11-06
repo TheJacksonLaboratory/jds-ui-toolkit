@@ -3,14 +3,10 @@ kind: LabelTransformer
 metadata:
   name: global-labels
 labels:
-  jax.org/owner-team: TODO
-  jax.org/owner-team-id: TODO
-  jax.org/billing-group: TODO
-  jax.org/system-group: jds-angular-ui
-  jax.org/component: jds-angular-ui
+  jax.org/system-group: jds-ui-demo
+  jax.org/component: jds-ui-demo
   jax.org/component-id: 66a92229-231e-4b0c-a192-650b7bc319e5
   jax.org/component-tier: 4
-  jax.org/grant-name: TODO
 fieldSpecs:
 - path: metadata/labels
   create: true

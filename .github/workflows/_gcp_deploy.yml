@@ -1,0 +1,58 @@
+name: 'GKE Deploy Demo Application Development'
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Deployment environment/profile'
+        required: true
+        type: string
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: 'actions/checkout@v4'
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v3'
+        with:
+          credentials_json: '${{ secrets.CLUSTER_SA }}'
+
+      - id: get-gke-credentials
+        name: Get GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v3'
+        with:
+          cluster_name: ${{ vars.CLUSTER_NAME }}
+          location: ${{ vars.CLUSTER_REGION }}
+          project_id: ${{ vars.CLUSTER_PROJECT }}
+
+      - name: Install Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.13.1
+          run_install: false
+
+      - uses: nrwl/nx-set-shas@v4
+      - name: Install dependencies with pnpm
+        run: pnpm install --frozen-lockfile
+
+      - name: Build demo app
+        run: pnpm --filter "demo" run build
+
+      - name: Copy demo app to bucket
+        run: |
+          gsutil -m cp -r ./dist/apps/demo/ ${{ var.CLUSTER_BUCKET }}/dist
+
+      - name: Skaffold deploy
+        run: |
+          skaffold deploy -f skaffold.yaml --profile ${{ inputs.environment }}

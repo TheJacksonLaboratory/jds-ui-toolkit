@@ -1,22 +1,11 @@
 apiVersion: skaffold/v2beta29
 kind: Config
+deploy:
+  kustomize:
+    paths:
+      - deploy/k8s/base
 metadata:
-  name: jds-angular-ui
-build:
-  tagPolicy:
-    gitCommit:
-      variant: AbbrevCommitSha
-  artifacts:
-    - image: jds-angular-ui
-      context: .
-      docker:
-          dockerfile: Dockerfile
-  local:
-    useBuildkit: true
-test:
-  - image: jds-angular-ui
-    structureTests:
-      - deploy/tests/*
+  name: jds-ui-demo
 profiles:
   - name: jax-cluster-dev-10--dev
     deploy:

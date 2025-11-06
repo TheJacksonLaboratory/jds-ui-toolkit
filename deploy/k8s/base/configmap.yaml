@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jds-ui-components-nginx-conf
+  name: jds-ui-demo-nginx-conf
 data:
   default.conf: |
     server {
