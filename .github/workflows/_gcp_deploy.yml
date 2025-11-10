@@ -25,6 +25,11 @@ jobs:
           location: ${{ vars.CLUSTER_REGION }}
           project_id: ${{ vars.CLUSTER_PROJECT }}
 
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v3'
+        with:
+          version: '>= 363.0.0'
+
       - name: Install Skaffold
         run: |
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
