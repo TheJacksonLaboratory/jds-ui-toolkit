@@ -14,7 +14,7 @@ spec:
       labels:
         app: jds-ui-demo
     spec:
-      serviceAccountName: workload-identity-jds-angular
+      serviceAccountName: workload-identity-jds-ui-demo
       volumes:
         - name: staticfiles
           emptyDir: {}
