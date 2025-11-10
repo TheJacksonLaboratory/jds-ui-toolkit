@@ -51,7 +51,7 @@ jobs:
 
       - name: Copy demo app to bucket
         run: |
-          gsutil -m cp -r ./dist/apps/demo/ ${{ var.CLUSTER_BUCKET }}/dist
+          gsutil -m cp -r ./dist/apps/demo/ ${{ vars.CLUSTER_BUCKET }}/dist
 
       - name: Skaffold deploy
         run: |
