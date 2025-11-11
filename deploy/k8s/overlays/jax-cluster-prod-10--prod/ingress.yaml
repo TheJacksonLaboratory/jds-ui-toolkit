@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  jds-ui-demo-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - "jds-echo-prod.jax.org"
+        - "jds-echo.jax.org"
+      secretName: jds-echo-prod-jax-org-tls
+  rules:
+  - host: "jds-echo-prod.jax.org"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: jds-ui-demo
+              port:
+                number: 80
+  - host: "astra.jax.org"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: jds-ui-demo
+              port:
+                number: 80

@@ -6,24 +6,20 @@ on:
       - '*/*'
       - '**'
       - '!main'
-
 jobs:
   main:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v3
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 10.13.1
           run_install: false
-
-      - uses: nrwl/nx-set-shas@v3
 
       - name: Install dependencies with pnpm
         run: pnpm install --frozen-lockfile

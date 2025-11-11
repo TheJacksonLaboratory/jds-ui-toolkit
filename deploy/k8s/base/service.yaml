@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jds-ui-demo
+  labels:
+    app: jds-ui-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: jds-ui-demo
+  ports:
+    - protocol: TCP
+      name: angular
+      port: 80
