@@ -18,8 +18,6 @@ import { SNPSearchRegion } from '../mvar/models/response/dtos';
 })
 export class SnpGridService {
   private api;
-  private strains: BehaviorSubject<Strain[]> = new BehaviorSubject(<Strain[]>[]);
-  strains$: Observable<Strain[]> = this.strains.asObservable();
 
   constructor(private http: HttpClient, @Inject('environment') private environment: any) {
     this.api = environment.securedURLs.genomeMUSter;
@@ -50,8 +48,7 @@ export class SnpGridService {
    */
   getStrains(limit = 5000): Observable<Strain[]> {
     return this.http
-      .get<Strain[]>(`${this.api}/strains/?limit=${limit}`)
-      .pipe(tap((strains) => this.strains.next(strains.filter((s) => s.mpd_strainid))));
+      .get<Strain[]>(`${this.api}/strains/?limit=${limit}`);
   }
 
   /**
