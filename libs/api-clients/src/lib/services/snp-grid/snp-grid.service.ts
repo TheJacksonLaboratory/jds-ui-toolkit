@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, map, Observable, tap } from "rxjs";
+import { catchError, map, Observable } from "rxjs";
 
 import {
   Dataset, DatasetStatus,
@@ -47,8 +47,9 @@ export class SnpGridService {
    * @param limit - maximum number of strains to be returned
    */
   getStrains(limit = 5000): Observable<Strain[]> {
-    return this.http
-      .get<Strain[]>(`${this.api}/strains/?limit=${limit}`);
+    return this.http.get<Strain[]>(`${this.api}/strains/?limit=${limit}`).pipe(
+      map((strains) => strains.filter((s) => s.mpd_strainid))
+    );
   }
 
   /**
