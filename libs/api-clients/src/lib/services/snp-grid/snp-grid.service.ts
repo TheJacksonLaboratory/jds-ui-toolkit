@@ -18,29 +18,11 @@ import { SNPSearchRegion } from '../mvar/models/response/dtos';
 })
 export class SnpGridService {
   private api;
-
-  // default true but becomes false if any of the API calls for general information fails
-  apiAvailable = true;
-
   private strains: BehaviorSubject<Strain[]> = new BehaviorSubject(<Strain[]>[]);
   strains$: Observable<Strain[]> = this.strains.asObservable();
 
   constructor(private http: HttpClient, @Inject('environment') private environment: any) {
     this.api = environment.securedURLs.genomeMUSter;
-
-    this.getHealthCheck().subscribe({
-      error: () => {
-        this.apiAvailable = false;
-      },
-    });
-    this.getStrains().subscribe({
-      next: (strains) => {
-        this.apiAvailable = Boolean(strains.length);
-      },
-      error: () => {
-        this.apiAvailable = false;
-      },
-    });
   }
 
   /**
@@ -56,7 +38,6 @@ export class SnpGridService {
   getMusterMetadata(): Observable<MusterMetadata> {
     return this.http.get<MusterMetadata>(`${this.api}/db_info`).pipe(
       catchError((err) => {
-        this.apiAvailable = false;
         throw err;
       }),
     );
