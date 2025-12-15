@@ -1,3 +1,9 @@
+## 0.0.2 (2025-12-15)
+
+### 🧱 Updated Dependencies
+
+- Updated api-clients to 0.1.0-0
+
 ## 0.0.1 (2025-10-16)
 
 ### 🧱 Updated Dependencies
