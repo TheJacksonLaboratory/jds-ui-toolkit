@@ -1,3 +1,7 @@
+## 0.0.2 (2025-12-15)
+
+- updated snp-grid-client to remove auto fetching on-init in favor of api calls
+  
 ## 0.0.1 (2025-10-16)
 
 This was a version bump only for api-clients to align it with other projects, there were no code changes.
