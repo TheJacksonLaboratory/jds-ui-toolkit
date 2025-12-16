@@ -3,6 +3,9 @@ name: PUBLISH - NPM
 
 on: [workflow_dispatch]
 
+permissions:
+  id-token: write  # Required for OIDC
+
 jobs:
   test:
     name: Publish
