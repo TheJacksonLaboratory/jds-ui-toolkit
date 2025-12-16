@@ -1,6 +1,11 @@
-# @jax-data-science/components
+## @jax-data-science/components by The Jackson Laboratory (JAX)
 
-A comprehensive UI component library built with Angular and designed for JAX Data Science applications. This library was generated with [Nx](https://nx.dev) and provides reusable, accessible, and consistent UI components.
+# Overview
+This library provides reusable, accessible, and consistent UI components that work seamlessly across
+multiple applications and microforntend architectures. Built with modern web standards, the library ensures
+components maintain visual and functional consistency whether used in standalone apps, embedded widgets, or
+federated modules. The library integrates seamlessly with `@jax-data-science/themes` to provide a cohesive
+design system across the entire JAX Data Science community.
 
 ## Installation
 
@@ -8,14 +13,18 @@ A comprehensive UI component library built with Angular and designed for JAX Dat
 npm install @jax-data-science/components @jax-data-science/themes
 ```
 
+## Available Components
+
+> **Note**: For a complete list of components and their APIs, visit our [Demo Application](https://jds-apps.jax.org/echo) or check the generated documentation.
+
+## Theming
+The library supports custom theming through CSS custom properties. See the `@jax-data-science/themes` package
+for available themes and customization options.
+
 ## Quick Start
-
 ### 1. Import Module
-
-Import the required modules in your Angular application:
-
+Import the required modules in your application:
 ```typescript
-
 import { SomeJAXComponent } from '@jax-data-science/components';
 
 @Component({
@@ -25,10 +34,8 @@ export class AppComponent {}
 ```
 
 ### 2. Import Styles
-
 Add the required styles to your `angular.json` file:
-
-```json
+```typescript
 {
   "projects": {
     "your-project-name": {
@@ -36,9 +43,10 @@ Add the required styles to your `angular.json` file:
         "build": {
           "options": {
             "styles": [
+              ...
               "node_modules/@jax-data-science/components/styles/styles.css",
               "node_modules/@jax-data-science/components/styles/components-tailwind.css",
-              "src/styles.css"
+              ...
             ]
           }
         }
@@ -49,9 +57,7 @@ Add the required styles to your `angular.json` file:
 ```
 
 ### 3. Use Components
-
-Start using components in your templates:
-
+Start using components in your templates
 ```html
 <jax-button variant="primary" size="medium">
   Click me
@@ -67,82 +73,51 @@ Start using components in your templates:
 </jax-card>
 ```
 
-## Styling System
-
-### Available Stylesheets
-
-The `@jax-data-science/components` library provides two main stylesheets:
-
-| Stylesheet | Description | Required |
-|-----------|-------------|----------|
-| `styles/styles.css` | Core component styles, themes, and design tokens | ✅ Yes |
-| `styles/components-tailwind.css` | Compiled Tailwind CSS utilities for enhanced styling | ⚠️ Optional |
-
-### Style Import Options
-
-#### Option 1: Angular.json (Recommended)
-Add styles to your `angular.json` configuration:
-
-```json
-{
-  "projects": {
-    "your-project-name": {
-      "architect": {
-        "build": {
-          "options": {
-            "styles": [
-              "node_modules/@jax-data-science/components/styles/styles.css",
-              "node_modules/@jax-data-science/components/styles/components-tailwind.css"
-            ]
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-#### Option 2: Global Styles
-Import in your `src/styles.css` file:
-
-```css
-@import '~@jax-data-science/components/styles/styles.css';
-@import '~@jax-data-science/components/styles/components-tailwind.css';
-```
-
-#### Option 3: Component-level Import
-Import in specific components:
-
-```scss
-// In your component.scss file
-@import '~@jax-data-science/components/styles/styles.css';
-```
-
-### Theming
-
-The library supports custom theming through CSS custom properties. See the `@jax-data-science/themes` package for available themes and customization options.
-
-## Available Components
-
-> **Note**: For a complete list of components and their APIs, visit our [Demo Application](https://jds-apps.jax.org/components) or check the generated documentation.
-
 
 ## Contributing
+The JAX Data Science team welcomes and encourages collaborations!
 
-This library is part of the JAX Data Science UI Components monorepo. For contribution guidelines, please refer to the main repository documentation.
+### Why Contribute?
+By contributing to `@jax-data-science/components`, you help:
+- robust library of reusable components that accelerate development across JAX teams
+- establish consistent user experiences across the JAX Data Science discovery ecosystem
+- advance open science by sharing high-quality UI patterns with the broader research community
+- collaborate with scientists and developers to solve real-world data visualization and interaction challenges
+- shape the future of scientific software interfaces and user experience design
+
+### Ways to Contribute
+
+- **Component Development**
+
+- **Testing & Quality Assurance**
+
+- **Documentation**
+
+- **Bug Fixes & Enhancements**
 
 ### Reporting Issues
-- Create issues in the main repository
-- Provide detailed reproduction steps
-- Include browser and version information
+
+Found a bug or have a suggestion? Please email us at: npm@jax.org
+
+When reporting issues please include:
+
+- a clear description of the problem or suggestion
+- steps to reproduce (for bugs)
+- expected vs. actual behavior
+- screenshots or code examples when applicable
+- environment details (browser, framework version, etc.)
+
 
 ## Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for recent updates and version history.
+For detailed release notes and version history, see [CHANGELOG.md](./CHANGELOG.md).
 
+## More Information
 
----
+**GitHub Repo**: [jds-ui-components](https://github.com/TheJacksonLaboratory/jds-ui-components)
 
-**Maintained by**: JAX Data Science UI/UX Team  
-**Repository**: [jds-ui-components](https://github.com/TheJacksonLaboratory/jds-ui-components)  
-**Demo Application**: [View Components](https://jds-apps.jax.org/components)
+**Maintained By**: JAX Data Science
+
+**Contact**: npm@jax.org
+
+**Demo Application**: [View JDS Components](https://jds-apps.jax.org/echo)
