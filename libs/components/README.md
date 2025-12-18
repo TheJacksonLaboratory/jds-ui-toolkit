@@ -2,7 +2,7 @@
 
 # Overview
 This library provides reusable, accessible, and consistent UI components that work seamlessly across
-multiple applications and microforntend architectures. Built with modern web standards, the library ensures
+multiple applications and micro-frontend architectures. Built with modern web standards, the library ensures
 components maintain visual and functional consistency whether used in standalone apps, embedded widgets, or
 federated modules. The library integrates seamlessly with `@jax-data-science/themes` to provide a cohesive
 design system across the entire JAX Data Science community.
