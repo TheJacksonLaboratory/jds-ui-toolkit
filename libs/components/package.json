@@ -10,7 +10,7 @@
     "primeng": "^19.0.6",
     "@primeng/themes": "^19.0.6",
     "rxjs": "^7.8.0",
-    "@jax-data-science/api-clients": "^0.0.1-a.1"
+    "@jax-data-science/api-clients": "workspace:*"
   },
   "devDependencies": {
     "fs-extra": "^11.0.0"
