@@ -1,15 +1,3 @@
-## 0.0.2 (2025-12-16)
-
-### 🧱 Updated Dependencies
-
-- Updated api-clients to 0.0.2
-
-## 0.0.1 (2025-10-16)
-
-### 🧱 Updated Dependencies
-
-- Updated api-clients to 0.0.1
-
 # Changelog
 
 All notable changes to the @jax-data-science/components library will be documented in this file.
@@ -19,39 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.0.1-a.2] - 2025-09-23
-
-### Fixed
-- **Styling Issues**: Resolved component styling problems when library was installed in consuming applications
-- **Missing TailwindCSS**: Now properly includes compiled TailwindCSS files in the packaged library
-- **Root Styles**: Added root `styles.css` to the final package distribution
-
-### Changed
-- **Build Process**: Updated packaging pipeline to bundle all necessary style files
-- **Output Structure**: Reorganized styling directories to include previously missing CSS files
-
-### Technical Details
-- Fixed build scripts to include compiled Tailwind styles that were previously excluded
-- Component styles now render correctly when the library is consumed by other applications
-
----
-
-## [0.0.1-a.1] - 2025-08-14
-
-### Added
-- Initial prerelease version of the components library
-- Core component architecture and foundation
-- Basic build and packaging setup
+## [0.0.2-0] - 2025-12-30
 
 ### Notes
-- **⚠️ Prerelease Version**: This is a prerelease version intended for internal testing and development purposes only
-- **Not Production Ready**: Do not use in production environments
-- **Breaking Changes Expected**: API and functionality may change significantly before stable release
+This is the baseline release establishing the changelog format. All previous versions (0.0.1-a.x through 0.0.1-0) were developmental releases.
 
----
+### Current Features
+- Angular component library for data science applications
+- PrimeNG UI integration with custom theming
+- Auth0 authentication support
+- Properly packaged TailwindCSS styling
+- Requires `@jax-data-science/api-clients ^0.0.2` as peerDependency
 
-## Prerelease Versioning
-
-All versions `0.0.1-alpha.*` are considered **alpha prereleases** and are subject to breaking changes, incomplete features, and potential instability.
-
-For questions or issues, please contact the development team.
+### Technical Details
+- Build process includes compiled CSS and styling assets
+- Component styles render correctly in consuming applications
+- PeerDependency on api-clients updated only when features require it
