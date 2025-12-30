@@ -1,12 +1,11 @@
-## @jax-data-science/api-clients by The Jackson Laboratory (JAX)
+# @jax-data-science/api-clients by The Jackson Laboratory (JAX)
 
-# Overview
-The library provides a centralized, standardized approach for frontend applications to interact with 
-backend services across the JAX Data Science ecosystem. It eliminates code duplication by offering reusable 
-API clients with consistent error handling, request/response models, and authentication mechanisms. 
-The library abstracts service communication details and provides orchestration, allowing developers to focus on 
-UI logic without worrying about underlying implementation. It's configurable via Angular injection tokens, 
-handles HTTP and custom errors uniformly, and defines type-safe UI models for robust data handling. 
+## Overview
+The library provides a centralized approach for frontend applications to interact with backend services across 
+the [JAX Data Science](https://www.jax.org/research-and-faculty/data-science/tools-and-databases) ecosystem. 
+It eliminates code duplication by offering reusable API clients with consistent error handling and authentication. 
+The library abstracts service communication details, allowing developers to focus on UI logic. All services are 
+configurable, handle errors uniformly, and define type-safe models for robust data handling. 
 
 Designed primarily for component consumption but usable independently, it ensures consistency and 
 maintainability as backend services evolve.
@@ -98,13 +97,13 @@ The JAX Data Science team welcomes and encourages collaborations!
 
 ### Ways to Contribute
 
-- **API Clients Development**
+- API Clients Development
 
-- **Testing & Quality Assurance**
+- Testing & Quality Assurance
 
-- **Documentation**
+- Documentation
 
-- **Bug Fixes & Enhancements**
+- Bug Fixes & Enhancements
 
 ### Reporting Issues
 
@@ -132,28 +131,3 @@ For detailed release notes and version history, see [CHANGELOG.md](./CHANGELOG.m
 **Contact**: npm@jax.org
 
 **Demo Application**: [View JDS Components](https://jds-apps.jax.org/echo)
-
-
-```bash
-
-# api-clients
-
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test api-clients` to execute the unit tests.
-
-
-## Ontology Service
-
-Ontology Service has two implementations JAXOntologyService & OLS Ontology Service. Both converge on the same model that is
-subject to change in releases.
-
-To use any particular implementation
-
-```
-    providers: [
-        {provide: OntologyService, useClass: JAXOntologyService}
-    ]
-```
