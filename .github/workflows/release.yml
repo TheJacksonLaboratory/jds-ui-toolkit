@@ -4,8 +4,8 @@ name: PUBLISH - NPM
 on: [workflow_dispatch]
 
 permissions:
-  id-token: write  # Required for OIDC
   contents: read
+  id-token: write
 
 jobs:
   test:
@@ -43,8 +43,10 @@ jobs:
         shell: bash
 
       - name: Publish packages
-        run: pnpm nx release publish --exclude=components,themes
+        run: pnpm nx release publish --projects=api-clients
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+          NPM_CONFIG_ACCESS: public
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
