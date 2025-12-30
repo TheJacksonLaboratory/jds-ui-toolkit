@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: Publish packages
-        run: pnpm nx release publish
+        run: pnpm nx release publish --exclude=components,themes
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
