@@ -1,95 +1,245 @@
-# Jax Data Science Components
+<h1>
+  <img src="assets/JAX-logo-helix-only-blue.png" width="45" alt="The Jackson Laboratory Logo" style="vertical-align: middle;"> 
+  JAX Data Science UI Toolkit
+</h1>
 
-<a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
-    <img src="public/JAX-logo-helix-only-blue.png" width="45">
-</a> 
+## Table of Contents
+- [Overview](#overview)
+- [Community](#community)
+- [Installation](#installation)
+- [Development](#development)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Common Tasks](#common-tasks)
+- [Contributing](#contributing)
+    - [Development Guidelines](#development-guidelines)
+    - [Creating New Components](#creating-new-components)
+- [Releasing](#releasing)
+    - [Versioning Strategy](#versioning-strategy)
+    - [Release Process](#release-process)
+- [License](#license)
 
-## *Overview*
+## Overview
 
-The *JAX Data Science UI Components* repository is a development workspace designed to streamline the creation, testing and 
-deployment of shareable UI components across the JAX Data Science community. This workspace employs development 
-practices and tools that promote code reuse, reduce duplication, and ensure architectural consistency throughout the organization.
+The **JAX Data Science UI Toolkit** repository facilitates the development, 
+testing, and deployment of reusable solutions for UI components, visualizations, back-end communication clients, 
+and visual design themes. This workspace promotes consistency, reduces redundant efforts, 
+and maintains current technology standards across the JAX Data Science community and the wider biomedical 
+research community, enabling faster, more reliable scientific insights.
 
-The workspace uses the Nx build system and has a [monorepo structure](https://angular.dev/reference/configs/file-structure#multiple-projects). 
-There are two libraries - *@jax-data-science/components* and *@jax-data-science/api-clients*, one theme - *@jax-data-science/themes*, and one root application.
+This [monorepo](https://angular.dev/reference/configs/file-structure#multiple-projects) uses 
+the Nx build system and contains three libraries:
 
-The workspace is maintained by the JAX Data Science UI/UX team and undergoes continuous updates to keep up with the 
-latest technologies. This commitment to technological currency ensures that all shared UI components benefit from the latest performance 
-improvements, security patches, and feature enhancements while also keeping backward compatibility.
+- **`@jax-data-science/components`** - reusable UI components and visualizations
 
-## *Local Setup*
-- Clone the workspace from the [GitHub](https://github.com/TheJacksonLaboratory/jds-ui-components) repository
 
-Clone the repository, move to a branch and install the dependencies:
+- **`@jax-data-science/themes`** - standardized visual design system
 
-- Install the dependencies using [Node.js](https://nodejs.org/en/download/) and [pnpm](https://pnpm.io/installation)
+
+- **`@jax-data-science/api-clients`** - backend service communication layer
+
+A `demo` application showcases library capabilities and usage examples.
+
+## Community
+
+These open-source libraries are maintained by the **JAX Data Science - Software and Platforms** 
+group and designed for the biomedical research community. We welcome researchers and 
+developers to adopt these components in their own projects. The workspace evolves 
+continuously based on emerging technologies and feedback from users.
+
+## Installation
+
+| Library | Description                                       | NPM Package |
+|:--------|:--------------------------------------------------|:------------|
+| **@jax-data-science/api-clients** | Back-end service communication layer              | [![npm version](https://img.shields.io/npm/v/@jax-data-science/api-clients?style=for-the-badge&logo=npm&logoColor=white&label=NPM%20Package&color=CB3837)](https://www.npmjs.com/package/@jax-data-science/api-clients) |
+| **@jax-data-science/components** | Reusable Angular UI components and visualizations | [![npm version](https://img.shields.io/npm/v/@jax-data-science/components?style=for-the-badge&logo=npm&logoColor=white&label=NPM%20Package&color=CB3837)](https://www.npmjs.com/package/@jax-data-science/components) |
+| **@jax-data-science/themes** | Standardized visual design system                 | [![npm version](https://img.shields.io/npm/v/@jax-data-science/themes?style=for-the-badge&logo=npm&logoColor=white&label=NPM%20Package&color=CB3837)](https://www.npmjs.com/package/@jax-data-science/themes) |
+
+*Click badges to view and install packages*
+
+
+# Development
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+🟢 **[Node.js](https://nodejs.org/en/download/)** (v18 or higher) - JavaScript runtime environment
 ```bash
-  pnpm install
+node --version
 ```
-- Start the development server locally
+
+📦 **[pnpm](https://pnpm.io/installation)** (v8 or higher) - fast, disk space efficient package manager 
 ```bash
-  pnpm run start
+pnpm --version
 ```
 
-To test before pushing changes, use:
+### Setup
 
-To start implementing your shared components, create a new module/directory in the **components** or **api-clients** 
-libraries (like */components/my-new-component* or */api-clients/my-new-component*).
-
-You can use the below Nx command: 
+1. **Clone the repository**
 ```bash
-# ui-components
-npx nx g @nrwl/angular:component --path=components/lib/my-new-component --export=true 
-
-# clients-api
-npx nx g @nrwl/angular:component --path=api-clients/lib/my-new-component --export=true 
+   git clone https://github.com/TheJacksonLaboratory/jds-ui-components
+   
+   cd jds-ui-components
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-- create */src/pages/my-new-component* and update the */src/app/app-routing.module.ts* file to include the new component
-
-
-- update the table in */src/app/pages/components-list/components-list.component.html* to include and link to your new component
-
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/WMyxahRqU7)
-
-- once the PR is approved, you will need to deploy the branch to the GCP instance, 
-where the QA team will be able to test the component using the showcase application
-
-<a alt="The Jackson Laboratory Logo" href="https://www.jax.org" target="_blank" rel="noreferrer">
-    <img src="public/release-process-jax-data-science-ui-components.png" width="100%">
-</a> 
-
-## *Releasing*
-Once the component has been tested and approved by the QA team, you can proceed with releasing the component. 
-You will need to: 
-- update the version of the component in the **package.json** - each */components* 
-and */api-clients* directory has its own **package.json** file.
-
-```sh
-  npx nx serve jax-data-science
+2. **Install dependencies**
+```bash
+   pnpm install
 ```
 
-- update the **CHANGELOG.md** file - each */components* and */api-clients* directory has its own **CHANGELOG.md** file.
+### Common Tasks
 
-```sh
-  npx nx build jax-data-science
+#### 🚀 Run Demo Application
+Start the development server to view the demo app at `http://localhost:4200/`:
+```bash
+pnpm run start
 ```
 
-- commit and push the updated to the GitHub repository
-
-```sh
-  npx nx show project jax-data-science
+#### 🧪 Run Tests
+Execute the test suite for all libraries:
+```bash
+pnpm run test
 ```
 
-- do <u>not</u> run the NPM RELEASE pipeline!! The UX/UI team will publish the package.  
+#### 🔍 Lint Code
+Check code quality and style:
+```bash
+pnpm run lint
+```
+
+#### 📦 Build Libraries
+Build all libraries for production:
+```bash
+pnpm run build
+```
+
+
+## Contributing
+
+We welcome contributions from the community! Follow these steps to add your UI components, 
+visualizations, themes or API clients to the libraries.
+
+### Development Guidelines
+
+#### Generate a New UI Component
+```bash
+nx g @nx/angular:component --path=libs/components/src/lib/my-component/my-component --export=true
+```
+
+#### Generate a New API Client Service
+```bash
+nx g @schematics/angular:service --name=my-service --project=api-clients --flat=false --path=libs/api-clients/src/lib/services
+```
+
+### Creating New Components
+
+### Step 1. Develop Your Module
+
+Create your contribution in the appropriate library directory (`components`, `themes`, or `api-clients`). 
+Follow the established patterns and coding standards used throughout the workspace.
+
+
+### Step 2. Create a Demo
+
+Build a demonstration in the `demo` application showing how to import and use your module. Include the 
+following documentation.
+
+- **Summary** - brief description of what your module does and its primary use case
+
+
+- **Authentication Requirements** (if applicable) - required authentication type (e.g., API key, OAuth)
+
+
+- **Contact** - your name/team and preferred contact method
+
+
+- **Vignette** - step-by-step walkthrough of key features and usage
+
+A clear demo helps other developers understand and adopt your contribution.
+
+
+### Step 3. Submit Your Pull Request
+
+1. Create a pull request with your module and demo
+
+
+2. Leave all version numbers unchanged (versioning is handled during the release process)
+
+
+3. Respond to any feedback from the review process
+
+
+4. Once approved the admin team will update versions and merge your changes
+
+---
+
+**Questions?** Contact **JAX Data Science - Software and Platforms** ([npm@jax.org](mailto:npm@jax.org)).
+
+
+## Releasing
+The **JAX Data Science - Software and Platforms** team manages the release process, including 
+versioning and changelog updates. Contributors should submit pull requests with code changes only.
+
+### Versioning Strategy
+Each library follows [semantic versioning](https://semver.org/) (semver) with 
+independent version numbers. Version bumps are determined manually based on the scope and impact 
+of changes in each library. Releases are scheduled regularly, with urgent releases issued when needed.
+
+### Release Process
+Once your pull request is approved and merged, releases follow these steps:
+
+#### 1. Generate Version Updates and Changelogs
+```bash
+npx nx release version
+```
+
+#### 2. Manually Edit CHANGELOG.md Files
+Review and refine the generated changelogs for each library being released.
+- `libs/components/CHANGELOG.md`
+- `libs/themes/CHANGELOG.md`
+- `libs/api-clients/CHANGELOG.md`
+
+#### 3. Commit Changes and Create Git Tags
+Because each library has its own version and release cycle, we create separate tags and GitHub Releases per library.
+```bash 
+# stage all version and changelog changes
+git add .
+
+# commit the changes
+git commit -m "chore: release themes@vX.Y.Z"
+
+# create a git tag for the library
+git tag themes@vX.Y.Z
+
+# push the commit to main branch
+git push origin main
+
+# push the tag to remote
+git push origin tag themes@vX.Y.Z
+```
+**Note**: Replace `themes@vX.Y.Z` with the actual library name and version (e.g., `themes@v1.2.3`). 
+Repeat steps 3-4 for each library being released. 
+
+
+#### 4. Create GitHub Release (using the edited CHANGELOGS)
+```bash
+gh release create themes@vX.Y.Z --title "themes@vX.Y.Z" --notes-file ./libs/themes/CHANGELOG.md
+```
+This creates a release on GitHub with:
+- the library-specific tag
+- release notes from edited changelog
+- downloadable source code archives
+
+#### 5. Publish to NPM
+Packages are published to NPM manually through GitHub Actions:
+- Navigate to the **Actions** tab in the GitHub repository
+- Select the **PUBLISH** workflow
+- Click **Run workflow** and choose the **main** branch
+
+## License
+
+This project is licensed under the [MIT License](https://github.com/TheJacksonLaboratory/jds-ui-components/blob/main/LICENSE).
+
+---
+Maintained by **JAX Data Science - Software and Platforms** ([npm@jax.org](mailto:npm@jax.org))

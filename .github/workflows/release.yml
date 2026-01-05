@@ -1,15 +1,16 @@
 # ./.github/workflows/publish.yml
-name: PUBLISH
+name: PUBLISH - NPM
 
 on: [workflow_dispatch]
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   test:
     name: Publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write # needed for provenance data generation
     timeout-minutes: 10
     steps:
       - name: Checkout repository
@@ -17,14 +18,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Node
+      - name: Install Node (necessary to handle NPM authentication properly)
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.13.1
+          run_install: false
+
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
         shell: bash
 
       - name: Print Environment Info
@@ -32,12 +39,13 @@ jobs:
         shell: bash
 
       - name: Build affected
-        run: npx nx run-many --target=build --all
+        run: pnpm run build
         shell: bash
 
       - name: Publish packages
-        run: npx nx release publish
+        run: pnpm nx release publish --projects=api-clients
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_CONFIG_ACCESS: public
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

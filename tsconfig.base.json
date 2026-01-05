@@ -20,5 +20,5 @@
       "@jax-data-science/themes": ["libs/themes/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp",  "**/node_modules"]
+  "exclude": ["node_modules", "tmp", "**/node_modules"]
 }

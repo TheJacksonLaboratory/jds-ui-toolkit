@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name:  jds-ui-demo-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-signin: "https://auth.jax-cluster-dev-10.jax.org/oauth2/start?rd=https://$http_host$escaped_request_uri"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.jax.org, http://localhost:4200, http://localhost:8080"
+spec:
+  tls:
+    - hosts:
+        - "jds-echo-dev.jax.org"
+      secretName: jds-echo-dev-jax-org-tls
+  rules:
+    - host: "jds-echo-dev.jax.org"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80

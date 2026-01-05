@@ -1,0 +1,15 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: global-labels
+labels:
+  jax.org/system-group: jds-ui-demo
+  jax.org/component: jds-ui-demo
+  jax.org/component-id: 66a92229-231e-4b0c-a192-650b7bc319e5
+  jax.org/component-tier: 4
+fieldSpecs:
+- path: metadata/labels
+  create: true
+- path: spec/template/metadata/labels
+  kind: Deployment
+  create: true

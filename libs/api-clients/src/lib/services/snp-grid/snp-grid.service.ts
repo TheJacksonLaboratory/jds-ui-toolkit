@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, map, Observable, tap } from "rxjs";
+import { catchError, map, Observable } from "rxjs";
 
 import {
   Dataset, DatasetStatus,
@@ -19,28 +19,8 @@ import { SNPSearchRegion } from '../mvar/models/response/dtos';
 export class SnpGridService {
   private api;
 
-  // default true but becomes false if any of the API calls for general information fails
-  apiAvailable = true;
-
-  private strains: BehaviorSubject<Strain[]> = new BehaviorSubject(<Strain[]>[]);
-  strains$: Observable<Strain[]> = this.strains.asObservable();
-
   constructor(private http: HttpClient, @Inject('environment') private environment: any) {
     this.api = environment.securedURLs.genomeMUSter;
-
-    this.getHealthCheck().subscribe({
-      error: () => {
-        this.apiAvailable = false;
-      },
-    });
-    this.getStrains().subscribe({
-      next: (strains) => {
-        this.apiAvailable = Boolean(strains.length);
-      },
-      error: () => {
-        this.apiAvailable = false;
-      },
-    });
   }
 
   /**
@@ -56,7 +36,6 @@ export class SnpGridService {
   getMusterMetadata(): Observable<MusterMetadata> {
     return this.http.get<MusterMetadata>(`${this.api}/db_info`).pipe(
       catchError((err) => {
-        this.apiAvailable = false;
         throw err;
       }),
     );
@@ -68,9 +47,9 @@ export class SnpGridService {
    * @param limit - maximum number of strains to be returned
    */
   getStrains(limit = 5000): Observable<Strain[]> {
-    return this.http
-      .get<Strain[]>(`${this.api}/strains/?limit=${limit}`)
-      .pipe(tap((strains) => this.strains.next(strains.filter((s) => s.mpd_strainid))));
+    return this.http.get<Strain[]>(`${this.api}/strains/?limit=${limit}`).pipe(
+      map((strains) => strains.filter((s) => s.mpd_strainid))
+    );
   }
 
   /**

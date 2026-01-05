@@ -86,6 +86,11 @@
     },
     "@nx/angular:component": {
       "style": "css"
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/libs/{projectName}"
+      }
     }
   },
   "release": {

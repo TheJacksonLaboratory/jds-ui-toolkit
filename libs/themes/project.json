@@ -8,7 +8,7 @@
   "targets": {
      "build": {
       "executor": "@nx/angular:package",
-      "outputs": ["{workspaceRoot}/dist/themes"],
+      "outputs": ["{workspaceRoot}/dist/libs/themes"],
       "options": {
         "project": "libs/themes/ng-package.json"
       },
