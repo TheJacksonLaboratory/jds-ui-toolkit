@@ -1,4 +1,4 @@
-<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100">
+<div class="tw-flex tw-flex-col tw-flex-1 tw-h-screen tw-w-full tw-bg-blue-100">
   <!-- mock study metadata section -->
   <div class="tw-flex-shrink-0">
     <h3 class="tw-text-xl tw-font-semibold tw-p-4">Study Metadata Placeholder</h3>
@@ -6,7 +6,7 @@
 
   <div class="tw-flex tw-flex-1 tw-py-5">
     <!-- mock facet search section -->
-    <div class="tw-flex tw-w-1/4 async-tasks-container" #facetSearchContainer>
+    <div class="tw-w-1/4 facet-search-container" #facetSearchContainer>
       <!-- facet search component -->
       <lib-facet-search
         *ngIf="isFacetSearchEnabled()"

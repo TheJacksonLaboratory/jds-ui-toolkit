@@ -2,7 +2,7 @@
  * positing: relative and overflow: hidden are both required to make
  * the facet search show constrained within the containing element
  */
-.async-tasks-container {
+.facet-search-container {
     position: relative;
     overflow: hidden;
 }

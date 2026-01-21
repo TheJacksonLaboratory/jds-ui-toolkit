@@ -7,6 +7,7 @@ import { Observable, catchError, of } from 'rxjs';
 import { FacetSearchComponent, FacetSearchFacade } from '@jax-data-science/components';
 // models
 import { IFacetSearchCategory, IFacetOption } from '@jax-data-science/components';
+import { ISADataService } from '@jax-data-science/api-clients';
 
 // API Response interfaces
 interface FilterOption {
@@ -78,24 +79,27 @@ export class ShowcaseFacetSearchComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private facetSearchFacade: FacetSearchFacade,
-    private http: HttpClient
+    private http: HttpClient,
+    private isaDataService: ISADataService
   ) { }
 
   ngOnInit() {
     this.facetSearchFacade.setIsSearchVisible(true);
 
     // Load facet search data
-    this.loadVisualizationData().subscribe({
-      next: (data) => {
-        this.searchCategories = this.transformToFacetCategories(data.availableFilters);
-        console.log('Search categories populated:', this.searchCategories);
-      },
-      error: (error) => {
-        console.error('Error loading visualization data:', error);
-        // Optionally set some default categories or show error message
-        this.searchCategories = [];
-      }
-    });
+    this.isaDataService
+      .getMeasureSeriesCharacteristics(['130499'], ['760'])
+      .subscribe({
+        next: (data) => {
+          this.searchCategories = this.transformToFacetCategories(data.object);
+          console.log('Search categories populated:', this.searchCategories);
+        },
+        error: (error) => {
+          console.error('Error loading visualization data:', error);
+          // Optionally set some default categories or show error message
+          this.searchCategories = [];
+        },
+      });
   }
 
   isFacetSearchEnabled(): boolean {
@@ -105,8 +109,8 @@ export class ShowcaseFacetSearchComponent implements OnInit {
   /**
    * Makes HTTP call to get visualization data
    */
-  private loadVisualizationData(): Observable<ApiResponse> {
-    const url = 'http://localhost:28080/api/v1/studies/1/visualization-data';
+  private loadVisualizationData(): Observable<any> {
+    const url = 'http://localhost:28080/data-orchestration/api/visualization/measures/characteristics?measureSeriesIds=130499&studyIds=760';
     const params = { measureIds: '1' };
 
     return this.http.get<ApiResponse>(url, { params }).pipe(
@@ -138,26 +142,32 @@ export class ShowcaseFacetSearchComponent implements OnInit {
   /**
    * Transforms API response availableFilters to IFacetSearchCategory[]
    */
-  private transformToFacetCategories(availableFilters: AvailableFilters): IFacetSearchCategory[] {
+  private transformToFacetCategories(characteristics: any): IFacetSearchCategory[] {
     const categories: IFacetSearchCategory[] = [];
 
-    // Transform each filter category
-    Object.entries(availableFilters).forEach(([categoryName, filterOptions]) => {
-      if (filterOptions && filterOptions.length > 0) {
-        const category: IFacetSearchCategory = {
-          name: categoryName,
-          label: this.getCategoryDisplayLabel(categoryName),
-          isOpen: false, // Start with categories closed
-          options: filterOptions.map((option: FilterOption) => ({
-            id: option.value,
-            label: option.displayName,
-            selected: false, // Start with no options selected
-            count: option.sampleCount
-          } as IFacetOption))
-        };
+    const characteristicsObj = characteristics as unknown as Record<string, any[]>;
 
-        categories.push(category);
-      }
+    // currently, the service doesn't return the IsaCharacteristic type, so cast it
+    Object.keys(characteristicsObj).forEach((key) => {
+      const category: IFacetSearchCategory = {
+        name: key,
+        // label: key.replace(/_/g, ' '),
+        label: key,
+        isOpen: false,
+        options: characteristicsObj[key].map((option: any) => {
+          const fo: IFacetOption = {
+            id: option.value,
+            label: option.displayName.replace(/_/g, ' '),
+            count: option.sampleCount,
+            selected: false,
+          };
+
+          return fo;
+        }),
+        showZeroCount: false,
+      };
+
+      categories.push(category);
     });
 
     return categories;
