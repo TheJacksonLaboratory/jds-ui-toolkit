@@ -71,25 +71,27 @@ export class ComponentDocsComponent implements OnInit {
         isAuthRequired: true,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
       },
-      'authentication': {
+      authentication: {
         name: 'Authentication',
-        description: 'A reusable Angular component that manages user ' +
+        description:
+          'A reusable Angular component that manages user ' +
           'authentication state and provides a dynamic login/logout interface. ' +
           'The component features a single button that intelligently displays ' +
           '"Login" when the user is unauthenticated and "Logout" when ' +
           'authenticated. It automatically handles authentication state changes, ' +
-          'integrates with the application\'s auth service, and provides ' +
+          "integrates with the application's auth service, and provides " +
           'visual feedback during authentication processes.',
         isAuthRequired: true,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
       },
       'error-widget': {
         name: 'Error Widget',
-        description: 'A reusable Angular component designed to display error ' +
+        description:
+          'A reusable Angular component designed to display error ' +
           'messages consistently across applications. This component ' +
           'provides a standardized way to show error states with customizable ' +
           'styling, icons, and messaging. It accepts error text, severity levels ' +
@@ -98,11 +100,12 @@ export class ComponentDocsComponent implements OnInit {
         isAuthRequired: false,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
       },
       'facet-search': {
         name: 'Facet Search',
-        description: 'A versatile Angular component that transforms structured data ' +
+        description:
+          'A versatile Angular component that transforms structured data ' +
           'into an interactive faceted search interface. It accepts data ' +
           'arrays and configuration objects to dynamically generate searchable ' +
           'categories and filter options with customizable layouts and ' +
@@ -115,7 +118,7 @@ export class ComponentDocsComponent implements OnInit {
         isAuthRequired: false,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
       },
       'ontology-search': {
         name: 'Ontology Search',
@@ -123,7 +126,16 @@ export class ComponentDocsComponent implements OnInit {
         isAuthRequired: false,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
+      },
+      'progress-widget': {
+        name: 'Progress Widget',
+        description:
+          'Progress widget in progress',
+        isAuthRequired: false,
+        status: 'In Progress',
+        contact: 'npm@jax.org',
+        docsUrl: 'https://jax.org/docs/components/progress-widget',
       },
       'schema-grid': {
         name: 'Schema Based Grid',
@@ -131,8 +143,8 @@ export class ComponentDocsComponent implements OnInit {
         isAuthRequired: false,
         status: 'In Progress',
         contact: 'npm@jax.org',
-        docsUrl: 'https://jax.org/docs/components/async-tasks'
-      }
+        docsUrl: 'https://jax.org/docs/components/async-tasks',
+      },
     };
   }
 }
