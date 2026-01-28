@@ -9,14 +9,21 @@ metadata:
 spec:
   tls:
     - hosts:
-        - "jds-echo-dev.jax.org"
-      secretName: jds-echo-dev-jax-org-tls
+        - "jds-apps-dev.jax.org"
+      secretName: jds-apps-dev-jax-org-tls
   rules:
-    - host: "jds-echo-dev.jax.org"
+    - host: "jds-apps-dev.jax.org"
       http:
         paths:
           - pathType: Prefix
             path: "/"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/echo"
             backend:
               service:
                 name: jds-ui-demo
