@@ -7,16 +7,25 @@ metadata:
 spec:
   tls:
     - hosts:
-        - "jds-echo-stage.jax.org"
-      secretName: jds-echo-stage-jax-org-tls
+        - "jds-apps-stage.jax.org"
+      secretName: jds-apps-stage-jax-org-tls
   rules:
-  - host: "jds-echo-stage.jax.org"
-    http:
-      paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: jds-ui-demo
-              port:
-                number: 80
+    - host: "jds-apps-stage.jax.org"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/echo"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80
+
+
