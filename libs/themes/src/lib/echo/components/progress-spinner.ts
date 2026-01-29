@@ -1,10 +1,8 @@
-import { ProgressSpinnerDesignTokens } from '@primeng/themes/types/progressspinner';
-
-export const progressspinner: ProgressSpinnerDesignTokens = {
-  root: {
-    colorOne: '{red.500}',
-    colorTwo: '{red.400}',
-    colorThree: '{red.300}',
-    colorFour: '{red.200}',
+export const progressspinner = {
+  colorScheme: {
+    colorOne: '{red.400}',
+    colorTwo: '{indigo.400}',
+    colorThree: '{teal.500}',
+    colorFour: '{yellow.600}',
   },
 };
