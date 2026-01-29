@@ -131,7 +131,9 @@ export class ComponentDocsComponent implements OnInit {
       'progress-widget': {
         name: 'Progress Widget',
         description:
-          'Progress widget in progress',
+          `A reusable Angular component that displays a loading spinner and an 
+          optional dynamic status message. It supports customizable spinner 
+          sizes and can block user interaction during loading states.`,
         isAuthRequired: false,
         status: 'In Progress',
         contact: 'npm@jax.org',
