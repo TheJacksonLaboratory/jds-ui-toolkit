@@ -16,14 +16,7 @@ spec:
       http:
         paths:
           - pathType: Prefix
-            path: "/"
-            backend:
-              service:
-                name: jds-ui-demo
-                port:
-                  number: 80
-          - pathType: Prefix
-            path: "/echo"
+            path: "/echo/"
             backend:
               service:
                 name: jds-ui-demo

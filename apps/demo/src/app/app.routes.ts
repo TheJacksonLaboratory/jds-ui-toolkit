@@ -17,7 +17,7 @@ import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: '/docs/components',
+    redirectTo: 'components/docs',
     pathMatch: 'full'
   },
   {
