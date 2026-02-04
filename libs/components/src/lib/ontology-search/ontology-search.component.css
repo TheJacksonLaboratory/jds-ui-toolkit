@@ -16,7 +16,7 @@ lib-ontology-search {
 
         .p-autocomplete-option-selected{
             background: unset;
-    }
+        }
 
         .p-autocomplete-option {
             justify-content: space-between;
@@ -105,7 +105,7 @@ lib-ontology-search {
 
         .p-checkbox-checked .p-checkbox-box {
             background-color: var(--echo-cyan-700, inherit);
-            border-color: var(white, inherit);
+            border-color: white;
         }
     }
 }
