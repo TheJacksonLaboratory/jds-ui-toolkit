@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, input } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { ChipModule } from 'primeng/chip';
@@ -30,10 +30,10 @@ import { CheckboxModule } from 'primeng/checkbox';
         [virtualScrollItemSize]="10"
         >
           <ng-template let-term #item>
-            <div class="tw-flex tw-items-center tw-gap-2 tw-w-full">
+            <div class="ontology-option tw-flex tw-items-center tw-gap-2 tw-w-full" (mouseenter)="hoveredObserve($event.target)" (mouseleave)="blurObserve($event.target)">
               <p-checkbox *ngIf="multiple" class="tw-flex-none" [(ngModel)]="selectedValues" [value]="term" size="small"/>
-              <span class="tw-flex-grow tw-truncate" [ngClass]="{'tw-text-center': multiple}" [innerHTML]="term.name | highlight: query$.getValue()"></span>
-              <span class="tw-ml-1 tw-flex-none"><p-chip label="{{term.id}}"/></span>
+              <span #ontologylabel class="ontology-option__label tw-flex-grow tw-min-w-0 tw-truncate" [innerHTML]="term.name | highlight: query$.getValue()"></span>
+              <span #ontologychip class="ontology-option__chip tw-ml-1"><p-chip label="{{term.id}}"/></span>
             </div>
           </ng-template>
         <ng-template #footer *ngIf="extended">
@@ -52,12 +52,16 @@ export class OntologySearchComponent {
   @Input() extended = false;
   @Input() max_results = 25;
   @Output() selected = new EventEmitter<OntologyTerm[]>();
+  @ViewChild('ontologychip') ontologychip: any;
+  @ViewChild('ontologylabel') ontologylabel: any;
+
   items: string[] = [];
   value: string | undefined;
   selectedValues: OntologyTerm[] = [];
   filteredOptions: OntologyTerm[] = [];
   query$ = new BehaviorSubject<string>("");
   private skipNextFocus = false;
+  protected doubleLineClamp = false;
 
   constructor(private ontologyService: OntologyService) {
     this.query$.pipe(
@@ -92,5 +96,19 @@ export class OntologySearchComponent {
     } else {
       this.skipNextFocus = false;
     }
+  }
+
+  hoveredObserve(element: EventTarget| any) {
+      setTimeout(() => {
+          const chip = element.querySelector('.ontology-option__chip');
+          const label = element.querySelector('.ontology-option__label');
+          if (parseFloat(window.getComputedStyle(chip).opacity) < 1){
+            label.classList.add('clamped');
+          }
+      }, 540);
+  }
+
+  blurObserve(element: any) {
+    element.querySelector('.ontology-option__label')?.classList.remove('clamped');
   }
 }

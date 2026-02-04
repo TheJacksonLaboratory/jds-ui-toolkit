@@ -1,7 +1,13 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
 lib-ontology-search {
-    
     .p-autocomplete {
         width: 100%;
+        container-type: inline-size;
+        container-name: ontology-search;
 
         .p-autocomplete-input {
             color: var(--echo-slate-800, inherit);
@@ -30,6 +36,67 @@ lib-ontology-search {
             color: var(--echo-slate-800, inherit);
             padding: .225rem .475rem;
             font-size: .75rem;
+        }
+
+        .p-autocomplete-option {
+            .ontology-option {
+                width: 100%;
+            }
+
+            .ontology-option__label {
+                min-width: 0;
+                text-align: left;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .ontology-option__chip {
+                flex: 0 1 auto;
+                min-width: 0;
+                overflow: hidden;
+                max-width: 12rem;
+                opacity: 1;
+                margin-left: 0.25rem;
+            }
+        }
+
+         .ontology-option__label.clamped {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        @container ontology-search (max-width: 499px) {
+            .p-autocomplete-option .ontology-option__chip {
+                transition: max-width 180ms ease, opacity 180ms ease, margin-left 180ms ease;
+                transition-delay: 0ms;
+                will-change: max-width, opacity, margin-left;
+            }
+
+            .p-autocomplete-option:hover:not(:has(.p-checkbox:hover)):not(:has(.p-checkbox:focus-within)) .ontology-option__chip {
+                max-width: 0;
+                opacity: 0;
+                margin-left: 0;
+                pointer-events: none;
+                transition-delay: 360ms;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .p-autocomplete-option .ontology-option__chip {
+                transition: none;
+                transition-delay: 0ms;
+            }
+
+            .p-autocomplete-option .ontology-option__label {
+                transition: none;
+                transition-delay: 0ms;
+            }
         }
 
         .p-checkbox-checked .p-checkbox-box {
