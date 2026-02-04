@@ -14,6 +14,10 @@ lib-ontology-search {
             width: 100%;
         }
 
+        .p-autocomplete-option-selected{
+            background: unset;
+    }
+
         .p-autocomplete-option {
             justify-content: space-between;
             color: var(--echo-slate-800, inherit);
