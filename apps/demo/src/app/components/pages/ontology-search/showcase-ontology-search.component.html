@@ -1,7 +1,260 @@
-<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100 tw-p-5">
-    <div class="tw-flex">
-      <div class="tw-w-[20%]">
-        <lib-ontology-search (selected)="onSelected($event)" [ontology]="ontology" [multiple]="true"></lib-ontology-search>
+<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-gray-50 tw-p-8">
+  <div class="tw-max-w-7xl tw-mx-auto tw-w-full">
+    <!-- Import Section -->
+    <app-doc-section
+      title="Import"
+      description="Import the OntologySearchComponent and necessary dependencies."
+      id="import">
+      <app-code-example
+        title="Module Import"
+        [code]="importCode">
+      </app-code-example>
+    </app-doc-section>
+
+    <!-- Examples Section -->
+    <app-doc-section
+      title="Examples"
+      description="Various use cases and configurations for the Ontology Search component."
+      id="examples">
+
+      <!-- Basic Example -->
+      <app-example-card
+        title="Basic Usage"
+        description="Simple single-select ontology search with default configuration.">
+        <div demo class="tw-max-w-md">
+          <lib-ontology-search
+            (selected)="onBasicSelected($event)"
+            [ontology]="ontology"
+            [multiple]="false"
+            placeholder="Search MAXO terms...">
+          </lib-ontology-search>
+          <div *ngIf="basicSelected.length > 0" class="tw-mt-4 tw-p-3 tw-bg-blue-50 tw-rounded">
+            <p class="tw-text-sm tw-font-medium tw-text-gray-700">Selected:</p>
+            <p class="tw-text-sm tw-text-gray-900">{{ basicSelected[0]?.name }} ({{ basicSelected[0]?.id }})</p>
+          </div>
+        </div>
+        <app-code-example code
+          title="Template"
+          [code]="basicExample">
+        </app-code-example>
+      </app-example-card>
+
+      <!-- Multiple Selection Example -->
+      <app-example-card
+        title="Multiple Selection"
+        description="Enable multi-select mode with checkboxes for selecting multiple ontology terms.">
+        <div demo class="tw-max-w-md">
+          <lib-ontology-search
+            (selected)="onMultipleSelected($event)"
+            [ontology]="ontology"
+            [multiple]="true"
+            placeholder="Search and select multiple terms...">
+          </lib-ontology-search>
+          <div *ngIf="multipleSelected.length > 0" class="tw-mt-4 tw-p-3 tw-bg-blue-50 tw-rounded">
+            <p class="tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Selected ({{ multipleSelected.length }}):</p>
+            <div class="tw-space-y-1">
+              <div *ngFor="let term of multipleSelected" class="tw-text-sm tw-text-gray-900">
+                • {{ term.name }} ({{ term.id }})
+              </div>
+            </div>
+          </div>
+        </div>
+        <app-code-example code
+          title="Template"
+          [code]="multipleExample">
+        </app-code-example>
+      </app-example-card>
+
+      <!-- Different Ontologies Example -->
+      <app-example-card
+        title="Different Ontologies"
+        description="Switch between different biomedical ontologies (HP, MAXO, MONDO, etc.).">
+        <div demo>
+          <div class="tw-mb-4 tw-flex tw-gap-2">
+            <button
+              *ngFor="let ont of availableOntologies"
+              (click)="switchOntology(ont)"
+              [class.tw-bg-blue-600]="selectedOntology === ont"
+              [class.tw-text-white]="selectedOntology === ont"
+              [class.tw-bg-gray-200]="selectedOntology !== ont"
+              [class.tw-text-gray-700]="selectedOntology !== ont"
+              class="tw-px-4 tw-py-2 tw-rounded tw-text-sm tw-font-medium tw-transition-colors">
+              {{ ont }}
+            </button>
+          </div>
+          <div class="tw-max-w-md">
+            <lib-ontology-search
+              (selected)="onOntologySelected($event)"
+              [ontology]="selectedOntology"
+              [multiple]="false"
+              [placeholder]="'Search ' + selectedOntology + ' terms...'">
+            </lib-ontology-search>
+          </div>
+        </div>
+        <app-code-example code
+          title="Template"
+          [code]="ontologyExample">
+        </app-code-example>
+      </app-example-card>
+
+      <!-- Responsive Width Example -->
+      <app-example-card
+        title="Responsive Behavior"
+        description="The component adapts its behavior based on width. Below 500px, chips hide on hover to show full term names.">
+        <div demo>
+          <div class="tw-mb-4">
+            <label class="tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2 tw-block">
+              Container Width: {{ containerWidth }}px
+            </label>
+            <input
+              type="range"
+              min="200"
+              max="800"
+              [(ngModel)]="containerWidth"
+              class="tw-w-full">
+          </div>
+          <div [style.width.px]="containerWidth">
+            <lib-ontology-search
+              (selected)="onResponsiveSelected($event)"
+              [ontology]="ontology"
+              [multiple]="true"
+              placeholder="Try hovering on options...">
+            </lib-ontology-search>
+          </div>
+          <p class="tw-text-xs tw-text-gray-500 tw-mt-2">
+            {{ containerWidth < 500 ? '⚡ Narrow mode: Chips hide on hover to reveal full text' : '📏 Wide mode: Chips remain visible' }}
+          </p>
+        </div>
+        <app-code-example code
+          title="Template"
+          [code]="responsiveExample">
+        </app-code-example>
+      </app-example-card>
+
+    </app-doc-section>
+
+    <!-- API Section -->
+    <app-doc-section
+      title="API"
+      description="Component properties, events, and methods."
+      id="api">
+
+      <!-- Inputs Table -->
+      <div class="tw-mb-6">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-3">Inputs</h3>
+        <div class="tw-overflow-x-auto tw-bg-white tw-rounded-lg tw-border tw-border-gray-200">
+          <table class="tw-w-full tw-text-sm">
+            <thead class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+              <tr>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Name</th>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Type</th>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Default</th>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Description</th>
+              </tr>
+            </thead>
+            <tbody class="tw-divide-y tw-divide-gray-200">
+              <tr *ngFor="let input of apiInputs">
+                <td class="tw-px-4 tw-py-3 tw-font-mono tw-text-blue-600">{{ input.name }}</td>
+                <td class="tw-px-4 tw-py-3 tw-font-mono tw-text-xs tw-text-gray-600">{{ input.type }}</td>
+                <td class="tw-px-4 tw-py-3 tw-font-mono tw-text-xs tw-text-gray-600">{{ input.default }}</td>
+                <td class="tw-px-4 tw-py-3 tw-text-gray-700">{{ input.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      <!-- Outputs Table -->
+      <div class="tw-mb-6">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-3">Outputs</h3>
+        <div class="tw-overflow-x-auto tw-bg-white tw-rounded-lg tw-border tw-border-gray-200">
+          <table class="tw-w-full tw-text-sm">
+            <thead class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+              <tr>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Name</th>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Type</th>
+                <th class="tw-px-4 tw-py-3 tw-text-left tw-font-semibold tw-text-gray-700">Description</th>
+              </tr>
+            </thead>
+            <tbody class="tw-divide-y tw-divide-gray-200">
+              <tr *ngFor="let output of apiOutputs">
+                <td class="tw-px-4 tw-py-3 tw-font-mono tw-text-blue-600">{{ output.name }}</td>
+                <td class="tw-px-4 tw-py-3 tw-font-mono tw-text-xs tw-text-gray-600">{{ output.type }}</td>
+                <td class="tw-px-4 tw-py-3 tw-text-gray-700">{{ output.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Types -->
+      <div class="tw-mb-6">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-3">Types</h3>
+        <app-code-example
+          title="OntologyTerm Interface"
+          [code]="typesCode">
+        </app-code-example>
+      </div>
+
+    </app-doc-section>
+
+    <!-- Theming Section -->
+    <app-doc-section
+      title="Theming"
+      description="Customize the appearance using CSS variables and Tailwind classes."
+      id="theming">
+
+      <div class="tw-mb-6">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-3">CSS Variables</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">
+          The component uses CSS custom properties for theming. Override these variables to customize colors:
+        </p>
+        <app-code-example
+          title="CSS Variables"
+          [code]="cssVariablesCode">
+        </app-code-example>
+      </div>
+
+      <div class="tw-mb-6">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-3">Responsive Behavior</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">
+          The component uses CSS Container Queries for responsive behavior. When the component width is less than 500px,
+          ontology ID chips automatically hide on hover to reveal the full term name.
+        </p>
+        <app-code-example
+          title="Container Query (Automatic)"
+          [code]="containerQueryCode">
+        </app-code-example>
+      </div>
+
+    </app-doc-section>
+
+    <!-- Dependencies Section -->
+    <app-doc-section
+      title="Dependencies"
+      description="Required packages and services."
+      id="dependencies">
+      <div class="tw-bg-white tw-rounded-lg tw-border tw-border-gray-200 tw-p-6">
+        <ul class="tw-space-y-2 tw-text-sm">
+          <li class="tw-flex tw-items-start">
+            <span class="tw-font-semibold tw-text-gray-700 tw-mr-2">PrimeNG:</span>
+            <span class="tw-text-gray-600">AutoComplete, Chip, Checkbox modules</span>
+          </li>
+          <li class="tw-flex tw-items-start">
+            <span class="tw-font-semibold tw-text-gray-700 tw-mr-2">Service:</span>
+            <span class="tw-text-gray-600">OntologyService (from &#64;jax-data-science/api-clients)</span>
+          </li>
+          <li class="tw-flex tw-items-start">
+            <span class="tw-font-semibold tw-text-gray-700 tw-mr-2">Browser Support:</span>
+            <span class="tw-text-gray-600">CSS Container Queries (Chrome 105+, Safari 16+, Firefox 110+)</span>
+          </li>
+        </ul>
+      </div>
+      <app-code-example
+        title="Service Provider Setup"
+        [code]="providerCode">
+      </app-code-example>
+    </app-doc-section>
+
+  </div>
 </div>
