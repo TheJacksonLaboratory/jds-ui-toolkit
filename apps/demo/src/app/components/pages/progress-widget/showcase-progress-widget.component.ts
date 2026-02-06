@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProgressWidgetComponent } from '@jax-data-science/components';
 import { Button } from 'primeng/button';
 
@@ -8,11 +8,12 @@ import { Button } from 'primeng/button';
   templateUrl: './showcase-progress-widget.component.html',
   styleUrl: './showcase-progress-widget.component.css',
 })
-export class ShowcaseProgressWidgetComponent implements OnInit {
+export class ShowcaseProgressWidgetComponent implements OnInit, OnDestroy {
   message = 'Loading...';
   isLoading = true;
   blockUi = false;
   unblockMessage = '';
+  private intervalId?: ReturnType<typeof setInterval>;
 
   ngOnInit() {
     // Simulate a loading process
@@ -26,13 +27,22 @@ export class ShowcaseProgressWidgetComponent implements OnInit {
     this.blockUi = true;
     this.unblockMessage = 'UI is blocked';
     let countdown = 4;
-    const interval = setInterval(() => {
+    this.intervalId = setInterval(() => {
       countdown--;
       this.unblockMessage = `Unblocking in ${countdown}...`;
       if (countdown === 0) {
-        clearInterval(interval);
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+        }
+        this.intervalId = undefined;
         this.blockUi = false;
       }
     }, 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }
