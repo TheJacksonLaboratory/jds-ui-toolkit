@@ -10,6 +10,15 @@ data:
       root /srv/dist;
       index index.html;
 
+      location /echo/ {
+        alias /srv/dist/;
+        try_files $uri $uri/ /echo/index.html;
+      }
+
+      location = /echo {
+        return 301 $scheme://$http_host/echo/;
+      }
+
       location / {
         try_files $uri $uri/ /index.html;
       }

@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build demo app
-        run: pnpm --filter "demo" run build
+        run: pnpm run build --projects=demo
 
       - name: Copy demo app to bucket
         run: |
