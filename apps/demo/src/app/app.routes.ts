@@ -13,12 +13,13 @@ import { ShowcaseOntologySearchComponent } from './components/pages/ontology-sea
 import { ShowcaseSchemaGridComponent } from './components/pages/schema-grid/showcase-schema-grid.component';
 // showcase services
 import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa-data.component';
+import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 
 export const appRoutes: Route[] = [
   {
     path: '',
     redirectTo: 'components/docs',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'components/docs',
@@ -27,41 +28,47 @@ export const appRoutes: Route[] = [
       {
         path: 'async-tasks',
         component: ShowcaseAsyncTasksComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       },
       {
         path: 'authentication',
-        component: ShowcaseAuthComponent
+        component: ShowcaseAuthComponent,
       },
       {
         path: 'error-widget',
-        component: ShowcaseErrorWidgetComponent
+        component: ShowcaseErrorWidgetComponent,
       },
       {
         path: 'facet-search',
-        component: ShowcaseFacetSearchComponent
+        component: ShowcaseFacetSearchComponent,
       },
       {
         path: 'ontology-search',
-        component: ShowcaseOntologySearchComponent
+        component: ShowcaseOntologySearchComponent,
+      },
+      {
+        path: 'progress-widget',
+        component: ShowcaseProgressWidgetComponent,
       },
       {
         path: 'schema-grid',
-        component: ShowcaseSchemaGridComponent
-      }
-    ]
+        component: ShowcaseSchemaGridComponent,
+      },
+    ],
   },
   {
     path: 'services/docs',
     component: ServiceDocsComponent,
-    children: [{
-      path: 'isa-data',
-      component: ShowcaseISADataComponent
-    }]
+    children: [
+      {
+        path: 'isa-data',
+        component: ShowcaseISADataComponent,
+      },
+    ],
   },
   {
     path: '**',
     redirectTo: '/docs/components',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];

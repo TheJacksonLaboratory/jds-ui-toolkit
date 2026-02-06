@@ -17,3 +17,6 @@ export * from './lib/navbar/navbar.component';
 // Widget Error UI component
 export * from './lib/widget-error/widget-error.component';
 
+// Progress Widget UI component
+export * from './lib/progress-widget/progress-widget.component';
+

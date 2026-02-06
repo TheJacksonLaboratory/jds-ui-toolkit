@@ -46,6 +46,10 @@ export class AppComponent {
               routerLink: "components/docs/ontology-search"
             },
             {
+              label: "Progress Widget",
+              routerLink: "components/docs/progress-widget"
+            },
+            {
               label: "Schema Based Grid",
               routerLink: "components/docs/schema-grid"
             }

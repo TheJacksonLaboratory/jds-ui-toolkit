@@ -1,0 +1,47 @@
+
+<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100 tw-p-5">
+  <div>
+    <span>
+      1rem spinner without message:
+      <lib-jds-progress-widget [spinnerSize]="1"></lib-jds-progress-widget>
+    </span>
+  </div>
+  <div class="tw-mt-3">
+    <span>
+      3rem spinner with message:
+    </span>
+    <lib-jds-progress-widget [spinnerSize]="3"
+                             [statusMessage]="'Loading data...'">
+    </lib-jds-progress-widget>
+  </div>
+  <div class="tw-mt-3">
+    <span>Default spinner size (5rem) with dynamic message:</span>
+    <lib-jds-progress-widget [statusMessage]="message"
+                             [isLoading]="isLoading"
+    ></lib-jds-progress-widget>
+  </div>
+  <div class="tw-mt-3">
+    <span>Spinner with icon:</span>
+    <lib-jds-progress-widget [statusMessage]="'Downloading'"
+                             [isLoading]="isLoading"
+                             [iconClass]="'pi pi-download tw-text-blue-600'"
+    ></lib-jds-progress-widget>
+  </div>
+  <div class="tw-mt-3">
+    <span>Spinner with icon on left:</span>
+    <lib-jds-progress-widget [statusMessage]="'Downloading'"
+                             [isLoading]="isLoading"
+                             [iconClass]="'pi pi-download tw-text-blue-600'"
+                             [iconLeft]="true"
+    ></lib-jds-progress-widget>
+  </div>
+  <div class="tw-mt-3 tw-flex tw-items-center">
+    <div class="tw-mr-3">Spinner with ui block overlay</div>
+    <p-button (onClick)="toggleBlockUi()">Show</p-button>
+    @if (blockUi) {
+      <lib-jds-progress-widget [blockUi]="blockUi"
+                               [statusMessage]="unblockMessage"
+      ></lib-jds-progress-widget>
+    }
+  </div>
+</div>
