@@ -31,6 +31,23 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "generate-utilities": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx libs/themes/scripts/generate-utilities.ts"
+      }
+    },
+    "build-with-utilities": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "commands": [
+          "nx build themes",
+          "npx tsx libs/themes/scripts/generate-utilities.ts"
+        ],
+        "parallel": false
+      }
     }
   }
 }

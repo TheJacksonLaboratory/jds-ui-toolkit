@@ -6,16 +6,21 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="tw-bg-gray-900 tw-rounded-lg tw-overflow-hidden tw-mb-6">
-      <div class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-2 tw-bg-gray-800">
-        <span class="tw-text-sm tw-font-medium tw-text-gray-300">{{ title }}</span>
+    <div class="tw-rounded-lg tw-overflow-hidden tw-mb-6 echo-bg-slate-900">
+      <div class="tw-flex tw-items-center tw-justify-between tw-px-4 tw-py-2 echo-bg-slate-800">
+        <span class="tw-text-sm tw-font-medium echo-text-grey-300">{{ title }}</span>
         <button
           (click)="copyCode()"
-          class="tw-px-3 tw-py-1 tw-text-xs tw-bg-blue-600 tw-text-white tw-rounded hover:tw-bg-blue-700 tw-transition-colors">
+          class="tw-px-3 tw-py-1 tw-text-xs tw-rounded tw-transition-colors tw-text-white"
+          [class.echo-bg-cyan-600]="copied"
+          [class.echo-bg-cyan-700]="!copied"
+          (mouseenter)="hovered = true"
+          (mouseleave)="hovered = false"
+          [style.opacity]="hovered && !copied ? '0.9' : '1'">
           {{ copied ? 'Copied!' : 'Copy' }}
         </button>
       </div>
-      <pre class="tw-p-4 tw-overflow-x-auto tw-text-sm"><code class="tw-text-gray-100">{{ code }}</code></pre>
+      <pre class="tw-p-4 tw-overflow-x-auto tw-text-sm"><code class="echo-text-grey-100">{{ code }}</code></pre>
     </div>
   `
 })
@@ -23,6 +28,7 @@ export class CodeExampleComponent {
   @Input() title = 'Code Example';
   @Input() code = '';
   copied = false;
+  hovered = false;
 
   copyCode() {
     navigator.clipboard.writeText(this.code);

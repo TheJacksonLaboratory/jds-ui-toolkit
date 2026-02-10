@@ -1,4 +1,5 @@
 @import "primeicons/primeicons.css";
+@import "@jax-data-science/themes/utilities.css";
 
 @layer tailwind-base, primeng, tailwind-utilities;
 

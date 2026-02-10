@@ -1,4 +1,4 @@
-<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-gray-50 tw-p-8">
+<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-p-8" style="background-color: var(--grey-100);">
   <div class="tw-max-w-7xl tw-mx-auto tw-w-full">
     <!-- Import Section -->
     <app-doc-section
@@ -30,7 +30,7 @@
           </lib-ontology-search>
           <div *ngIf="basicSelected.length > 0" class="tw-mt-4 tw-p-3 tw-bg-blue-50 tw-rounded">
             <p class="tw-text-sm tw-font-medium tw-text-gray-700">Selected:</p>
-            <p class="tw-text-sm tw-text-gray-900">{{ basicSelected[0]?.name }} ({{ basicSelected[0]?.id }})</p>
+            <p class="tw-text-sm tw-text-gray-900">{{ basicSelected[0].name }} ({{ basicSelected[0].id }})</p>
           </div>
         </div>
         <app-code-example code

@@ -1,53 +1,56 @@
 <div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full">
   <!-- docs overview section -->
-  <div class="tw-w-full tw-flex-shrink-0 tw-py-4 tw-px-8 tw-bg-gray-50">
+  <div class="tw-w-full tw-flex-shrink-0 tw-py-4 tw-px-8 echo-bg-grey-100">
     <div *ngIf="currentComponent" class="tw-max-w-7xl tw-mx-auto">
       <!-- header section -->
       <div class="tw-mb-6">
-        <div class="tw-flex tw-items-start tw-justify-between tw-mb-4">
-          <div class="tw-flex-1">
-            <h1 class="tw-text-4xl tw-font-bold tw-text-gray-900 tw-mb-2">
-              {{ currentComponent.name }}
-            </h1>
-            <p class="tw-text-lg tw-text-gray-600 tw-leading-relaxed">
-              {{ currentComponent.description }}
-            </p>
-          </div>
-          <div class="tw-flex tw-items-center tw-space-x-2 tw-ml-6">
-            <span class="tw-inline-flex tw-items-center tw-px-3 tw-py-1 tw-rounded-full tw-text-xs tw-font-semibold tw-bg-yellow-400 tw-text-yellow-900">
-              <div class="tw-w-2 tw-h-2 tw-bg-yellow-600 tw-rounded-full tw-mr-2 tw-animate-pulse"></div>
-              <b>{{ currentComponent.status }}</b>
-            </span>
-          </div>
-        </div>
+        <h1 class="tw-text-4xl tw-font-bold tw-mb-2 echo-text-slate-900">
+          {{ currentComponent.name }}
+        </h1>
+        <p class="tw-text-lg tw-leading-relaxed echo-text-grey-700">
+          {{ currentComponent.description }}
+        </p>
       </div>
       <!-- end header section -->
 
       <!-- metadata section -->
       <div class="tw-flex tw-gap-4 tw-flex-wrap">
+        <!-- status -->
+        <div class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-shadow-sm echo-border-grey-200">
+          <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3 echo-bg-yellow-100">
+            <svg class="tw-w-4 tw-h-4 echo-text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium echo-text-grey-600">Status</p>
+            <p class="tw-text-sm echo-text-slate-900">{{ currentComponent.status }}</p>
+          </div>
+        </div>
+
         <!-- auth status -->
-        <div class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-border-gray-200 tw-shadow-sm">
-          <div class="tw-w-8 tw-h-8 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3">
-            <svg class="tw-w-4 tw-h-4 tw-text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-shadow-sm echo-border-grey-200">
+          <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3 echo-bg-green-100">
+            <svg class="tw-w-4 tw-h-4 echo-text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
           <div>
-            <p class="tw-text-xs tw-text-gray-500 tw-font-medium">Authentication</p>
-            <p class="tw-text-sm tw-text-gray-900">{{ currentComponent.isAuthRequired ? 'Required' : 'Not Required' }}</p>
+            <p class="tw-text-xs tw-font-medium echo-text-grey-600">Authentication</p>
+            <p class="tw-text-sm echo-text-slate-900">{{ currentComponent.isAuthRequired ? 'Required' : 'Not Required' }}</p>
           </div>
         </div>
 
         <!-- contact info -->
-        <div class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-border-gray-200 tw-shadow-sm">
-          <div class="tw-w-8 tw-h-8 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3">
-            <svg class="tw-w-4 tw-h-4 tw-text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-shadow-sm echo-border-grey-200">
+          <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3 echo-bg-grey-200">
+            <svg class="tw-w-4 tw-h-4 echo-text-grey-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
           </div>
           <div>
-            <p class="tw-text-xs tw-text-gray-500 tw-font-medium">Contact</p>
-            <p class="tw-text-sm tw-text-gray-900">{{ currentComponent.contact }}</p>
+            <p class="tw-text-xs tw-font-medium echo-text-grey-600">Contact</p>
+            <p class="tw-text-sm echo-text-slate-900">{{ currentComponent.contact }}</p>
           </div>
         </div>
 
@@ -55,15 +58,15 @@
         <a *ngIf="currentComponent.docsUrl"
            href="{{ currentComponent.docsUrl }}"
            target="_blank"
-           class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-border-gray-200 tw-shadow-sm hover:tw-shadow-md tw-transition-shadow">
-          <div class="tw-w-8 tw-h-8 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3">
-            <svg class="tw-w-4 tw-h-4 tw-text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           class="tw-inline-flex tw-items-center tw-bg-white tw-rounded-lg tw-px-4 tw-py-2 tw-border tw-shadow-sm hover:tw-shadow-md tw-transition-shadow echo-border-grey-200">
+          <div class="tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3 echo-bg-cyan-100">
+            <svg class="tw-w-4 tw-h-4 echo-text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
           </div>
           <div>
-            <p class="tw-text-xs tw-text-gray-500 tw-font-medium">Documentation</p>
-            <p class="tw-text-sm tw-text-blue-600 tw-font-medium">PDF Download</p>
+            <p class="tw-text-xs tw-font-medium echo-text-grey-600">Documentation</p>
+            <p class="tw-text-sm tw-font-medium echo-text-cyan-700">PDF Download</p>
           </div>
         </a>
       </div>
