@@ -18,7 +18,7 @@ import { ShowcaseProgressWidgetComponent } from './components/pages/progress-wid
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: '/docs/components',
+    redirectTo: 'components/docs',
     pathMatch: 'full',
   },
   {
