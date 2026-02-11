@@ -1,9 +1,16 @@
 # Changelog
 
-All notable changes to the @jax-data-science/themes library will be documented in this file.
+All notable changes to the @my-domain/themes library will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [0.0.3-a.1] - 2025-02-11
+
+### Changed
+- Updated default Echo theme with refined indigo color palette
 
 ---
 
