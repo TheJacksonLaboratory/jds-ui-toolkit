@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.0-a.1] - 2025-02-11
+
+### Added
+- Progress Widget component with dynamic status messaging and optional overlay blocking
+- Supports multiple spinner sizes (small, medium, large, extra-large) and configurable positioning
+- Follows presentational component pattern with parent-controlled loading state via Angular signals
+- Styled Progress Spinner component integrated from `@jax-data-science/themes`
+
+---
+
 ## [0.0.2-0] - 2025-12-30
 
 ### Notes
