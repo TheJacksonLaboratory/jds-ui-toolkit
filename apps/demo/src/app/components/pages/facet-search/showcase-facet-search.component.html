@@ -8,11 +8,12 @@
     <!-- mock facet search section -->
     <div class="tw-flex tw-w-1/4 async-tasks-container" #facetSearchContainer>
       <!-- facet search component -->
-      <lib-facet-search
-        *ngIf="isFacetSearchEnabled()"
-        [categories]="searchCategories"
-        [parentContainer]="facetSearchContainer"
-      ></lib-facet-search>
+      @if (isFacetSearchEnabled()) {
+        <lib-facet-search
+          [categories]="searchCategories"
+          [parentContainer]="facetSearchContainer"
+        ></lib-facet-search>
+      }
       <br><br>
     </div>
 
@@ -22,47 +23,52 @@
       <h2 class="tw-text-xl tw-font-bold tw-text-white tw-mb-4">Applied Search Filters</h2>
 
       <div class="tw-bg-white tw-rounded-lg tw-p-4 tw-shadow-lg">
-        <div *ngIf="appliedSearchesDisplay().isEmpty; else hasFilters" class="tw-text-gray-500 tw-italic">
-          No filters applied
-        </div>
-
-        <ng-template #hasFilters>
+        @if (appliedSearchesDisplay().isEmpty) {
+          <div class="tw-text-gray-500 tw-italic">
+            No filters applied
+          </div>
+        } @else {
           <div class="tw-space-y-4">
             <!-- Summary -->
             <div class="tw-border-b tw-pb-3">
               <h3 class="tw-font-semibold tw-text-gray-800 tw-mb-2">Active Filters:</h3>
               <div class="tw-space-y-1">
-                <div *ngFor="let summary of appliedSearchesDisplay().summary"
-                     class="tw-bg-blue-100 tw-text-blue-800 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm">
-                  {{ summary }}
-                </div>
+                @for (summary of appliedSearchesDisplay().summary; track summary) {
+                  <div
+                    class="tw-bg-blue-100 tw-text-blue-800 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm">
+                    {{ summary }}
+                  </div>
+                }
               </div>
             </div>
-
             <!-- Raw Data Structure -->
             <div>
               <h3 class="tw-font-semibold tw-text-gray-800 tw-mb-2">Raw Data Structure:</h3>
               <pre class="tw-bg-gray-100 tw-p-3 tw-rounded tw-text-xs tw-overflow-auto tw-max-h-64">{{ appliedSearchesDisplay().appliedSearches | json }}</pre>
             </div>
-
             <!-- Individual Categories -->
             <div>
               <h3 class="tw-font-semibold tw-text-gray-800 tw-mb-2">Filter Details:</h3>
               <div class="tw-grid tw-grid-cols-1 tw-gap-3">
-                <div *ngFor="let category of appliedSearchesDisplay().appliedSearches | keyvalue"
-                     class="tw-border tw-rounded tw-p-3">
-                  <div class="tw-font-medium tw-text-gray-700">{{ category.key | titlecase }}</div>
-                  <div class="tw-flex tw-flex-wrap tw-gap-1 tw-mt-1">
-                    <span *ngFor="let option of category.value"
+                @for (category of appliedSearchesDisplay().appliedSearches | keyvalue; track category) {
+                  <div
+                    class="tw-border tw-rounded tw-p-3">
+                    <div class="tw-font-medium tw-text-gray-700">{{ category.key | titlecase }}</div>
+                    <div class="tw-flex tw-flex-wrap tw-gap-1 tw-mt-1">
+                      @for (option of category.value; track option) {
+                        <span
                           class="tw-bg-green-100 tw-text-green-800 tw-px-2 tw-py-1 tw-rounded tw-text-xs">
-                      {{ option }}
-                    </span>
+                          {{ option }}
+                        </span>
+                      }
+                    </div>
                   </div>
-                </div>
+                }
               </div>
             </div>
           </div>
-        </ng-template>
+        }
+
       </div>
     </div>
   </div>

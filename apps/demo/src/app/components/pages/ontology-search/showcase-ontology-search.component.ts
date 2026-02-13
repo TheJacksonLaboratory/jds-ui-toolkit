@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-showcase-ontology-search',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './showcase-ontology-search.component.html',
   styleUrl: './showcase-ontology-search.component.css',
   standalone: true

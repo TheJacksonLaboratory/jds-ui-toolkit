@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 import { ButtonModule } from 'primeng/button';
 
@@ -7,7 +7,7 @@ import { AuthenticationComponent} from '@jax-data-science/components';
 
 @Component({
   selector: 'app-showcase-auth',
-  imports: [CommonModule, ButtonModule, AuthenticationComponent],
+  imports: [ButtonModule, AuthenticationComponent],
   templateUrl: './showcase-auth.component.html',
   styleUrl: './showcase-auth.component.css',
   standalone: true

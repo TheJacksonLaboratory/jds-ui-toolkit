@@ -16,7 +16,7 @@ import { map, of, Subscription, switchMap } from 'rxjs';
 // PrimeNG components
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
-import { DataTableDesignTokens } from '@primeng/themes/types/datatable';
+import { DataTableDesignTokens } from '@primeuix/themes/types/datatable';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';

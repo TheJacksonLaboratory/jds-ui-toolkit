@@ -1,10 +1,12 @@
 <div class="tw-p-3 tw-ml-3">
-  <div *ngIf="error.length">
-    Error Section
-  </div>
+  @if (error.length) {
+    <div>
+      Error Section
+    </div>
+  }
 
   <div id="asynctask-details-body"
-       class="tw-mb-3">
+    class="tw-mb-3">
     @if (bodyTemplate) {
       <ng-container *ngTemplateOutlet="bodyTemplate; context: { $implicit: task }"></ng-container>
     } @else {
@@ -12,11 +14,15 @@
     }
   </div>
 
-  <div id="asynctask-details-footer"
-       *ngIf="task.id">
-    <p-divider></p-divider>
-<!--    TODO: change this to trace ID and add run time when the api includes those values-->
-    <div *ngIf="task.id"><span class="tw-font-bold">Trace ID:</span> {{task.id}}</div>
-  </div>
+  @if (task.id) {
+    <div id="asynctask-details-footer"
+      >
+      <p-divider></p-divider>
+      <!--    TODO: change this to trace ID and add run time when the api includes those values-->
+      @if (task.id) {
+        <div><span class="tw-font-bold">Trace ID:</span> {{task.id}}</div>
+      }
+    </div>
+  }
 </div>
 

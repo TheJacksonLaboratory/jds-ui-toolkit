@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 // services
 import { ISADataService } from '@jax-data-science/api-clients';
@@ -9,7 +9,7 @@ import { MeasureSeriesMetadata } from '@jax-data-science/api-clients';
 
 @Component({
   selector: 'app-showcase-isa-data',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './showcase-isa-data.component.html',
   styleUrl: './showcase-isa-data.component.css',
   standalone: true

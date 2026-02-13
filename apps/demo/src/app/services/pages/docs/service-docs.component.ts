@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -18,7 +18,7 @@ interface IApiClientDocs {
 
 @Component({
   selector: 'app-client-docs-component',
-  imports: [CommonModule, CardModule, RouterModule, TableModule],
+  imports: [CardModule, RouterModule, TableModule],
   templateUrl: './service-docs.component.html',
   styleUrl: './service-docs.component.css',
   standalone: true
