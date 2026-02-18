@@ -136,30 +136,26 @@
                   <span class="tw-hidden lg:tw-block">Edit</span>
                 </p-button>
               }
-              @if(task.status === 1) {
-                @if (task.status === WorkflowExecutionStatus.RUNNING) {
-                  <p-button
-                    severity="contrast"
-                    styleClass="tw-mx-2 tw-p-2"
-                    (onClick)="cancelTask(task)"
-                    title="Cancel Task"
-                    variant="text">
-                    <i class="pi pi-times-circle"></i>
-                    <span class="tw-hidden lg:tw-block">Cancel</span>
-                  </p-button>
-                }
+              @if(task.status === WorkflowExecutionStatus.RUNNING) {
+                <p-button
+                  severity="contrast"
+                  styleClass="tw-mx-2 tw-p-2"
+                  (onClick)="cancelTask(task)"
+                  title="Cancel Task"
+                  variant="text">
+                  <i class="pi pi-times-circle"></i>
+                  <span class="tw-hidden lg:tw-block">Cancel</span>
+                </p-button>
               } @else {
-                @if (task.status !== WorkflowExecutionStatus.RUNNING) {
-                  <p-button
-                    severity="danger"
-                    styleClass="tw-mx-2 tw-p-2"
-                    (onClick)="deleteTask(task)"
-                    title="Delete Task"
-                    variant="text" >
-                    <i class="pi pi-trash"></i>
-                    <span class="tw-hidden lg:tw-block">Delete</span>
-                  </p-button>
-                }
+                <p-button
+                  severity="danger"
+                  styleClass="tw-mx-2 tw-p-2"
+                  (onClick)="deleteTask(task)"
+                  title="Delete Task"
+                  variant="text" >
+                  <i class="pi pi-trash"></i>
+                  <span class="tw-hidden lg:tw-block">Delete</span>
+                </p-button>
               }
             </div>
           </td>

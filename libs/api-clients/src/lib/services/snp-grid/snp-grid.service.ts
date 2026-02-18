@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { catchError, map, Observable } from "rxjs";
 
@@ -12,15 +12,19 @@ import {
   Strain
 } from './models/response/dtos';
 import { SNPSearchRegion } from '../mvar/models/response/dtos';
+import { SNP_GRID_SERVICE_CONFIG, SnpGridServiceConfig } from '../../tokens/snp-grid-config.token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SnpGridService {
-  private api;
+  private readonly config: SnpGridServiceConfig = inject(SNP_GRID_SERVICE_CONFIG);
+  private readonly http = inject(HttpClient);
 
-  constructor(private http: HttpClient, @Inject('environment') private environment: any) {
-    this.api = environment.securedURLs.genomeMUSter;
+  private api: string;
+
+  constructor() {
+    this.api = this.config.apiUrl;
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   forkJoin,
   map,
@@ -22,10 +22,8 @@ import { AsyncTaskService } from '@jax-data-science/api-clients';
   providedIn: 'root'
 })
 export class AsyncTaskFacade {
-  constructor(
-    private asyncTaskState: AsyncTaskState,
-    private asyncTaskService: AsyncTaskService
-  ) { }
+  private asyncTaskState = inject(AsyncTaskState);
+  private asyncTaskService = inject(AsyncTaskService);
 
   /**
    * Fetches async tasks data.

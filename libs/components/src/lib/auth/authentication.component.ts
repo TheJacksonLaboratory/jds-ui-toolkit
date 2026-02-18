@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 // Auth0
@@ -12,10 +12,10 @@ import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@aut
   standalone: true
 })
 export class AuthenticationComponent implements OnInit {
+  public auth = inject(AuthService);
+
   @Input() configLogin: RedirectLoginOptions<AppState>= {};
   @Input() configLogout: LogoutOptions = {};
-
-  constructor(public auth: AuthService) { }
 
   /**
    * OnInit(): provides the components with default configuration options

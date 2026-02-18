@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, Input, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { RouterLink } from '@angular/router';
@@ -60,9 +60,8 @@ export class NavbarComponent implements OnInit {
   @Input() externalLink = "https://github.com/TheJacksonLaboratory/jds-ui-components";
   @Input() externalLinkLabel = "GitHub";
 
+  public injector = inject(Injector);
   authService: AuthService | null = null;
-
-  constructor(public injector: Injector) { }
 
   /**
    * Lifecycle hook that is called after the component is initialized.

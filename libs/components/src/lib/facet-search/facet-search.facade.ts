@@ -1,4 +1,4 @@
-import { Injectable, Signal } from '@angular/core';
+import { Injectable, Signal, inject } from '@angular/core';
 // states
 import { FacetSearchState } from './facet-search.state';
 // models
@@ -8,10 +8,7 @@ import { IFacetSearchCategory } from './facet-search.model';
   providedIn: 'root'
 })
 export class FacetSearchFacade {
-
-  constructor(
-    private state: FacetSearchState
-  ) { }
+  private state = inject(FacetSearchState);
 
   setIsSearchVisible(isVisible: boolean): void {
     this.state.setIsSearchVisible(isVisible);

@@ -7,7 +7,8 @@ import {
   OnDestroy,
   ViewChild,
   EventEmitter,
-  Output
+  Output,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -125,10 +126,8 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     },
   };
 
-  constructor(
-    private asyncTaskFacade: AsyncTaskFacade,
-    private facetSearchFacade: FacetSearchFacade
-  ) {}
+  private asyncTaskFacade = inject(AsyncTaskFacade);
+  private facetSearchFacade = inject(FacetSearchFacade);
 
   /**
    * onInit: fetches all tasks and opens an SSE connection to get real-time updates

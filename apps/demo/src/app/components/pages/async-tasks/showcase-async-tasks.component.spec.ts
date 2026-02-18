@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShowcaseAsyncTasksComponent } from './showcase-async-tasks.component';
-import { AsyncTaskFacade } from '@jax-data-science/components';
-// import { provideHttpClient, withFetch } from '@angular/common/http';
+import { AsyncTaskComponent, AsyncTaskFacade } from '@jax-data-science/components';
 import { AuthService } from '@auth0/auth0-angular';
 import { of } from 'rxjs';
 
@@ -35,7 +34,11 @@ describe('ShowcaseAsyncTasksComponent', () => {
         { provide: AuthService, useValue: mockAuthService },
         { provide: AsyncTaskFacade, useValue: mockAsyncTaskFacade },
       ]
-    }).compileComponents();
+    })
+    .overrideComponent(AsyncTaskComponent, {
+      set: { template: '<div></div>', imports: [] }
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(ShowcaseAsyncTasksComponent);
     component = fixture.componentInstance;

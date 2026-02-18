@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { Response, CollectionResponse } from './../models/response';
   providedIn: 'root'
 })
 export class ApiBaseServiceFactory {
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   create(baseUrl: string): ApiBaseService {
     return new ApiBaseService(this.http, baseUrl);

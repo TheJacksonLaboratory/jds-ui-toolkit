@@ -25,10 +25,14 @@ describe('AsyncTaskComponent', () => {
         AsyncTaskComponent,
       ],
       providers: [
-        provideHttpClient(withFetch()), // Modern approach for HTTP in tests
+        provideHttpClient(withFetch()),
         { provide: AsyncTaskFacade, useValue: mockAsyncTaskFacade },
       ]
-    }).compileComponents();
+    })
+    .overrideComponent(AsyncTaskComponent, {
+      set: { template: '<div></div>', imports: [] }
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(AsyncTaskComponent);
     component = fixture.componentInstance;

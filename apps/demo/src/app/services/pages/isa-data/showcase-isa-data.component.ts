@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 
 // services
@@ -15,8 +15,7 @@ import { MeasureSeriesMetadata } from '@jax-data-science/api-clients';
   standalone: true
 })
 export class ShowcaseISADataComponent implements OnInit {
-
-  constructor(private isaDataService: ISADataService) { }
+  private isaDataService = inject(ISADataService);
 
   ngOnInit() {
     this.isaDataService.getMeasureSeriesMetadata(['130499'], ['740']).subscribe(

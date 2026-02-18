@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { Ontology, OntologyConfig, OntologyTerm } from './ontology.model';
 
@@ -11,13 +11,15 @@ import { OntologyService } from './ontology.service.base';
   providedIn: 'root'
 })
 export class JaxOntologyService extends OntologyService {
+  private httpClient = inject(HttpClient);
+
   config_location = 'https://raw.githubusercontent.com/TheJacksonLaboratory/ontology-service/refs/heads/main/config/ontologies-internal.json'
   private config!: OntologyConfig[];
 
   /**
    * Get the configuration file from the source for the backend api service
    */
-  constructor(private httpClient: HttpClient) {
+  constructor() {
     super();
     this.httpClient.get<OntologyConfig[]>(this.config_location).subscribe({
       next: (config) => this.config = config,

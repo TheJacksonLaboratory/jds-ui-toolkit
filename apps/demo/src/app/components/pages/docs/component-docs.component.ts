@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { RouterModule, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -24,11 +24,12 @@ interface IComponentDocs {
   standalone: true
 })
 export class ComponentDocsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   uiComponentDocs: Record<string, IComponentDocs> = {};
   currentComponent: IComponentDocs | null = null;
   currentRouteSegment = '';
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.uiComponentDocs = this.getUiComponents();

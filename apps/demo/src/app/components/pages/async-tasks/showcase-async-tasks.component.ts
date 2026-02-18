@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
@@ -13,6 +13,8 @@ import { AsyncTaskComponent, IAsyncTableConfig } from '@jax-data-science/compone
   standalone: true
 })
 export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
+  private auth = inject(AuthService);
+
   @ViewChild('detailsTemplate') detailsTemplate!: TemplateRef<null>;
 
   tableConfiguration: IAsyncTableConfig = {
@@ -27,8 +29,6 @@ export class ShowcaseAsyncTasksComponent implements OnInit, AfterViewInit {
   };
 
   accessToken$: Observable<string> = new Observable<string>();
-
-  constructor(private auth: AuthService) { }
 
   ngOnInit() {
     this.accessToken$ = this.auth.getAccessTokenSilently();

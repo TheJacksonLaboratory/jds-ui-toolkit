@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, computed } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
@@ -56,6 +56,10 @@ interface ApiResponse {
   standalone: true
 })
 export class ShowcaseFacetSearchComponent implements OnInit {
+  private auth = inject(AuthService);
+  private facetSearchFacade = inject(FacetSearchFacade);
+  private http = inject(HttpClient);
+
   // facet search categories
   searchCategories: IFacetSearchCategory[] = [];
 
@@ -75,11 +79,6 @@ export class ShowcaseFacetSearchComponent implements OnInit {
     console.log('Applied searches changed:', displayData);
     return displayData;
   });
-  constructor(
-    private auth: AuthService,
-    private facetSearchFacade: FacetSearchFacade,
-    private http: HttpClient
-  ) { }
 
   ngOnInit() {
     this.facetSearchFacade.setIsSearchVisible(true);
