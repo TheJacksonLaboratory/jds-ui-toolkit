@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+
 
 // services
 import { ISADataService } from '@jax-data-science/api-clients';
@@ -9,14 +9,13 @@ import { MeasureSeriesMetadata } from '@jax-data-science/api-clients';
 
 @Component({
   selector: 'app-showcase-isa-data',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './showcase-isa-data.component.html',
   styleUrl: './showcase-isa-data.component.css',
   standalone: true
 })
 export class ShowcaseISADataComponent implements OnInit {
-
-  constructor(private isaDataService: ISADataService) { }
+  private isaDataService = inject(ISADataService);
 
   ngOnInit() {
     this.isaDataService.getMeasureSeriesMetadata(['130499'], ['740']).subscribe(

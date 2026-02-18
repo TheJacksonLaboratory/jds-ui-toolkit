@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, input, Input, OnInit, effect } from '@angular/core';
+import { Component, computed, ElementRef, input, Input, OnInit, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 // PrimeNG modules
@@ -45,9 +45,9 @@ export class FacetSearchComponent implements OnInit {
   // facet search containing element (<div> is recommended)
   @Input() parentContainer!: ElementRef<HTMLElement> | HTMLElement;
 
-  constructor(
-    private facetSearchFacade: FacetSearchFacade
-  ) {
+  private facetSearchFacade = inject(FacetSearchFacade);
+
+  constructor() {
     effect(() => {
       const currentCategories = this.categories();
 

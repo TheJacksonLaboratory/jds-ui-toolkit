@@ -1,5 +1,5 @@
 // ols-ontology.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OntologyService } from './ontology.service.base';
 import { Observable, map, pipe } from 'rxjs';
@@ -11,11 +11,13 @@ import { ontologyFromCurie } from './ontology.shared';
   providedIn: 'root'
 })
 export class OLSOntologyService extends OntologyService {
+    private httpClient = inject(HttpClient);
 
     private OLS_SEARCH_BASE = 'https://www.ebi.ac.uk/ols4/api/v2/entities';
     private OLS_ENTITY_BASE = 'https://www.ebi.ac.uk/ols4/api/v2/ontologies';
     private PURL_BASE = 'http://purl.obolibrary.org/obo';
-    constructor(private httpClient: HttpClient) {
+
+    constructor() {
         super();
     }
 

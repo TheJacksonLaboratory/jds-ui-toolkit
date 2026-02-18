@@ -2,7 +2,7 @@
   "name": "@jax-data-science/themes",
   "version": "0.1.0-alpha.1",
   "peerDependencies": {
-    "@primeng/themes": "^19.0.6"
+    "@primeuix/themes": "^1.2.0"
   },
   "sideEffects": false,
   "publishConfig": {

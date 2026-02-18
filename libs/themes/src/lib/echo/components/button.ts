@@ -1,4 +1,4 @@
-import { ButtonDesignTokens } from '@primeng/themes/types/button';
+import { ButtonDesignTokens } from '@primeuix/themes/types/button';
 
 export const button: ButtonDesignTokens = {
   colorScheme: {

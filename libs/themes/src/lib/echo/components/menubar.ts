@@ -1,4 +1,4 @@
-import {MenubarDesignTokens} from '@primeng/themes/types/menubar';
+import {MenubarDesignTokens} from '@primeuix/themes/types/menubar';
 
 export const menubar: MenubarDesignTokens = {
   root: {

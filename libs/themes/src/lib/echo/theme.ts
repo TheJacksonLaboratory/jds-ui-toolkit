@@ -1,5 +1,5 @@
-import { definePreset } from '@primeng/themes';
-import Lara from '@primeng/themes/lara';
+import { definePreset } from '@primeuix/themes';
+import Lara from '@primeuix/themes/lara';
 import { components } from './components';
 import { primitive } from './primitive';
 import { semantic } from './semantic';
@@ -32,7 +32,8 @@ ${toCssVars(primitive)}
 const EchoPreset = definePreset(Lara, {
   primitive: primitive,
   semantic: semantic,
-  components: components
-}, echoCSSVars);
+  components: components,
+  css: echoCSSVars
+});
 
-export {EchoPreset};
+export { EchoPreset };

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+
 import { RouterModule, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -18,17 +18,18 @@ interface IComponentDocs {
 
 @Component({
   selector: 'app-components-list',
-  imports: [CommonModule, CardModule, RouterModule, TableModule],
+  imports: [CardModule, RouterModule, TableModule],
   templateUrl: './component-docs.component.html',
   styleUrl: './component-docs.component.css',
   standalone: true
 })
 export class ComponentDocsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   uiComponentDocs: Record<string, IComponentDocs> = {};
   currentComponent: IComponentDocs | null = null;
   currentRouteSegment = '';
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.uiComponentDocs = this.getUiComponents();

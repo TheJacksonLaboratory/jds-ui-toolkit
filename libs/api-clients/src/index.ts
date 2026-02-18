@@ -11,6 +11,7 @@ export * from './lib/tokens/isa-data-config.token';
 export * from './lib/services/mvar/mvar.service';
 export * from './lib/services/mvar/models/response/dtos';
 export * from './lib/services/mvar/mvar-client.module';
+export * from './lib/tokens/mvar-config.token';
 
 // Ontology API client
 export * from './lib/services/ontology/ontology.service.base';
@@ -26,3 +27,4 @@ export * from './lib/services/mvar/mvar-client.module';
 export * from './lib/services/snp-grid/snp-grid-client.module';
 export * from './lib/services/snp-grid/models/response/dtos';
 export * from './lib/services/snp-grid/snp-grid.service';
+export * from './lib/tokens/snp-grid-config.token';

@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'lib-widget-error',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './widget-error.component.html',
   styleUrl: './widget-error.component.css',
   standalone: true

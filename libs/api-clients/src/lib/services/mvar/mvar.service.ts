@@ -1,23 +1,26 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, map, Observable, tap } from "rxjs";
 
 import { MUS_CHRS, SequenceOntologyTerm, SNP, SNPSearchRegion, Variant, VariantResults } from './models/response/dtos';
+import { MVAR_SERVICE_CONFIG, MVarServiceConfig } from '../../tokens/mvar-config.token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MVarService {
+  private readonly config: MVarServiceConfig = inject(MVAR_SERVICE_CONFIG);
+  private readonly http = inject(HttpClient);
 
-  private api;
+  private api: string;
 
   sequenceOntologyMapping: Record<string, SequenceOntologyTerm> = {};
 
   private soTerms: BehaviorSubject<SequenceOntologyTerm[]> = new BehaviorSubject(<SequenceOntologyTerm[]>[]);
   soTerms$: Observable<SequenceOntologyTerm[]> = this.soTerms.asObservable();
 
-  constructor(private http: HttpClient, @Inject('environment') private environment: any) {
-    this.api = environment.unsecuredURLs.mvar;
+  constructor() {
+    this.api = this.config.apiUrl;
 
     // create a sequence ontology lookup
     this.getSequenceOntologyTerms().subscribe((terms) => {

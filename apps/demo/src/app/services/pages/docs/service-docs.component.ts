@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+
 import { RouterModule, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -18,17 +18,18 @@ interface IApiClientDocs {
 
 @Component({
   selector: 'app-client-docs-component',
-  imports: [CommonModule, CardModule, RouterModule, TableModule],
+  imports: [CardModule, RouterModule, TableModule],
   templateUrl: './service-docs.component.html',
   styleUrl: './service-docs.component.css',
   standalone: true
 })
 export class ServiceDocsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   apiClientDocs: Record<string, IApiClientDocs> = {};
   currentApiClient: IApiClientDocs | null = null;
   currentRouteSegment = '';
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.apiClientDocs = this.getApiClients();
