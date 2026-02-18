@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SnpGridService } from "./snp-grid.service";
-import { SNP_GRID_SERVICE_CONFIG } from '../../tokens/snp-grid-config.token';
+import { SNP_GRID_SERVICE_CONFIG, SnpGridServiceConfig } from '../../tokens/snp-grid-config.token';
 
 @NgModule({
   imports: [CommonModule],
@@ -15,7 +15,7 @@ export class SnpGridClientModule {
         SnpGridService,
         {
           provide: SNP_GRID_SERVICE_CONFIG,
-          useValue: { apiUrl }
+          useValue: { apiUrl } as SnpGridServiceConfig
         }
       ]
     };
