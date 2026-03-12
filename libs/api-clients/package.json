@@ -1,6 +1,6 @@
 {
   "name": "@jax-data-science/api-clients",
-  "version": "0.0.2-0",
+  "version": "0.1.0-a.0",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
     "@angular/core": "^20.3.0",
