@@ -5,6 +5,15 @@ All notable changes to the @jax-data-science/components library will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.2.0-a.0] - 2026-03-12
+
+### Changed
+- Updated peer dependency from Angular 19 to Angular 20
+- Migrated all `*ngIf` usages to the new built-in `@if` control flow syntax
+- Migrated all `*ngFor` usages to the new built-in `@for` control flow syntax
+- Removed `CommonModule` imports where they were only needed for `NgIf` and `NgFor` directives
+
 ---
 
 ## [0.1.0-a.1] - 2025-02-11

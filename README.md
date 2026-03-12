@@ -191,7 +191,7 @@ Once your pull request is approved and merged, releases follow these steps:
 
 #### 1. Generate Version Updates and Changelogs
 ```bash
-npx nx release version
+npx nx release version --projects=themes
 ```
 
 #### 2. Manually Edit CHANGELOG.md Files
@@ -213,7 +213,7 @@ git commit -m "chore: release themes@vX.Y.Z"
 git tag themes@vX.Y.Z
 
 # push the commit to main branch
-git push origin main
+git push origin --set-upstream origin <your-branch-name>
 
 # push the tag to remote
 git push origin tag themes@vX.Y.Z
