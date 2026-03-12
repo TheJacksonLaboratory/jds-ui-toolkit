@@ -259,8 +259,8 @@ importers:
         specifier: ^2.2.3
         version: 2.3.0(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/router@20.3.16(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.16(@angular/animations@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2))
       '@jax-data-science/api-clients':
-        specifier: ^0.0.2-0
-        version: 0.0.2-0(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@microsoft/fetch-event-source@2.0.1)(rxjs@7.8.2)
+        specifier: ^0.1.0-a.0
+        version: 0.1.0-a.0(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@microsoft/fetch-event-source@2.0.1)(rxjs@7.8.2)
       '@primeuix/themes':
         specifier: ^1.2.5
         version: 1.2.5
@@ -1814,11 +1814,11 @@ packages:
     resolution: {integrity: sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==}
     engines: {node: '>=8'}
 
-  '@jax-data-science/api-clients@0.0.2-0':
-    resolution: {integrity: sha512-SneK4CzZxEcMzgBgWzcQxb3AS9LH6kn47U0RSrpVg7OU43yGX2MIs1QmjZKVQFwQt63ZxKIGXg778V0L3iAtMQ==}
+  '@jax-data-science/api-clients@0.1.0-a.0':
+    resolution: {integrity: sha512-MC+ugnpY910ImXiyQd3jVIVJdTyUxJsnPi8JOmkSmO7hV7uuTmTragn+N1e8qfYZ7RH6ezVJEYfbosOKAnvYJA==}
     peerDependencies:
-      '@angular/common': ^19.2.14
-      '@angular/core': ^19.2.14
+      '@angular/common': ^20.3.0
+      '@angular/core': ^20.3.0
       '@microsoft/fetch-event-source': ^2.0.1
       rxjs: ^7.8.0
 
@@ -10970,7 +10970,7 @@ snapshots:
 
   '@istanbuljs/schema@0.1.3': {}
 
-  '@jax-data-science/api-clients@0.0.2-0(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@microsoft/fetch-event-source@2.0.1)(rxjs@7.8.2)':
+  '@jax-data-science/api-clients@0.1.0-a.0(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@microsoft/fetch-event-source@2.0.1)(rxjs@7.8.2)':
     dependencies:
       '@angular/common': 20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@angular/core': 20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)
