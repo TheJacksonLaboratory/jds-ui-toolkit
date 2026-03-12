@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.0] - 2025-3-12
+
+### Changed
+- Updated peer dependency from Angular 19 to Angular 20
+
+---
+
 ## [0.1.0-alpha.1] - 2025-02-11
 
 ### Changed
