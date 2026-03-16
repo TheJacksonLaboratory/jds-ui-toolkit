@@ -9,8 +9,6 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
-
-// components
 import { AuthenticationComponent } from '../auth/authentication.component';
 
 @Component({
@@ -33,10 +31,10 @@ import { AuthenticationComponent } from '../auth/authentication.component';
 export class NavbarComponent implements OnInit {
   @Input() authentication = false;
   @Input() title = "JDS Angular Application";
-  @Input() logo = "https://media.jax.org/m/70a126ca6332fe5a/webimage-logo.png";
+  @Input() logo = "";
+  @Input() icon = "pi pi-cog";
   @Input() logoLink = "/";
 
-  // default menu items
   @Input() items: MenuItem[] = [
     {
       label: "Explore",
@@ -101,18 +99,29 @@ export class NavbarComponent implements OnInit {
     return 'User';
   }
 
-  /**
-   * Lifecycle hook that is called after the component is initialized.
-   * If authentication is enabled, retrieves the `AuthService` instance
-   * from the Angular `Injector` to handle authentication-related functionality.
-   */
   ngOnInit() {
     if(this.authentication) {
       this.authService = this.injector.get(AuthService);
     }
   }
 
-  isSvg(): boolean {
-    return this.logo.endsWith(".svg");
+  getLogoImageSrc(): string | undefined {
+    const trimmedLogo = this.logo.trim();
+
+    if (!trimmedLogo) {
+      return undefined;
+    }
+
+    return trimmedLogo;
+  }
+
+  getLogoIconClass(): string {
+    const trimmedIcon = this.icon.trim();
+
+    if (trimmedIcon) {
+      return trimmedIcon;
+    }
+
+    return 'pi pi-cog';
   }
 }

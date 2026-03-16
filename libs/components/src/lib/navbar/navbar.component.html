@@ -1,10 +1,11 @@
 <p-menubar [model]="items" class="tw-w-full">
   <ng-template #start>
     <a aria-label="Logo" class="p-menubar-logo tw-mr-2" [href]="logoLink">
-      @if (isSvg()) {
-        <img [src]="logo" alt="Logo" class="tw-w-[24px] tw-h-[32px]" />
+      @if (getLogoImageSrc(); as logoImage) {
+        <img [src]="logoImage" alt="Logo" class="tw-h-[32px]" />
+      } @else {
+        <i [class]="getLogoIconClass() + ' tw-text-xl'"></i>
       }
-      <i class="pi pi-cog tw-text-2xl"></i>
     </a>
     <h1 class="tw-text-xl">{{title}}</h1>
   </ng-template>
