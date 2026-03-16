@@ -29,9 +29,15 @@
       @if (externalLink) {
         <a class="p-button-link tw-mr-4" [href]="externalLink" target="_blank">{{externalLinkLabel}}</a>
       }
-      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-      @if (!authentication) {
-        <div class="tw-ml-4">
+      @if (authentication) {
+        <div class="tw-ml-4 tw-flex tw-items-center tw-gap-2">
+          @if (authService?.isAuthenticated$ | async) {
+            @if (getAvatarImage(authService?.user$ | async); as avatarImage) {
+              <p-avatar [image]="avatarImage" shape="circle" [pTooltip]="getUserName(authService?.user$ | async)" tooltipPosition="bottom" />
+            } @else {
+              <p-avatar [icon]="'pi pi-user'" shape="circle" [pTooltip]="getUserName(authService?.user$ | async)" tooltipPosition="bottom" />
+            }
+          }
           <lib-jds-auth></lib-jds-auth>
         </div>
       }

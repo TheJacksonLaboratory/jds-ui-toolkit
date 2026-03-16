@@ -8,6 +8,8 @@ import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
+
 // components
 import { AuthenticationComponent } from '../auth/authentication.component';
 
@@ -20,6 +22,7 @@ import { AuthenticationComponent } from '../auth/authentication.component';
     ButtonModule,
     CommonModule,
     MenubarModule,
+    TooltipModule,
     RouterLink
   ],
   templateUrl: './navbar.component.html',
@@ -62,6 +65,41 @@ export class NavbarComponent implements OnInit {
 
   public injector = inject(Injector);
   authService: AuthService | null = null;
+
+  getAvatarImage(user: unknown): string | undefined {
+    if (!user || typeof user !== 'object') {
+      return undefined;
+    }
+
+    const userObject = user as Record<string, unknown>;
+    const picture = userObject['picture'];
+
+    if (typeof picture === 'string' && picture.trim().length > 0 && (picture.startsWith('http://') || picture.startsWith('https://'))) {
+      return picture;
+    }
+
+    return undefined;
+  }
+
+  getUserName(user: unknown): string {
+    if (!user || typeof user !== 'object') {
+      return 'User';
+    }
+
+    const userObject = user as Record<string, unknown>;
+    const nickname = userObject['nickname'];
+    const name = userObject['name'];
+
+    if (typeof nickname === 'string' && nickname.trim().length > 0) {
+      return nickname;
+    }
+
+    if (typeof name === 'string' && name.trim().length > 0) {
+      return name;
+    }
+
+    return 'User';
+  }
 
   /**
    * Lifecycle hook that is called after the component is initialized.
