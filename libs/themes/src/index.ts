@@ -1,1 +1,1 @@
-export {EchoPreset} from './lib/echo/theme';
+export { EchoPreset } from './lib/echo/theme';
