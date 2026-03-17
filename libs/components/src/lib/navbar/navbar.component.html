@@ -39,7 +39,7 @@
               <p-avatar [icon]="'pi pi-user'" shape="circle" [pTooltip]="getUserName(authService?.user$ | async)" tooltipPosition="bottom" />
             }
           }
-          <lib-jds-auth></lib-jds-auth>
+          <lib-jds-auth [configLogin]="authConfigLogin" [configLogout]="authConfigLogout"></lib-jds-auth>
         </div>
       }
     </div>

@@ -1,6 +1,6 @@
 import { Component, Injector, Input, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@auth0/auth0-angular';
+import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@auth0/auth0-angular';
 import { RouterLink } from '@angular/router';
 // PrimeNG modules
 import { AvatarModule } from 'primeng/avatar';
@@ -60,6 +60,8 @@ export class NavbarComponent implements OnInit {
   ];
   @Input() externalLink = "https://github.com/TheJacksonLaboratory/jds-ui-components";
   @Input() externalLinkLabel = "GitHub";
+  @Input() authConfigLogin: RedirectLoginOptions<AppState> = {};
+  @Input() authConfigLogout: LogoutOptions = {};
 
   public injector = inject(Injector);
   authService: AuthService | null = null;
