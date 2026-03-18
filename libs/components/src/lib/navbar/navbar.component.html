@@ -11,7 +11,13 @@
   </ng-template>
   <ng-template #item let-item let-root="root">
     <div class="margin-auto">
-      <a pRipple class="flex items-center p-menubar-item-link" [routerLink]="item.routerLink">
+        <a pRipple class="flex items-center p-menubar-item-link" 
+           [routerLink]="item.routerLink" 
+           [href]="!item.routerLink ? item.url : null"
+           [ngClass]="{ 'opacity-50 cursor-not-allowed': item.disabled }">
+        @if (item.icon) {
+          <i [class]="'pi ' + item.icon"></i>
+        }
         <span>{{ item.label }}</span>
         @if (item.badge) {
           <p-badge [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
