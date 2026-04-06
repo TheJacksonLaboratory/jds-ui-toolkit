@@ -35,8 +35,15 @@ export class AuthenticationComponent {
     };
 
     const hasCustomLogoutConfig = Object.keys(this.configLogout).length > 0;
-    const logoutConfig = hasCustomLogoutConfig
-      ? this.configLogout
+    const logoutConfig: LogoutOptions = hasCustomLogoutConfig
+      ? {
+          ...defaultLogoutConfig,
+          ...this.configLogout,
+          logoutParams: {
+            ...(defaultLogoutConfig.logoutParams ?? {}),
+            ...(this.configLogout.logoutParams ?? {})
+          }
+        }
       : defaultLogoutConfig;
 
     this.auth.logout(logoutConfig);
