@@ -11,6 +11,9 @@ export * from './lib/facet-search/facet-search.component';
 export * from './lib/facet-search/facet-search.facade';
 export * from './lib/facet-search/facet-search.model';
 
+// Footer UI component
+export * from './lib/footer/footer.component';
+
 // Navbar UI component
 export * from './lib/navbar/navbar.component';
 

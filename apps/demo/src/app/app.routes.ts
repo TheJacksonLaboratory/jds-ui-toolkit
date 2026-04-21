@@ -9,6 +9,7 @@ import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/show
 import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseFacetSearchComponent } from './components/pages/facet-search/showcase-facet-search.component';
+import { ShowcaseFooterComponent } from './components/pages/footer/showcase-footer.component';
 import { ShowcaseOntologySearchComponent } from './components/pages/ontology-search/showcase-ontology-search.component';
 import { ShowcaseSchemaGridComponent } from './components/pages/schema-grid/showcase-schema-grid.component';
 // showcase services
@@ -41,6 +42,10 @@ export const appRoutes: Route[] = [
       {
         path: 'facet-search',
         component: ShowcaseFacetSearchComponent,
+      },
+      {
+        path: 'footer',
+        component: ShowcaseFooterComponent,
       },
       {
         path: 'ontology-search',

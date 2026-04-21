@@ -38,6 +38,10 @@ export class AppComponent {
               routerLink: "components/docs/facet-search"
             },
             {
+              label: "Footer",
+              routerLink: "components/docs/footer"
+            },
+            {
               label: "Navbar",
               routerLink: "components/docs/navbar"
             },

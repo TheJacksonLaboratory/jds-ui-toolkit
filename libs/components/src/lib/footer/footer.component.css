@@ -1,0 +1,6 @@
+.lib-jds-footer {
+  --jds-footer-bg: #222222;
+  --jds-footer-fg: #ffffff;
+
+  font-family: 'Source Sans 3', 'Source Sans Pro', sans-serif;
+}

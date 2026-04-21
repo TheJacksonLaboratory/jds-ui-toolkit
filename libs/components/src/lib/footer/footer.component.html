@@ -1,0 +1,81 @@
+<footer
+  class="lib-jds-footer tw-w-full tw-block tw-bg-[color:var(--jds-footer-bg)] tw-text-[color:var(--jds-footer-fg)]"
+>
+  <div
+    class="tw-flex tw-items-stretch tw-gap-16 tw-px-12 tw-py-4 max-[900px]:tw-flex-col max-[900px]:tw-gap-6 max-[900px]:tw-p-6"
+  >
+    @if (logo) {
+      <div
+        class="tw-w-[32rem] tw-shrink-0 tw-flex tw-items-center tw-py-6 max-[900px]:tw-w-auto max-[900px]:tw-py-0 max-[900px]:tw-justify-center"
+      >
+        <a [href]="logoHref" [attr.aria-label]="logoAlt" class="tw-block tw-leading-none">
+          <img
+            [src]="logo"
+            [alt]="logoAlt"
+            class="tw-block tw-max-w-full tw-h-auto max-[900px]:tw-max-w-[20rem]"
+          />
+        </a>
+      </div>
+    }
+
+    @if (items.length) {
+      <nav
+        class="tw-flex-1 tw-min-w-0 tw-py-8 tw-flex tw-justify-center max-[900px]:tw-py-0 max-[900px]:tw-justify-start"
+        aria-label="Footer navigation"
+      >
+        <ul
+          class="tw-list-none tw-m-0 tw-p-0 tw-grid tw-grid-cols-[repeat(3,max-content)] tw-auto-rows-max tw-gap-x-8 tw-gap-y-8 max-[900px]:tw-grid-cols-2 max-[900px]:tw-gap-x-4 max-[900px]:tw-gap-y-3 max-[900px]:tw-w-full"
+        >
+          @for (item of items; track $index) {
+            <li>
+              @if (item.routerLink) {
+                <a
+                  [routerLink]="item.routerLink"
+                  class="lib-jds-footer__item tw-inline-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-md tw-text-[color:var(--jds-footer-fg)] tw-no-underline tw-font-bold tw-text-base tw-whitespace-nowrap hover:tw-bg-white/10 focus-visible:tw-bg-white/10 focus-visible:tw-outline-none"
+                  [class.tw-opacity-50]="item.disabled"
+                  [class.tw-pointer-events-none]="item.disabled"
+                >
+                  @if (item.icon) {
+                    <i [class]="item.icon"></i>
+                  }
+                  <span>{{ item.label }}</span>
+                </a>
+              } @else if (item.url) {
+                <a
+                  [href]="item.url"
+                  [attr.target]="item.target ?? null"
+                  class="lib-jds-footer__item tw-inline-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-md tw-text-[color:var(--jds-footer-fg)] tw-no-underline tw-font-bold tw-text-base tw-whitespace-nowrap hover:tw-bg-white/10 focus-visible:tw-bg-white/10 focus-visible:tw-outline-none"
+                  [class.tw-opacity-50]="item.disabled"
+                  [class.tw-pointer-events-none]="item.disabled"
+                >
+                  @if (item.icon) {
+                    <i [class]="item.icon"></i>
+                  }
+                  <span>{{ item.label }}</span>
+                </a>
+              } @else {
+                <span
+                  class="lib-jds-footer__item tw-inline-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-md tw-text-[color:var(--jds-footer-fg)] tw-font-bold tw-text-base tw-whitespace-nowrap"
+                  [class.tw-opacity-50]="item.disabled"
+                >
+                  @if (item.icon) {
+                    <i [class]="item.icon"></i>
+                  }
+                  <span>{{ item.label }}</span>
+                </span>
+              }
+            </li>
+          }
+        </ul>
+      </nav>
+    }
+
+    @if (caption) {
+      <div
+        class="tw-flex tw-items-end tw-justify-end tw-py-8 tw-text-xl tw-leading-7 tw-whitespace-nowrap tw-shrink-0 max-[900px]:tw-py-0 max-[900px]:tw-justify-center"
+      >
+        {{ caption }}
+      </div>
+    }
+  </div>
+</footer>

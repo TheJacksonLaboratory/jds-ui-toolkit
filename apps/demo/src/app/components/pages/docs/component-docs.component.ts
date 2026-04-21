@@ -121,6 +121,19 @@ export class ComponentDocsComponent implements OnInit {
         contact: 'npm@jax.org',
         docsUrl: 'https://jax.org/docs/components/async-tasks',
       },
+      footer: {
+        name: 'Footer',
+        description:
+          'A reusable Angular footer component with a three-column layout: logo ' +
+          'on the left, a responsive grid of navigation links in the center, and ' +
+          'a caption (e.g. version) on the right. Accepts any logo image path ' +
+          'and a PrimeNG MenuItem[] for links. Layout collapses to a stacked ' +
+          'mobile view below 900px.',
+        isAuthRequired: false,
+        status: 'In Progress',
+        contact: 'npm@jax.org',
+        docsUrl: 'https://jax.org/docs/components/footer',
+      },
       'ontology-search': {
         name: 'Ontology Search',
         description: 'OntologySearch component description',
