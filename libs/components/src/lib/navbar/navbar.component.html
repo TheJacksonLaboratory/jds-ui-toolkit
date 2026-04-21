@@ -11,12 +11,14 @@
   </ng-template>
   <ng-template #item let-item let-root="root">
     <div class="tw-m-auto">
-        <a pRipple class="tw-flex tw-items-center p-menubar-item-link"
-           [routerLink]="item.routerLink"
-           [href]="!item.routerLink ? item.url : null"
-           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }">
+        <a pRipple class="tw-flex tw-items-center p-menubar-item-link" 
+           [routerLink]="!item.disabled ? item.routerLink : null" 
+           [attr.href]="!item.disabled && !item.routerLink ? item.url : null"
+           [attr.aria-disabled]="item.disabled ? 'true' : null"
+           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }"
+           (click)="item.disabled ? $event.preventDefault() : null">
         @if (item.icon) {
-          <i [class]="'pi ' + item.icon"></i>
+          <i [class]="item.icon && item.icon.includes('pi') ? item.icon : 'pi ' + item.icon"></i>
         }
         <span>{{ item.label }}</span>
         @if (item.badge) {
@@ -39,8 +41,10 @@
       @if (authentication) {
         <div class="tw-ml-4 tw-flex tw-items-center tw-gap-2">
           @if (authService?.isAuthenticated$ | async) {
-            @if (getAvatarImage(authService?.user$ | async); as avatarImage) {
-              <p-avatar [image]="avatarImage" shape="circle" [pTooltip]="getUserName(authService?.user$ | async)" tooltipPosition="bottom" />
+            @if (authService?.user$ | async; as user) {
+              @if (getAvatarImage(user); as avatarImage) {
+                <p-avatar [image]="avatarImage" shape="circle" [pTooltip]="getUserName(user)" tooltipPosition="bottom" />
+              }
             }
           }
           <lib-jds-auth [configLogin]="authConfigLogin" [configLogout]="authConfigLogout"></lib-jds-auth>
