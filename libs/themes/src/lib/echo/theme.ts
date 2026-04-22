@@ -1,5 +1,5 @@
 import { definePreset } from '@primeuix/themes';
-import Lara from '@primeuix/themes/lara';
+import Aura from '@primeuix/themes/aura';
 import { components } from './components';
 import { primitive } from './primitive';
 import { semantic } from './semantic';
@@ -24,12 +24,12 @@ function toCssVars(obj: Record<string, unknown>, prefix = ''): string {
 const echoCSSVars = `
 :root {
 ${toCssVars(primitive)}
-  --submenu-text-color: #fffff;
+  --submenu-text-color: #ffffff;
   --button-secondary-background: #ffffff;
 }
 `;
 
-const EchoPreset = definePreset(Lara, {
+const EchoPreset = definePreset(Aura, {
   primitive: primitive,
   semantic: semantic,
   components: components,

@@ -55,7 +55,7 @@ export const menubar: MenubarDesignTokens = {
         .p-menubar-submenu .p-menubar-item.p-focus > .p-menubar-item-content,
         .p-menubar-submenu .p-menubar-item-content:hover {
           background: var(--cyan-700);
-          color: var(--grey-0);
+          color: var(--gray-0);
         }
         
         .p-menubar-logo {

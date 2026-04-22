@@ -1,5 +1,15 @@
 export const primitive = {
-  "emerald": {},
+  "borderRadius": {
+    "none": "0",
+    "xs": "2px",
+    "sm": "4px",
+    "md": "6px",
+    "lg": "8px",
+    "xl": "12px",
+    "xxl": "16px",
+    "xxxl": "24px",
+    "xxxxl": "32px"
+  },
   "green": {
     "50": "#f3fff2",
     "100": "#e6ffe5",
@@ -12,7 +22,7 @@ export const primitive = {
     "800": "#046b00",
     "900": "#034500"
   },
-  "grey": {
+  "gray": {
     "0": "#ffffff",
     "100": "#f7f7f7",
     "200": "#e8e8e8",
