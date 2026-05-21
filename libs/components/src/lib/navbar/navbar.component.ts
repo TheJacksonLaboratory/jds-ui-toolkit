@@ -1,6 +1,6 @@
 import { Component, Injector, Input, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@auth0/auth0-angular';
+import { AppState, AuthService, LogoutOptions, RedirectLoginOptions, User } from '@auth0/auth0-angular';
 import { RouterLink } from '@angular/router';
 // PrimeNG modules
 import { AvatarModule } from 'primeng/avatar';
@@ -66,39 +66,16 @@ export class NavbarComponent implements OnInit {
   public injector = inject(Injector);
   authService: AuthService | null = null;
 
-  getAvatarImage(user: unknown): string | undefined {
-    if (!user || typeof user !== 'object') {
-      return undefined;
-    }
-
-    const userObject = user as Record<string, unknown>;
-    const picture = userObject['picture'];
-
-    if (typeof picture === 'string' && picture.trim().length > 0 && (picture.startsWith('http://') || picture.startsWith('https://'))) {
+  getAvatarImage(user: User): string | undefined {
+    const picture = user.picture;
+    if (picture && picture.trim().length > 0 && (picture.startsWith('http://') || picture.startsWith('https://'))) {
       return picture;
     }
-
     return undefined;
   }
 
-  getUserName(user: unknown): string {
-    if (!user || typeof user !== 'object') {
-      return 'User';
-    }
-
-    const userObject = user as Record<string, unknown>;
-    const nickname = userObject['nickname'];
-    const name = userObject['name'];
-
-    if (typeof nickname === 'string' && nickname.trim().length > 0) {
-      return nickname;
-    }
-
-    if (typeof name === 'string' && name.trim().length > 0) {
-      return name;
-    }
-
-    return 'User';
+  getUserName(user: User): string {
+    return user.nickname?.trim() || user.name?.trim() || 'User';
   }
 
   ngOnInit() {
