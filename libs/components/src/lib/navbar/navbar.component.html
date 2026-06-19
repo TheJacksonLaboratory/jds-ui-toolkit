@@ -1,25 +1,34 @@
 <p-menubar [model]="items" class="tw-w-full">
   <ng-template #start>
     <a aria-label="Logo" class="p-menubar-logo tw-mr-2" [href]="logoLink">
-      @if (isSvg()) {
-        <img [src]="logo" alt="Logo" class="tw-w-[24px] tw-h-[32px]" />
+      @if (getLogoImageSrc(); as logoImage) {
+        <img [src]="logoImage" alt="Logo" class="tw-h-[32px]" />
+      } @else {
+        <i [class]="getLogoIconClass() + ' tw-text-xl'"></i>
       }
-      <i class="pi pi-cog tw-text-2xl"></i>
     </a>
     <h1 class="tw-text-xl">{{title}}</h1>
   </ng-template>
   <ng-template #item let-item let-root="root">
-    <div class="margin-auto">
-      <a pRipple class="flex items-center p-menubar-item-link" [routerLink]="item.routerLink">
+    <div class="tw-m-auto">
+        <a pRipple class="tw-flex tw-items-center p-menubar-item-link" 
+           [routerLink]="!item.disabled ? item.routerLink : null" 
+           [attr.href]="!item.disabled && !item.routerLink ? item.url : null"
+           [attr.aria-disabled]="item.disabled ? 'true' : null"
+           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }"
+           (click)="item.disabled ? $event.preventDefault() : null">
+        @if (item.icon) {
+          <i [class]="item.icon && item.icon.includes('pi') ? item.icon : 'pi ' + item.icon"></i>
+        }
         <span>{{ item.label }}</span>
         @if (item.badge) {
-          <p-badge [ngClass]="{ 'ml-auto': !root, 'ml-2': root }" [value]="item.badge" />
+          <p-badge [ngClass]="{ 'tw-ml-auto': !root, 'tw-ml-2': root }" [value]="item.badge" />
         }
         @if (item.shortcut) {
-          <span class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+          <span class="tw-ml-auto tw-border tw-border-surface tw-rounded tw-bg-emphasis tw-text-muted-color tw-text-xs tw-p-1">{{ item.shortcut }}</span>
         }
         @if (item.items) {
-          <i [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+          <i [ngClass]="['tw-ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
         }
       </a>
     </div>
@@ -29,10 +38,16 @@
       @if (externalLink) {
         <a class="p-button-link tw-mr-4" [href]="externalLink" target="_blank">{{externalLinkLabel}}</a>
       }
-      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-      @if (!authentication) {
-        <div class="tw-ml-4">
-          <lib-jds-auth></lib-jds-auth>
+      @if (authentication) {
+        <div class="tw-ml-4 tw-flex tw-items-center tw-gap-2">
+          @if (authService?.isAuthenticated$ | async) {
+            @if (authService?.user$ | async; as user) {
+              @if (getAvatarImage(user); as avatarImage) {
+                <p-avatar [image]="avatarImage" shape="circle" [pTooltip]="getUserName(user)" tooltipPosition="bottom" />
+              }
+            }
+          }
+          <lib-jds-auth [configLogin]="authConfigLogin" [configLogout]="authConfigLogout"></lib-jds-auth>
         </div>
       }
     </div>

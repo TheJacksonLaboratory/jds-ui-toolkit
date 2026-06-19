@@ -12,8 +12,8 @@ export const menubar: MenubarDesignTokens = {
       },
       item: {
         color: '{surface.0}',
-        focusColor: '{gray.300}',
-        focusBackground: 'unset'
+        focusBackground: '{surface.0}',
+        focusColor: '{surface.800}'
       },
       submenu: {
         background: '{surface.0}',
@@ -49,6 +49,13 @@ export const menubar: MenubarDesignTokens = {
         
         .p-menubar-submenu .p-menubar-item-content {
             color: black;
+        }
+        
+        /* White background (submenu dropdowns): use primary cyan 700 on hover */
+        .p-menubar-submenu .p-menubar-item.p-focus > .p-menubar-item-content,
+        .p-menubar-submenu .p-menubar-item-content:hover {
+          background: var(--cyan-700);
+          color: var(--grey-0);
         }
         
         .p-menubar-logo {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 // Auth0
@@ -11,28 +11,11 @@ import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@aut
   styleUrl: './authentication.component.css',
   standalone: true
 })
-export class AuthenticationComponent implements OnInit {
+export class AuthenticationComponent {
   public auth = inject(AuthService);
 
   @Input() configLogin: RedirectLoginOptions<AppState>= {};
   @Input() configLogout: LogoutOptions = {};
-
-  /**
-   * OnInit(): provides the components with default configuration options
-   */
-  ngOnInit() {
-    this.configLogin = {
-      appState: { target: '/search' },
-      ...this.configLogin
-    };
-
-    this.configLogout = {
-      logoutParams: {
-        returnTo: document.location.origin
-      },
-      ...this.configLogout
-    };
-  }
 
   /**
    * Login parameters are passed as components configuration options
@@ -45,6 +28,24 @@ export class AuthenticationComponent implements OnInit {
    * Logout parameters are passed as components configuration options
    */
   logout() {
-    this.auth.logout(this.configLogout);
+    const defaultLogoutConfig: LogoutOptions = {
+      logoutParams: {
+        returnTo: document.location.origin
+      }
+    };
+
+    const hasCustomLogoutConfig = Object.keys(this.configLogout).length > 0;
+    const logoutConfig: LogoutOptions = hasCustomLogoutConfig
+      ? {
+          ...defaultLogoutConfig,
+          ...this.configLogout,
+          logoutParams: {
+            ...(defaultLogoutConfig.logoutParams ?? {}),
+            ...(this.configLogout.logoutParams ?? {})
+          }
+        }
+      : defaultLogoutConfig;
+
+    this.auth.logout(logoutConfig);
   }
 }

@@ -18,7 +18,7 @@ export class AppComponent {
     [
       {
         label: "Components",
-        icon: "",
+        icon: "pi-database",
         items:
           [
             {
