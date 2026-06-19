@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.1] - 2026-06-19
+
+### Changed
+- Updated navbar theme styles with Tailwind CSS overrides
+
+---
+
 ## [0.2.0-a.0] - 2025-3-12
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "@jax-data-science/themes",
-  "version": "0.2.0-a.0",
+  "version": "0.2.0-a.1",
   "peerDependencies": {
     "@primeuix/themes": "^1.2.0"
   },
