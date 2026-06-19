@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.2] - 2026-06-19
+
+### Added
+- Navbar: icon support via `NavbarConfig`
+- Navbar: image-first then icon fallback for logo display
+- Navbar: pass-through configuration support
+- Navbar: avatar display in auth navbar
+
+### Fixed
+- Auth navbar: login/logout bug
+- Auth navbar: suppress icon when user metadata is empty
+- Navbar: href, disabled, icon, async, and logout prop issues
+
+### Chores
+- Removed accidental `package-lock.json`, added to `.gitignore`
+
+---
+
 ## [0.2.0-a.1] - 2026-03-12
 
 ### Changed
