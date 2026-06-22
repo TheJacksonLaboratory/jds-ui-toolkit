@@ -18,7 +18,7 @@
            [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
            (click)="item.disabled ? $event.preventDefault() : null">
         @if (item.icon) {
-          <i [class]="item.icon && item.icon.includes('pi') ? item.icon : 'pi ' + item.icon"></i>
+          <i [class]="item.icon.startsWith('pi pi-') ? item.icon : 'pi ' + item.icon"></i>
         }
         <span>{{ item.label }}</span>
         @if (item.badge) {

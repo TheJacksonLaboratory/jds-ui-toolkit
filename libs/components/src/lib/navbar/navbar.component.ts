@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
   @Input() authentication = false;
   @Input() title = "JDS Angular Application";
   @Input() logo = "";
-  @Input() icon = "pi pi-cog";
+  @Input() icon = "pi-cog";
   @Input() logoLink = "/";
 
   @Input() items: JdsMenuItem[] = [
