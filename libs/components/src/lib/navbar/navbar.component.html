@@ -11,11 +11,11 @@
   </ng-template>
   <ng-template #item let-item let-root="root">
     <div class="tw-m-auto">
-        <a pRipple class="tw-flex tw-items-center p-menubar-item-link" 
-           [routerLink]="!item.disabled ? item.routerLink : null" 
+        <a pRipple class="tw-flex tw-items-center p-menubar-item-link"
+           [routerLink]="!item.disabled ? item.routerLink : null"
            [attr.href]="!item.disabled && !item.routerLink ? item.url : null"
            [attr.aria-disabled]="item.disabled ? 'true' : null"
-           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }"
+           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
            (click)="item.disabled ? $event.preventDefault() : null">
         @if (item.icon) {
           <i [class]="item.icon && item.icon.includes('pi') ? item.icon : 'pi ' + item.icon"></i>

@@ -8,6 +8,7 @@ import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { JdsMenuItem } from './navbar.model';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthenticationComponent } from '../auth/authentication.component';
 
@@ -35,7 +36,7 @@ export class NavbarComponent implements OnInit {
   @Input() icon = "pi pi-cog";
   @Input() logoLink = "/";
 
-  @Input() items: MenuItem[] = [
+  @Input() items: JdsMenuItem[] = [
     {
       label: "Explore",
       icon: "",
