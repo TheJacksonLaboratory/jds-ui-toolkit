@@ -14,7 +14,7 @@ import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
-  navbarItems: JdsMenuItem =
+  navbarItems: JdsMenuItem[] =
     [
       {
         label: "Components",
