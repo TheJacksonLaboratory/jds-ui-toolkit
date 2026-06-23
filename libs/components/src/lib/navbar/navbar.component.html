@@ -10,28 +10,49 @@
     <h1 class="tw-text-xl">{{title}}</h1>
   </ng-template>
   <ng-template #item let-item let-root="root">
-    <div class="tw-m-auto">
-        <a pRipple class="tw-flex tw-items-center p-menubar-item-link"
-           [routerLink]="!item.disabled ? item.routerLink : null"
-           [attr.href]="!item.disabled && !item.routerLink ? item.url : null"
-           [attr.aria-disabled]="item.disabled ? 'true' : null"
-           [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
-           (click)="item.disabled ? $event.preventDefault() : null">
-        @if (item.icon) {
-          <i [class]="item.icon.startsWith('pi pi-') ? item.icon : 'pi ' + item.icon"></i>
-        }
-        <span>{{ item.label }}</span>
-        @if (item.badge) {
-          <p-badge [ngClass]="{ 'tw-ml-auto': !root, 'tw-ml-2': root }" [value]="item.badge" />
-        }
-        @if (item.shortcut) {
-          <span class="tw-ml-auto tw-border tw-border-surface tw-rounded tw-bg-emphasis tw-text-muted-color tw-text-xs tw-p-1">{{ item.shortcut }}</span>
-        }
-        @if (item.items) {
-          <i [ngClass]="['tw-ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
-        }
-      </a>
-    </div>
+    @if (item.visible !== false) {
+      @if (item.separator) {
+        <hr class="tw-border-surface tw-my-1" />
+      } @else {
+        <div class="tw-m-auto">
+          <a pRipple class="tw-flex tw-items-center p-menubar-item-link"
+             [routerLink]="!item.disabled && item.routerLink ? item.routerLink : null"
+             [queryParams]="item.queryParams"
+             [fragment]="item.fragment"
+             [queryParamsHandling]="item.queryParamsHandling"
+             [preserveFragment]="item.preserveFragment"
+             [skipLocationChange]="item.skipLocationChange"
+             [replaceUrl]="item.replaceUrl"
+             [attr.href]="!item.disabled && !item.routerLink && item.url ? item.url : null"
+             [attr.target]="item.target"
+             [attr.title]="item.title"
+             [attr.tabindex]="item.tabindex ?? '0'"
+             [attr.aria-disabled]="item.disabled ? 'true' : null"
+             [pTooltip]="item.tooltip"
+             [tooltipOptions]="item.tooltipOptions"
+             [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
+             (click)="onItemClick($event, item)">
+            @if (item.icon) {
+              <i [class]="resolveIconClass(item)" [ngStyle]="item.iconStyle"></i>
+            }
+            @if (item.escape === false) {
+              <span [innerHTML]="item.label"></span>
+            } @else {
+              <span>{{ item.label }}</span>
+            }
+            @if (item.badge) {
+              <p-badge [ngClass]="{ 'tw-ml-auto': !root, 'tw-ml-2': root }" [value]="item.badge" [styleClass]="item.badgeStyleClass" />
+            }
+            @if (item.shortcut) {
+              <span class="tw-ml-auto tw-border tw-border-surface tw-rounded tw-bg-emphasis tw-text-muted-color tw-text-xs tw-p-1">{{ item.shortcut }}</span>
+            }
+            @if (item.items) {
+              <i [ngClass]="['tw-ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+            }
+          </a>
+        </div>
+      }
+    }
   </ng-template>
   <ng-template #end>
     <div class="tw-flex tw-items-center">
