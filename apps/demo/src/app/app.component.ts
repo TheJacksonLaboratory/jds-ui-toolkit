@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from '@jax-data-science/components';
+import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 
 @Component({
   imports: [
@@ -14,7 +14,7 @@ import { NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
-  navbarItems =
+  navbarItems: JdsMenuItem[] =
     [
       {
         label: "Components",
@@ -68,7 +68,8 @@ export class AppComponent {
       },
       {
         label: "Help",
-        icon: ""
+        icon: "pi pi-external-link",
+        iconEnd: true
       }
     ]
 }

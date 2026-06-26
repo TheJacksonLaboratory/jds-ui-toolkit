@@ -7,7 +7,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
+import { JdsMenuItem } from './navbar.model';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthenticationComponent } from '../auth/authentication.component';
 
@@ -32,10 +32,10 @@ export class NavbarComponent implements OnInit {
   @Input() authentication = false;
   @Input() title = "JDS Angular Application";
   @Input() logo = "";
-  @Input() icon = "pi pi-cog";
+  @Input() icon = "pi-cog";
   @Input() logoLink = "/";
 
-  @Input() items: MenuItem[] = [
+  @Input() items: JdsMenuItem[] = [
     {
       label: "Explore",
       icon: "",
@@ -82,6 +82,21 @@ export class NavbarComponent implements OnInit {
     if(this.authentication) {
       this.authService = this.injector.get(AuthService);
     }
+  }
+
+  onItemClick(event: MouseEvent, item: JdsMenuItem): void {
+    if (item.disabled) {
+      event.preventDefault();
+      return;
+    }
+    if (item.command) {
+      item.command({ originalEvent: event, item });
+    }
+  }
+
+  resolveIconClass(item: JdsMenuItem): string {
+    const base = item.icon!.startsWith('pi pi-') ? item.icon! : 'pi ' + item.icon!;
+    return item.iconClass ? `${base} ${item.iconClass}` : base;
   }
 
   getLogoImageSrc(): string | undefined {
