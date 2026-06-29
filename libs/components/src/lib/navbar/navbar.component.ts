@@ -113,7 +113,7 @@ export class NavbarComponent implements OnInit {
     const trimmedIcon = this.icon.trim();
 
     if (trimmedIcon) {
-      return trimmedIcon;
+      return trimmedIcon.startsWith('pi pi-') ? trimmedIcon : 'pi ' + trimmedIcon;
     }
 
     return 'pi pi-cog';
