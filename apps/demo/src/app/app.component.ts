@@ -69,6 +69,7 @@ export class AppComponent {
       {
         label: "Help",
         icon: "pi pi-external-link",
+        url : "https://google.com",
         iconEnd: true
       }
     ]
