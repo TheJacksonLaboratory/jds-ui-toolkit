@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.4] - 2026-06-29
+
+### Fixed
+- Navbar: icon class resolution now auto-prefixes `pi ` when icon string does not start with `pi pi-`
+- Navbar: `routerLink` and external URL rendering split into separate anchor branches, fixing conflict between Angular `RouterLink` and plain `href` targets
+
+---
+
 ## [0.2.0-a.3] - 2026-06-23
 
 ### Added
