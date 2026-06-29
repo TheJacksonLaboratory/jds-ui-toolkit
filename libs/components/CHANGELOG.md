@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.3] - 2026-06-23
+
+### Added
+- Navbar: `JdsMenuItem` interface extending PrimeNG `MenuItem` with `iconEnd` property for reversed icon placement
+- Navbar: expanded PrimeNG menu item feature coverage
+
+### Fixed
+- Navbar: icon check bug causing incorrect icon rendering
+- Navbar: reversed icon display now renders correctly
+
+### Chores
+- Demo app updated to showcase reversed icon feature
+
+---
+
 ## [0.2.0-a.2] - 2026-06-19
 
 ### Added
