@@ -1,0 +1,53 @@
+<div class="tw-p-6 tw-space-y-10 tw-min-h-screen">
+
+  <!-- Grouped example -->
+  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
+    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Grouped suggestions</h3>
+    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
+      Type at least 2 characters (e.g. "br", "sei", "rett"). Results grouped by Phenotypes, Diseases, Genes.
+    </p>
+
+    <div class="tw-max-w-md">
+      <lib-jds-autocomplete
+        [suggestions]="groupedSuggestions()"
+        [totalCount]="groupedTotalCount()"
+        placeholder="Search phenotypes, diseases, genes…"
+        (completeMethod)="onGroupedSearch($event)"
+        (selectItem)="onGroupedSelect($event)"
+        (showAll)="onGroupedShowAll($event)"
+        (cleared)="onGroupedClear()">
+      </lib-jds-autocomplete>
+    </div>
+
+    @if (groupedLastEvent()) {
+      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+        {{ groupedLastEvent() }}
+      </div>
+    }
+  </section>
+
+  <!-- Flat example -->
+  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
+    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Flat suggestions (no groups)</h3>
+    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
+      Same component, flat array — no section headers rendered.
+    </p>
+
+    <div class="tw-max-w-md">
+      <lib-jds-autocomplete
+        [suggestions]="flatSuggestions()"
+        placeholder="Search terms…"
+        (completeMethod)="onFlatSearch($event)"
+        (selectItem)="onFlatSelect($event)"
+        (cleared)="onFlatClear()">
+      </lib-jds-autocomplete>
+    </div>
+
+    @if (flatLastEvent()) {
+      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+        {{ flatLastEvent() }}
+      </div>
+    }
+  </section>
+
+</div>

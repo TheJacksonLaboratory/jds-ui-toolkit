@@ -66,6 +66,18 @@ export class ComponentDocsComponent implements OnInit {
    */
   getUiComponents() {
     return {
+      autocomplete: {
+        name: 'Autocomplete',
+        description:
+          'A reusable autocomplete component wrapping PrimeNG AutoComplete. ' +
+          'Supports grouped or flat suggestions, bold match highlighting, ' +
+          'configurable debounce, and a "show all" footer row. ' +
+          'All PrimeNG AutoComplete inputs are exposed as pass-through model inputs.',
+        isAuthRequired: false,
+        status: 'In Progress',
+        contact: 'npm@jax.org',
+        docsUrl: 'https://jax.org/docs/components/autocomplete',
+      },
       'async-tasks': {
         name: 'Async Tasks',
         description: 'AsyncTasks components description',

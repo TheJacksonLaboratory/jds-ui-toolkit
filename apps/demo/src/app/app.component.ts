@@ -22,6 +22,10 @@ export class AppComponent {
         items:
           [
             {
+              label: "Autocomplete",
+              routerLink: "components/docs/autocomplete"
+            },
+            {
               label: "Async Tasks",
               routerLink: "components/docs/async-tasks"
             },

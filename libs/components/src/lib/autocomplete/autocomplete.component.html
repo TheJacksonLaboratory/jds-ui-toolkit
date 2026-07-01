@@ -1,0 +1,49 @@
+<p-autocomplete
+  [(ngModel)]="value"
+  [suggestions]="suggestions()"
+  [group]="isGrouped()"
+  optionGroupLabel="groupLabel"
+  optionGroupChildren="items"
+  optionLabel="label"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  [minLength]="minLength()"
+  [delay]="delay()"
+  [scrollHeight]="scrollHeight()"
+  [appendTo]="appendTo()"
+  [forceSelection]="forceSelection()"
+  [dropdown]="dropdown()"
+  styleClass="tw-w-full"
+  panelStyleClass="jds-autocomplete-panel"
+  (completeMethod)="onComplete($event)"
+  (onSelect)="onSelect($event)"
+  (onClear)="onClear()">
+
+  <ng-template #group let-group>
+    <span class="tw-flex-1 tw-font-bold tw-text-base tw-leading-none tw-text-[var(--echo-grey-700,#636363)]">
+      {{ group.groupLabel }}
+    </span>
+  </ng-template>
+
+  <ng-template #item let-item>
+    <div class="jds-ac-item tw-flex tw-flex-col tw-w-full tw-px-4 tw-py-1">
+      <span
+        class="jds-ac-label tw-text-base tw-leading-5 tw-overflow-hidden tw-text-ellipsis tw-whitespace-nowrap"
+        [innerHTML]="highlightMatch(item.label, currentQuery())"></span>
+      <span class="jds-ac-id tw-text-sm tw-leading-4 tw-text-[var(--echo-grey-700,#636363)]">{{ item.id }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
+    @if (showAllFooter()) {
+      <div class="tw-flex tw-items-center tw-justify-center tw-px-1 tw-py-1 tw-border-t tw-border-[var(--echo-grey-300,#d9d9d9)]">
+        <button
+          type="button"
+          class="jds-ac-showall tw-w-full tw-text-center tw-px-3 tw-py-2 tw-font-bold tw-text-base tw-text-[var(--echo-cyan-700,#0177b2)] tw-bg-transparent tw-border-0 tw-rounded-md tw-cursor-pointer hover:tw-bg-[var(--echo-cyan-50,#f0faff)]"
+          (click)="onShowAll()">
+          Show all {{ totalCount() }} results for &ldquo;{{ currentQuery() }}&rdquo;
+        </button>
+      </div>
+    }
+  </ng-template>
+</p-autocomplete>

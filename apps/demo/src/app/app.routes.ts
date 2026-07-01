@@ -5,6 +5,7 @@ import { ComponentDocsComponent } from './components/pages/docs/component-docs.c
 import { ServiceDocsComponent } from './services/pages/docs/service-docs.component';
 
 // showcase components
+import { ShowcaseAutocompleteComponent } from './components/pages/autocomplete/showcase-autocomplete.component';
 import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/showcase-async-tasks.component';
 import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
@@ -25,6 +26,10 @@ export const appRoutes: Route[] = [
     path: 'components/docs',
     component: ComponentDocsComponent,
     children: [
+      {
+        path: 'autocomplete',
+        component: ShowcaseAutocompleteComponent,
+      },
       {
         path: 'async-tasks',
         component: ShowcaseAsyncTasksComponent,

@@ -785,6 +785,14 @@ video {
   overflow-y: auto;
 }
 
+.tw-text-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.tw-whitespace-nowrap {
+  white-space: nowrap;
+}
+
 .tw-text-nowrap {
   text-wrap: nowrap;
 }
@@ -813,6 +821,10 @@ video {
   border-width: 1px;
 }
 
+.tw-border-0 {
+  border-width: 0px;
+}
+
 .tw-border-x {
   border-left-width: 1px;
   border-right-width: 1px;
@@ -824,6 +836,10 @@ video {
 
 .tw-border-t {
   border-top-width: 1px;
+}
+
+.tw-border-\[var\(--echo-grey-300\,\#d9d9d9\)\] {
+  border-color: var(--echo-grey-300,#d9d9d9);
 }
 
 .tw-border-blue-200 {
@@ -886,6 +902,10 @@ video {
   background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
 }
 
+.tw-bg-transparent {
+  background-color: transparent;
+}
+
 .tw-bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
@@ -912,9 +932,24 @@ video {
   padding: 1rem;
 }
 
+.tw-px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
 .tw-px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.tw-px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.tw-px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .tw-py-1 {
@@ -957,6 +992,11 @@ video {
   line-height: 2rem;
 }
 
+.tw-text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .tw-text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -993,8 +1033,28 @@ video {
   text-transform: uppercase;
 }
 
+.tw-leading-4 {
+  line-height: 1rem;
+}
+
+.tw-leading-5 {
+  line-height: 1.25rem;
+}
+
+.tw-leading-none {
+  line-height: 1;
+}
+
 .tw-tracking-wide {
   letter-spacing: 0.025em;
+}
+
+.tw-text-\[var\(--echo-cyan-700\,\#0177b2\)\] {
+  color: var(--echo-cyan-700,#0177b2);
+}
+
+.tw-text-\[var\(--echo-grey-700\,\#636363\)\] {
+  color: var(--echo-grey-700,#636363);
 }
 
 .tw-text-black {
@@ -1113,6 +1173,10 @@ video {
     opacity: var(--p-leave-opacity, 1);
     transform: translate3d(var(--p-leave-translate-x, 0), var(--p-leave-translate-y, 0), 0) scale3d(var(--p-leave-scale, 1), var(--p-leave-scale, 1), var(--p-leave-scale, 1)) rotate(var(--p-leave-rotate, 0));
   }
+}
+
+.hover\:tw-bg-\[var\(--echo-cyan-50\2c \#f0faff\)\]:hover {
+  background-color: var(--echo-cyan-50,#f0faff);
 }
 
 @media (min-width: 1024px) {

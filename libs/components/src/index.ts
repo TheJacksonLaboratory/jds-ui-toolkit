@@ -1,3 +1,7 @@
+// Autocomplete UI component
+export * from './lib/autocomplete/autocomplete.component';
+export * from './lib/autocomplete/autocomplete.model';
+
 // Async Task UI component
 export * from './lib/asynctask/asynctask.component';
 export * from './lib/asynctask/asynctask.facade';
