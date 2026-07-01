@@ -1,0 +1,86 @@
+/* Fill parent width. Host is inline by default; make it block so the
+   full-width p-autocomplete (styleClass="tw-w-full") actually spans the parent.
+   encapsulation:None → :host is not processed, so target the element selector. */
+lib-jds-autocomplete {
+  display: block;
+  width: 100%;
+}
+
+lib-jds-autocomplete .p-autocomplete,
+lib-jds-autocomplete .p-autocomplete-input {
+  width: 100%;
+}
+
+/* Panel chrome — panel is appended to body, so target it by its style class */
+/* Colors point at echo PRIMITIVE tokens (with literal fallback) because the echo
+   SEMANTIC layer isn't aligned to this design yet — semantic primary maps to navy
+   and surface muted/border to navy, but the design uses cyan + grey. Primitives
+   match the design exactly today; swap to semantic tokens once they're aligned. */
+.jds-autocomplete-panel.p-autocomplete-overlay {
+  border: 1px solid var(--echo-grey-300, #d9d9d9);
+  border-radius: var(--echo-overlay-popover-border-radius, 6px);
+  box-shadow: var(--echo-overlay-popover-shadow, 0 10px 25px rgba(0, 0, 0, 0.12));
+
+  /* Retint PrimeNG's built-in option focus/hover state to the design's primary
+     highlight. focusOnHover (default) applies .p-focus on pointer hover too, so
+     these two tokens drive both keyboard focus and mouse hover. Scoped to this
+     panel only — global echo autocomplete theme is untouched. */
+  --echo-autocomplete-option-focus-background: var(--echo-cyan-700, #0177b2);
+  --echo-autocomplete-option-focus-color: var(--echo-grey-0, #ffffff);
+}
+
+.jds-autocomplete-panel .p-autocomplete-list {
+  padding: 4px 0;
+}
+
+/* Item template controls its own padding — reset PrimeNG's */
+.jds-autocomplete-panel .p-autocomplete-option {
+  padding: 0;
+}
+
+/* Section header (group) */
+.jds-autocomplete-panel .p-autocomplete-option-group {
+  padding: 4px 12px 4px 8px;
+}
+
+/* Divider between groups (design: line above each group after the first) */
+.jds-autocomplete-panel .p-autocomplete-option-group:not(:first-child) {
+  border-top: 1px solid var(--echo-grey-300, #d9d9d9);
+  margin-top: 4px;
+  padding-top: 8px;
+}
+
+/* Secondary id is muted by default; follow the option's focus color when active */
+.jds-autocomplete-panel .p-autocomplete-option.p-focus .jds-ac-id,
+.jds-autocomplete-panel .p-autocomplete-option:hover .jds-ac-id {
+  color: inherit;
+}
+
+/* Primary item label color (design #222). Follows the option focus color when active. */
+.jds-ac-label {
+  color: var(--echo-grey-900, #222222);
+}
+
+.jds-autocomplete-panel .p-autocomplete-option.p-focus .jds-ac-label,
+.jds-autocomplete-panel .p-autocomplete-option:hover .jds-ac-label {
+  color: inherit;
+}
+
+/* PrimeNG's focusOnHover leaves .p-focus on the last-hovered option when the
+   pointer moves onto the show-all row (footer isn't an option, so it never
+   clears focusedOptionIndex). Neutralize that stale highlight while show-all
+   is hovered. */
+.jds-autocomplete-panel:has(.jds-ac-showall:hover) .p-autocomplete-option.p-focus {
+  background: transparent;
+}
+.jds-autocomplete-panel:has(.jds-ac-showall:hover) .p-autocomplete-option.p-focus .jds-ac-label {
+  color: var(--echo-grey-900, #222222);
+}
+.jds-autocomplete-panel:has(.jds-ac-showall:hover) .p-autocomplete-option.p-focus .jds-ac-id {
+  color: var(--echo-grey-700, #636363);
+}
+
+/* Bold matched characters */
+.jds-ac-label strong {
+  font-weight: 700;
+}
