@@ -24,6 +24,8 @@ export interface ComponentDoc {
   /** Short description shown on the Overview header card. */
   description: string;
   docsUrl?: string;
+  /** Class name Compodoc keys the generated Properties table by. */
+  compodocSymbol: string;
 
   /** Overview tab: variation sections (live demo + code). */
   variations: VariationDoc[];
@@ -32,8 +34,12 @@ export interface ComponentDoc {
   /** Overview tab: component activity section. */
   activity?: ActivityDoc;
 
-  /** Properties tab: inputs / outputs table. */
-  properties: ApiDoc;
+  /**
+   * Properties tab fallback. Prefer the Compodoc-generated map
+   * (COMPONENT_PROPERTIES, keyed by compodocSymbol); this is only used when no
+   * generated entry exists.
+   */
+  properties?: ApiDoc;
   /** Theming tab: overridable CSS custom properties. */
   theming: ThemingVar[];
 }

@@ -4,10 +4,9 @@ import { ComponentDoc } from '@jax-data-science/component-docs';
 
 const mockDoc: ComponentDoc = {
   name: 'Test', slug: 'test', category: 'Utilities', description: '', status: 'stable',
-  tags: [], isAuthRequired: false, contact: '',
+  tags: [], isAuthRequired: false, contact: '', compodocSymbol: 'TestComponent',
   variations: [],
   usage: { summary: '', dos: [], donts: [] },
-  properties: { inputs: [], outputs: [] },
   theming: [],
 };
 

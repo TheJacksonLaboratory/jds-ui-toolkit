@@ -1,7 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { ApiDoc } from '@jax-data-science/component-docs';
 import { DocsContextService } from '../../docs-context.service';
+import { COMPONENT_PROPERTIES } from '../../generated/component-properties.generated';
+
+const EMPTY: ApiDoc = { inputs: [], outputs: [] };
 
 @Component({
   selector: 'app-doc-properties',
@@ -11,4 +15,11 @@ import { DocsContextService } from '../../docs-context.service';
 })
 export class DocPropertiesComponent {
   readonly docsContext = inject(DocsContextService);
+
+  /** Prefer the Compodoc-generated map; fall back to hand-authored front-matter. */
+  readonly properties = computed<ApiDoc>(() => {
+    const doc = this.docsContext.currentDoc();
+    if (!doc) return EMPTY;
+    return COMPONENT_PROPERTIES[doc.compodocSymbol] ?? doc.properties ?? EMPTY;
+  });
 }

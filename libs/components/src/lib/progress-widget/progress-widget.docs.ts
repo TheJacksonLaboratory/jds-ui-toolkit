@@ -8,6 +8,7 @@ export const progressWidgetDoc: ComponentDoc = {
   tags: ['loading', 'spinner', 'feedback'],
   isAuthRequired: false,
   contact: 'npm@jax.org',
+  compodocSymbol: 'ProgressWidgetComponent',
   description:
     'A reusable Angular component that displays a loading spinner and an optional ' +
     'dynamic status message. Supports customizable spinner sizes (rem), optional ' +
@@ -71,17 +72,8 @@ export const progressWidgetDoc: ComponentDoc = {
       'Adopted across async-heavy views. Track usage and reported issues here as ' +
       'the component matures toward a stable release.',
   },
-  properties: {
-    inputs: [
-      { name: 'isLoading', type: 'boolean', default: 'true', required: false, description: 'Controls spinner visibility.' },
-      { name: 'statusMessage', type: 'string', default: "''", required: false, description: 'Text displayed below the spinner.' },
-      { name: 'spinnerSize', type: 'number', default: '5', required: false, description: 'Spinner diameter in rem.' },
-      { name: 'blockUi', type: 'boolean', default: 'false', required: false, description: 'Enables full-screen BlockUI overlay.' },
-      { name: 'iconClass', type: 'string', default: "''", required: false, description: 'PrimeIcons or custom CSS class for an icon beside the message.' },
-      { name: 'iconLeft', type: 'boolean', default: 'false', required: false, description: 'Places the icon to the left of the message when true.' },
-    ],
-    outputs: [],
-  },
+  // Properties (inputs/outputs) come from the Compodoc-generated map,
+  // COMPONENT_PROPERTIES, keyed by compodocSymbol. See `pnpm docs:properties`.
   theming: [
     {
       variable: '--echo-progress-spinner-color',
