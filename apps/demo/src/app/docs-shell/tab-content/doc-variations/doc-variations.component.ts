@@ -1,7 +1,8 @@
 import { Component, Input, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { ComponentDoc } from '@jax-data-science/component-docs';
+import { ComponentDoc, VariationDoc } from '@jax-data-science/component-docs';
+import { COMPONENT_SNIPPETS } from '../../generated/component-snippets.generated';
 
 @Component({
   selector: 'app-doc-variations',
@@ -14,6 +15,11 @@ export class DocVariationsComponent {
   @Input() demoTemplates!: Map<string, TemplateRef<void>>;
 
   copied = '';
+
+  /** Prefer the generated snippet (extracted from the live demo template). */
+  code(variation: VariationDoc): string {
+    return COMPONENT_SNIPPETS[this.doc.slug]?.[variation.id] ?? variation.code ?? '';
+  }
 
   copyCode(code: string, id: string): void {
     navigator.clipboard.writeText(code);

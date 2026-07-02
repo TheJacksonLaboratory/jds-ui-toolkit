@@ -15,41 +15,38 @@ export const progressWidgetDoc: ComponentDoc = {
     'icon decoration, and a full-screen BlockUI overlay to prevent user interaction ' +
     'during async operations.',
   docsUrl: 'https://jax.org/docs/components/progress-widget',
+  // Code snippets are generated from the live demo templates (`pnpm docs:snippets`),
+  // keyed by variation id. No hand-authored `code` needed.
   variations: [
     {
       id: 'basic-spinner',
       title: 'Basic Spinner',
       description: 'Minimal 1rem spinner with no message.',
       language: 'html',
-      code: `<lib-jds-progress-widget [spinnerSize]="1"></lib-jds-progress-widget>`,
     },
     {
       id: 'with-message',
       title: 'Spinner with Message',
       description: '3rem spinner with a static status message.',
       language: 'html',
-      code: `<lib-jds-progress-widget\n  [spinnerSize]="3"\n  [statusMessage]="'Loading data...'">\n</lib-jds-progress-widget>`,
     },
     {
       id: 'dynamic-message',
       title: 'Dynamic Message',
       description: 'Default 5rem spinner whose message and loading state are bound to component properties.',
       language: 'html',
-      code: `<lib-jds-progress-widget\n  [statusMessage]="message"\n  [isLoading]="isLoading">\n</lib-jds-progress-widget>`,
     },
     {
       id: 'with-icon',
       title: 'With Icon',
       description: 'Spinner paired with a PrimeIcons icon class for contextual feedback.',
       language: 'html',
-      code: `<lib-jds-progress-widget\n  [statusMessage]="'Downloading'"\n  [iconClass]="'pi pi-download tw-text-blue-600'">\n</lib-jds-progress-widget>`,
     },
     {
       id: 'block-ui',
       title: 'BlockUI Overlay',
       description: 'Full-screen overlay that prevents user interaction while loading.',
       language: 'html',
-      code: `<lib-jds-progress-widget\n  [blockUi]="true"\n  [statusMessage]="'Processing...'"\n></lib-jds-progress-widget>`,
     },
   ],
   usage: {

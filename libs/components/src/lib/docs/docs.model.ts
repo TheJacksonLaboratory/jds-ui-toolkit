@@ -45,12 +45,15 @@ export interface ComponentDoc {
 }
 
 export interface VariationDoc {
-  /** Anchor id used by the right-side "On this page" TOC. */
+  /**
+   * Anchor id used by the right-side "On this page" TOC, and the key that ties
+   * this variation to its generated code snippet (COMPONENT_SNIPPETS).
+   */
   id: string;
   title: string;
   description: string;
-  // TODO(stage 2): source from the example component file via `?raw` import.
-  code: string;
+  /** Fallback code; normally sourced from the generated snippet by `id`. */
+  code?: string;
   language: 'html' | 'typescript';
 }
 

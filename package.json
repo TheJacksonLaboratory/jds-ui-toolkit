@@ -10,7 +10,9 @@
     "lint": "nx run-many -t lint --parallel --no-cloud",
     "e2e": "nx run-many -t e2e --no-cloud",
     "run": "nx run",
-    "docs:properties": "node tools/generate-docs-properties.mjs"
+    "docs:properties": "node tools/generate-docs-properties.mjs",
+    "docs:snippets": "node tools/generate-docs-snippets.mjs",
+    "docs:generate": "pnpm docs:properties && pnpm docs:snippets"
   },
   "private": true,
   "devDependencies": {

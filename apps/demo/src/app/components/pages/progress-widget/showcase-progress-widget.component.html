@@ -6,32 +6,47 @@
   <app-doc-activity></app-doc-activity>
 </div>
 
-<!-- Live demo templates — referenced by @ViewChild -->
+<!--
+  Live demo templates — referenced by @ViewChild.
+  The markup between `snippet:<id>` / `/snippet` markers is extracted into the
+  generated code block by `pnpm docs:snippets`, so each snippet is the exact
+  markup that renders its live demo and cannot drift.
+-->
 <ng-template #tplBasicSpinner>
+  <!-- snippet:basic-spinner -->
   <lib-jds-progress-widget [spinnerSize]="1"></lib-jds-progress-widget>
+  <!-- /snippet -->
 </ng-template>
 
 <ng-template #tplWithMessage>
+  <!-- snippet:with-message -->
   <lib-jds-progress-widget [spinnerSize]="3" [statusMessage]="'Loading data...'"></lib-jds-progress-widget>
+  <!-- /snippet -->
 </ng-template>
 
 <ng-template #tplDynamicMessage>
+  <!-- snippet:dynamic-message -->
   <lib-jds-progress-widget [statusMessage]="message" [isLoading]="isLoading"></lib-jds-progress-widget>
+  <!-- /snippet -->
 </ng-template>
 
 <ng-template #tplWithIcon>
+  <!-- snippet:with-icon -->
   <lib-jds-progress-widget
     [statusMessage]="'Downloading'"
     [isLoading]="isLoading"
     [iconClass]="'pi pi-download tw-text-blue-600'">
   </lib-jds-progress-widget>
+  <!-- /snippet -->
 </ng-template>
 
 <ng-template #tplBlockUi>
   <div class="tw-flex tw-items-center tw-gap-3">
     <p-button (onClick)="toggleBlockUi()" label="Show"></p-button>
     @if (blockUi) {
+      <!-- snippet:block-ui -->
       <lib-jds-progress-widget [blockUi]="blockUi" [statusMessage]="unblockMessage"></lib-jds-progress-widget>
+      <!-- /snippet -->
     }
   </div>
 </ng-template>
