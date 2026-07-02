@@ -1,0 +1,34 @@
+<div class="tw-p-8 tw-max-w-4xl tw-space-y-12">
+  @for (variation of doc.variations; track variation.id) {
+    <section [id]="variation.id">
+      <!-- Title with anchor -->
+      <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
+        <h2 class="tw-text-2xl tw-font-semibold tw-m-0">{{ variation.title }}</h2>
+        <a [href]="'#' + variation.id"
+           class="tw-text-gray-400 hover:tw-text-blue-600 tw-transition-colors"
+           aria-label="Link to section">
+          <i class="pi pi-link tw-text-sm"></i>
+        </a>
+      </div>
+
+      <!-- Description -->
+      <p class="tw-text-gray-600 tw-mb-4">{{ variation.description }}</p>
+
+      <!-- Live demo -->
+      <div class="tw-p-4 tw-border tw-border-gray-200 tw-rounded-lg tw-bg-white tw-mb-3">
+        <ng-container [ngTemplateOutlet]="getTemplate(variation.id)"></ng-container>
+      </div>
+
+      <!-- Code block -->
+      <div class="tw-relative tw-rounded-lg tw-overflow-hidden">
+        <button
+          (click)="copyCode(variation.code)"
+          class="tw-absolute tw-top-2 tw-right-2 tw-z-10 tw-bg-gray-700 hover:tw-bg-gray-600 tw-text-white tw-text-xs tw-px-2 tw-py-1 tw-rounded tw-transition-colors"
+          type="button">
+          Copy
+        </button>
+        <pre class="tw-m-0"><code [highlight]="variation.code" [language]="variation.language"></code></pre>
+      </div>
+    </section>
+  }
+</div>

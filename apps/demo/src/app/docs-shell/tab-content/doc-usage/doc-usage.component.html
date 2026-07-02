@@ -1,0 +1,34 @@
+@let doc = docsContext.currentDoc();
+@if (doc) {
+  <div class="tw-p-8 tw-max-w-4xl">
+    <p class="tw-text-gray-700 tw-leading-relaxed tw-mb-8">{{ doc.usage.summary }}</p>
+
+    <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+      <!-- Dos -->
+      <div class="tw-bg-green-50 tw-rounded-xl tw-p-6 tw-border tw-border-green-200">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-green-800 tw-mb-4">Do</h3>
+        <ul class="tw-space-y-3 tw-list-none tw-p-0 tw-m-0">
+          @for (item of doc.usage.dos; track item) {
+            <li class="tw-flex tw-items-start tw-gap-2">
+              <i class="pi pi-check-circle tw-text-green-600 tw-mt-0.5 tw-flex-shrink-0"></i>
+              <span class="tw-text-gray-700 tw-text-sm">{{ item }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Donts -->
+      <div class="tw-bg-red-50 tw-rounded-xl tw-p-6 tw-border tw-border-red-200">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-red-800 tw-mb-4">Don't</h3>
+        <ul class="tw-space-y-3 tw-list-none tw-p-0 tw-m-0">
+          @for (item of doc.usage.donts; track item) {
+            <li class="tw-flex tw-items-start tw-gap-2">
+              <i class="pi pi-times-circle tw-text-red-600 tw-mt-0.5 tw-flex-shrink-0"></i>
+              <span class="tw-text-gray-700 tw-text-sm">{{ item }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+}
