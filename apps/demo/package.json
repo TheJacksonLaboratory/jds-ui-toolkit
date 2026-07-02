@@ -10,7 +10,7 @@
     "e2e": "nx e2e demo-e2e"
   },
   "private": true,
-   "dependencies": {
+  "dependencies": {
     "@angular/animations": "~20.3.16",
     "@angular/common": "~20.3.16",
     "@angular/compiler": "~20.3.16",
@@ -20,13 +20,15 @@
     "@angular/platform-browser-dynamic": "~20.3.16",
     "@angular/router": "~20.3.16",
     "@auth0/auth0-angular": "^2.2.3",
+    "@jax-data-science/api-clients": "workspace:*",
+    "@jax-data-science/components": "workspace:*",
+    "@jax-data-science/themes": "workspace:*",
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "highlight.js": "^11.11.1",
+    "ngx-highlightjs": "^14.0.1",
     "primeicons": "^7.0.0",
     "primeng": "^20.0.0",
     "rxjs": "~7.8.0",
-    "zone.js": "~0.15.0",
-    "@microsoft/fetch-event-source": "^2.0.1",
-    "@jax-data-science/components": "workspace:*",
-    "@jax-data-science/api-clients": "workspace:*",
-    "@jax-data-science/themes": "workspace:*"
+    "zone.js": "~0.15.0"
   }
 }
