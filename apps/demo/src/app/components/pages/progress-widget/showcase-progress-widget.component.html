@@ -1,4 +1,10 @@
-<app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+<!-- Overview tab: single scrolling page (header + variations + usage + activity) -->
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
+</div>
 
 <!-- Live demo templates — referenced by @ViewChild -->
 <ng-template #tplBasicSpinner>

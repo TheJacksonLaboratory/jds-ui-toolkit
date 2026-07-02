@@ -10,7 +10,6 @@ import { appRoutes } from './app.routes';
 import { environment } from '../environments/environment';
 
 import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '@jax-data-science/api-clients';
-import { provideHighlightOptions } from 'ngx-highlightjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,9 +29,6 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.my-app-dark'
         }
       }
-    }),
-    provideHighlightOptions({
-      fullLibraryLoader: () => import('highlight.js'),
     }),
     provideAuth0({
       domain: environment.auth.domain,

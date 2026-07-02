@@ -1,49 +1,35 @@
 @let doc = docsContext.currentDoc();
 @if (doc) {
-  <div class="tw-p-8 tw-max-w-4xl">
-    <!-- Header -->
-    <div class="tw-flex tw-items-center tw-gap-4 tw-mb-6">
-      <h1 class="tw-text-4xl tw-font-semibold tw-m-0">{{ doc.name }}</h1>
-      <p-tag
-        [value]="doc.status"
-        [severity]="doc.status === 'stable' ? 'success' : doc.status === 'deprecated' ? 'danger' : 'warn'">
-      </p-tag>
-    </div>
+  <section id="summary" class="tw-mb-10">
+    <h1 class="tw-text-4xl tw-font-bold tw-m-0 tw-mb-3">{{ doc.name }}</h1>
+    <p class="tw-text-gray-600 tw-leading-relaxed tw-max-w-3xl tw-mb-4">{{ doc.description }}</p>
 
-    <!-- Tags -->
-    <div class="tw-flex tw-gap-2 tw-mb-6">
-      @for (tag of doc.tags; track tag) {
-        <p-tag [value]="tag" severity="secondary"></p-tag>
+    <!-- Badge row: status, auth, contact -->
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-4 tw-text-sm">
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-amber-600">
+        <i class="pi pi-info-circle"></i>{{ statusLabel(doc.status) }}
+      </span>
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-emerald-600">
+        <i class="pi pi-shield"></i>{{ doc.isAuthRequired ? 'Authentication Required' : 'No Authentication Required' }}
+      </span>
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-gray-600">
+        <i class="pi pi-envelope"></i>Contact: {{ doc.contact }}
+      </span>
+      @if (doc.docsUrl) {
+        <a [href]="doc.docsUrl" target="_blank" rel="noopener noreferrer"
+           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-blue-600 hover:tw-text-blue-800 tw-no-underline">
+          <i class="pi pi-external-link"></i>Docs
+        </a>
       }
     </div>
 
-    <!-- 2-column layout: summary | sidebar -->
-    <div class="tw-grid tw-grid-cols-3 tw-gap-8">
-      <!-- Summary (2/3 width) -->
-      <div class="tw-col-span-2">
-        <p class="tw-text-gray-700 tw-leading-relaxed tw-text-base">{{ doc.overview.summary }}</p>
-      </div>
-
-      <!-- Sidebar (1/3 width) -->
-      <aside class="tw-space-y-4 tw-text-sm">
-        <div class="tw-bg-gray-50 tw-rounded-lg tw-p-4 tw-border tw-border-gray-200">
-          <p class="tw-font-medium tw-text-gray-900 tw-mb-1">Authentication</p>
-          <p class="tw-text-gray-600">{{ doc.isAuthRequired ? 'Required' : 'Not required' }}</p>
-        </div>
-        <div class="tw-bg-gray-50 tw-rounded-lg tw-p-4 tw-border tw-border-gray-200">
-          <p class="tw-font-medium tw-text-gray-900 tw-mb-1">Contact</p>
-          <p class="tw-text-gray-600">{{ doc.contact }}</p>
-        </div>
-        @if (doc.overview.docsUrl) {
-          <div class="tw-bg-blue-50 tw-rounded-lg tw-p-4 tw-border tw-border-blue-200">
-            <p class="tw-font-medium tw-text-gray-900 tw-mb-1">External Docs</p>
-            <a [href]="doc.overview.docsUrl" target="_blank" rel="noopener noreferrer"
-               class="tw-text-blue-600 hover:tw-text-blue-800 tw-underline">
-              View docs
-            </a>
-          </div>
+    <!-- Topic tags -->
+    @if (doc.tags.length) {
+      <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-4">
+        @for (tag of doc.tags; track tag) {
+          <p-tag [value]="tag" severity="secondary"></p-tag>
         }
-      </aside>
-    </div>
-  </div>
+      </div>
+    }
+  </section>
 }

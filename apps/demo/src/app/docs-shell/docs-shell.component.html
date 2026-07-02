@@ -15,9 +15,9 @@
         <router-outlet></router-outlet>
       </div>
 
-      <!-- Right TOC: shown on Variations and Usage only -->
+      <!-- Right TOC ("On this page"): shown on the Overview tab -->
       @if (showToc() && currentDoc()) {
-        <app-docs-right-toc [variations]="currentDoc()!.variations"></app-docs-right-toc>
+        <app-docs-right-toc [doc]="currentDoc()!"></app-docs-right-toc>
       }
     </div>
   </div>

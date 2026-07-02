@@ -3,20 +3,17 @@ import { ComponentDoc } from '../docs/docs.model';
 export const progressWidgetDoc: ComponentDoc = {
   name: 'Progress Widget',
   slug: 'progress-widget',
-  description: 'A reusable spinner with an optional status message and UI-block overlay.',
+  category: 'Utilities',
   status: 'in-progress',
   tags: ['loading', 'spinner', 'feedback'],
   isAuthRequired: false,
   contact: 'npm@jax.org',
-  group: 'components',
-  overview: {
-    summary:
-      'A reusable Angular component that displays a loading spinner and an optional ' +
-      'dynamic status message. Supports customizable spinner sizes (rem), optional ' +
-      'icon decoration, and a full-screen BlockUI overlay to prevent user interaction ' +
-      'during async operations.',
-    docsUrl: 'https://jax.org/docs/components/progress-widget',
-  },
+  description:
+    'A reusable Angular component that displays a loading spinner and an optional ' +
+    'dynamic status message. Supports customizable spinner sizes (rem), optional ' +
+    'icon decoration, and a full-screen BlockUI overlay to prevent user interaction ' +
+    'during async operations.',
+  docsUrl: 'https://jax.org/docs/components/progress-widget',
   variations: [
     {
       id: 'basic-spinner',
@@ -69,7 +66,12 @@ export const progressWidgetDoc: ComponentDoc = {
       'Do not use spinner sizes below 1rem — they are illegible.',
     ],
   },
-  api: {
+  activity: {
+    summary:
+      'Adopted across async-heavy views. Track usage and reported issues here as ' +
+      'the component matures toward a stable release.',
+  },
+  properties: {
     inputs: [
       { name: 'isLoading', type: 'boolean', default: 'true', required: false, description: 'Controls spinner visibility.' },
       { name: 'statusMessage', type: 'string', default: "''", required: false, description: 'Text displayed below the spinner.' },
@@ -80,4 +82,21 @@ export const progressWidgetDoc: ComponentDoc = {
     ],
     outputs: [],
   },
+  theming: [
+    {
+      variable: '--echo-progress-spinner-color',
+      default: 'var(--echo-primary-color)',
+      description: 'Stroke color of the spinner arc.',
+    },
+    {
+      variable: '--echo-progress-widget-message-color',
+      default: 'var(--echo-text-color)',
+      description: 'Color of the status message text.',
+    },
+    {
+      variable: '--echo-progress-widget-overlay-bg',
+      default: 'rgba(0, 0, 0, 0.4)',
+      description: 'Background of the BlockUI full-screen overlay.',
+    },
+  ],
 };

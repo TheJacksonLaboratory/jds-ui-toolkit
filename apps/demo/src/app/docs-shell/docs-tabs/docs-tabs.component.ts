@@ -23,8 +23,7 @@ export class DocsTabsComponent {
 
   readonly tabs = [
     { label: 'Overview', path: 'overview' },
-    { label: 'Variations', path: 'variations' },
-    { label: 'Usage', path: 'usage' },
-    { label: 'API', path: 'api' },
+    { label: 'Properties', path: 'properties' },
+    { label: 'Theming', path: 'theming' },
   ];
 }

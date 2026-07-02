@@ -1,25 +1,49 @@
+export type ComponentCategory =
+  | 'Navigation'
+  | 'Input'
+  | 'Messaging'
+  | 'Data Display'
+  | 'Utilities';
+
+/**
+ * Front-matter for a documented component.
+ *
+ * Properties and variation code are hand-authored here for now; the plan is to
+ * source properties from Compodoc JSON and variation code from raw imports
+ * (`?raw`) in a later stage.
+ * See docs/superpowers/specs/2026-06-29-component-page-design.md.
+ */
 export interface ComponentDoc {
   name: string;
   slug: string;
-  description: string;
+  category: ComponentCategory;
   status: 'stable' | 'in-progress' | 'deprecated';
   tags: string[];
   isAuthRequired: boolean;
   contact: string;
-  group: 'components' | 'services';
-  overview: {
-    summary: string;
-    docsUrl?: string;
-  };
+  /** Short description shown on the Overview header card. */
+  description: string;
+  docsUrl?: string;
+
+  /** Overview tab: variation sections (live demo + code). */
   variations: VariationDoc[];
+  /** Overview tab: usage guidance (do / don't panels). */
   usage: UsageDoc;
-  api: ApiDoc;
+  /** Overview tab: component activity section. */
+  activity?: ActivityDoc;
+
+  /** Properties tab: inputs / outputs table. */
+  properties: ApiDoc;
+  /** Theming tab: overridable CSS custom properties. */
+  theming: ThemingVar[];
 }
 
 export interface VariationDoc {
+  /** Anchor id used by the right-side "On this page" TOC. */
   id: string;
   title: string;
   description: string;
+  // TODO(stage 2): source from the example component file via `?raw` import.
   code: string;
   language: 'html' | 'typescript';
 }
@@ -28,6 +52,11 @@ export interface UsageDoc {
   summary: string;
   dos: string[];
   donts: string[];
+}
+
+export interface ActivityDoc {
+  /** "Activity / Measure" copy; may later carry an image or visualization. */
+  summary: string;
 }
 
 export interface ApiDoc {
@@ -40,5 +69,12 @@ export interface ApiProp {
   type: string;
   default?: string;
   required: boolean;
+  description: string;
+}
+
+/** An overridable CSS custom property exposed by a component. */
+export interface ThemingVar {
+  variable: string;
+  default: string;
   description: string;
 }

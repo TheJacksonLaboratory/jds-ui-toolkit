@@ -6,11 +6,17 @@ import {
   OnDestroy,
   signal,
 } from '@angular/core';
-import { VariationDoc } from '@jax-data-science/component-docs';
+import { ButtonModule } from 'primeng/button';
+import { ComponentDoc } from '@jax-data-science/component-docs';
+
+interface TocItem {
+  id: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-docs-right-toc',
-  imports: [],
+  imports: [ButtonModule],
   standalone: true,
   template: `
     <aside class="tw-w-56 tw-flex-shrink-0 tw-h-full tw-overflow-y-auto tw-p-4 tw-border-l tw-border-gray-200 tw-bg-white">
@@ -31,20 +37,31 @@ import { VariationDoc } from '@jax-data-science/component-docs';
           </li>
         }
       </ul>
+
+      <div class="tw-mt-6">
+        <!-- TODO(open item): Download Vignette action is not yet defined. -->
+        <p-button
+          label="Download Vignette"
+          icon="pi pi-download"
+          severity="secondary"
+          [outlined]="true"
+          styleClass="tw-w-full">
+        </p-button>
+      </div>
     </aside>
   `,
 })
 export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDestroy {
-  @Input() variations: VariationDoc[] = [];
+  @Input() doc!: ComponentDoc;
 
-  items = signal<{ id: string; title: string }[]>([]);
+  items = signal<TocItem[]>([]);
   activeId = signal<string>('');
 
   private observer?: IntersectionObserver;
   private needsObserverRebind = false;
 
   ngOnChanges(): void {
-    this.items.set(this.variations.map((v) => ({ id: v.id, title: v.title })));
+    this.items.set(this.buildItems());
     this.needsObserverRebind = true;
   }
 
@@ -60,6 +77,20 @@ export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDes
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 
+  /** Summary + each variation + Usage + Component Activity (per the design). */
+  private buildItems(): TocItem[] {
+    if (!this.doc) return [];
+    const items: TocItem[] = [{ id: 'summary', title: 'Summary' }];
+    for (const v of this.doc.variations) {
+      items.push({ id: v.id, title: v.title });
+    }
+    items.push({ id: 'usage', title: 'Usage' });
+    if (this.doc.activity) {
+      items.push({ id: 'activity', title: 'Component Activity' });
+    }
+    return items;
+  }
+
   private rebindObserver(): void {
     this.observer?.disconnect();
     this.observer = new IntersectionObserver(
@@ -71,10 +102,10 @@ export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDes
       },
       { threshold: 0.2, rootMargin: '-80px 0px -60% 0px' }
     );
-    this.variations.forEach((v) => {
-      const el = document.getElementById(v.id);
-      if (el) this.observer!.observe(el);
-    });
+    for (const item of this.items()) {
+      const el = document.getElementById(item.id);
+      if (el) this.observer.observe(el);
+    }
   }
 
   ngOnDestroy(): void {

@@ -34,8 +34,11 @@ export class DocsShellComponent implements OnInit, OnDestroy {
   readonly currentSlug = signal<string>('');
 
   readonly showToc = computed(() => {
+    // TOC ("On this page") is shown on the Overview tab, which is the single
+    // scrolling page. currentSlug() ties the computed to navigation changes.
+    this.currentSlug();
     const url = this.router.url;
-    return url.endsWith('/variations') || url.endsWith('/usage');
+    return url.endsWith('/overview') || /\/components\/[^/]+$/.test(url);
   });
 
   ngOnInit(): void {

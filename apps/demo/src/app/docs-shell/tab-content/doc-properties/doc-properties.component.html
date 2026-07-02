@@ -4,10 +4,10 @@
     <!-- Inputs -->
     <section>
       <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Inputs</h2>
-      @if (doc.api.inputs.length === 0) {
+      @if (doc.properties.inputs.length === 0) {
         <p class="tw-text-gray-500">No inputs.</p>
       } @else {
-        <p-table [value]="doc.api.inputs" [sortField]="'name'" [sortOrder]="1">
+        <p-table [value]="doc.properties.inputs" [sortField]="'name'" [sortOrder]="1">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
@@ -38,10 +38,10 @@
     <!-- Outputs -->
     <section>
       <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Outputs</h2>
-      @if (doc.api.outputs.length === 0) {
+      @if (doc.properties.outputs.length === 0) {
         <p class="tw-text-gray-500">No outputs.</p>
       } @else {
-        <p-table [value]="doc.api.outputs" [sortField]="'name'" [sortOrder]="1">
+        <p-table [value]="doc.properties.outputs" [sortField]="'name'" [sortOrder]="1">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>

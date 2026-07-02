@@ -16,9 +16,8 @@ import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa
 
 // New docs shell
 import { DocsShellComponent } from './docs-shell/docs-shell.component';
-import { DocOverviewComponent } from './docs-shell/tab-content/doc-overview/doc-overview.component';
-import { DocUsageComponent } from './docs-shell/tab-content/doc-usage/doc-usage.component';
-import { DocApiComponent } from './docs-shell/tab-content/doc-api/doc-api.component';
+import { DocPropertiesComponent } from './docs-shell/tab-content/doc-properties/doc-properties.component';
+import { DocThemingComponent } from './docs-shell/tab-content/doc-theming/doc-theming.component';
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 
 export const appRoutes: Route[] = [
@@ -36,10 +35,10 @@ export const appRoutes: Route[] = [
       {
         path: 'progress-widget',
         children: [
-          { path: 'overview', component: DocOverviewComponent },
-          { path: 'variations', component: ShowcaseProgressWidgetComponent },
-          { path: 'usage', component: DocUsageComponent },
-          { path: 'api', component: DocApiComponent },
+          // Overview is the single scrolling page (header + variations + usage + activity).
+          { path: 'overview', component: ShowcaseProgressWidgetComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },

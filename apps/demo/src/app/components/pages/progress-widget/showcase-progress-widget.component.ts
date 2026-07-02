@@ -1,13 +1,22 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import { Button } from 'primeng/button';
 import { ProgressWidgetComponent } from '@jax-data-science/components';
 import { progressWidgetDoc } from '@jax-data-science/component-docs';
+import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
 import { DocVariationsComponent } from '../../../docs-shell/tab-content/doc-variations/doc-variations.component';
+import { DocUsageComponent } from '../../../docs-shell/tab-content/doc-usage/doc-usage.component';
+import { DocActivityComponent } from '../../../docs-shell/tab-content/doc-activity/doc-activity.component';
 
 @Component({
   selector: 'app-showcase-progress-widget',
-  imports: [DocVariationsComponent, NgTemplateOutlet, ProgressWidgetComponent, Button],
+  imports: [
+    DocOverviewComponent,
+    DocVariationsComponent,
+    DocUsageComponent,
+    DocActivityComponent,
+    ProgressWidgetComponent,
+    Button,
+  ],
   templateUrl: './showcase-progress-widget.component.html',
   styleUrl: './showcase-progress-widget.component.css',
   standalone: true,

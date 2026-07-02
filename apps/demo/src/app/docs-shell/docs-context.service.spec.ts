@@ -3,12 +3,12 @@ import { DocsContextService } from './docs-context.service';
 import { ComponentDoc } from '@jax-data-science/component-docs';
 
 const mockDoc: ComponentDoc = {
-  name: 'Test', slug: 'test', description: '', status: 'stable',
-  tags: [], isAuthRequired: false, contact: '', group: 'components',
-  overview: { summary: '' },
+  name: 'Test', slug: 'test', category: 'Utilities', description: '', status: 'stable',
+  tags: [], isAuthRequired: false, contact: '',
   variations: [],
   usage: { summary: '', dos: [], donts: [] },
-  api: { inputs: [], outputs: [] },
+  properties: { inputs: [], outputs: [] },
+  theming: [],
 };
 
 describe('DocsContextService', () => {

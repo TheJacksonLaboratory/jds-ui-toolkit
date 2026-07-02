@@ -10,4 +10,15 @@ import { DocsContextService } from '../../docs-context.service';
 })
 export class DocOverviewComponent {
   readonly docsContext = inject(DocsContextService);
+
+  statusLabel(status: 'stable' | 'in-progress' | 'deprecated'): string {
+    switch (status) {
+      case 'stable':
+        return 'Stable';
+      case 'deprecated':
+        return 'Deprecated';
+      default:
+        return 'In Progress';
+    }
+  }
 }
