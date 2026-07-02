@@ -16,3 +16,19 @@ html {
     font-family: Inter var,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol;
     line-height: 1.2
 }
+
+/* Docs tab bar — match Figma (node 2663:601). Overrides the PrimeNG theme. */
+.docs-tabs {
+    padding: 16px 24px 0;
+}
+.docs-tabs .p-tablist { border-bottom: 1px solid #d9d9d9; }
+.docs-tabs .p-tab {
+    padding: 16px 16px 17px;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 400;
+    color: #636363;
+}
+.docs-tabs .p-tab.p-tab-active { color: #0177b2; font-weight: 700; }
+.docs-tabs .p-tab:not(.p-tab-active):hover { color: #0177b2; }
+.docs-tabs .p-tablist-active-bar { background: #0177b2; height: 2px; }
