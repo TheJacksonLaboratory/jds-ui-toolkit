@@ -9,13 +9,15 @@ import { TabsModule } from 'primeng/tabs';
   imports: [TabsModule],
   standalone: true,
   template: `
-    <p-tabs [value]="activeTab()" (valueChange)="navigate($event)" styleClass="docs-tabs">
-      <p-tablist>
-        @for (tab of tabs; track tab.path) {
-          <p-tab [value]="tab.path">{{ tab.label }}</p-tab>
-        }
-      </p-tablist>
-    </p-tabs>
+    <div class="docs-tabs">
+      <p-tabs [value]="activeTab()" (valueChange)="navigate($event)">
+        <p-tablist>
+          @for (tab of tabs; track tab.path) {
+            <p-tab [value]="tab.path">{{ tab.label }}</p-tab>
+          }
+        </p-tablist>
+      </p-tabs>
+    </div>
   `,
 })
 export class DocsTabsComponent implements OnInit, OnDestroy {
