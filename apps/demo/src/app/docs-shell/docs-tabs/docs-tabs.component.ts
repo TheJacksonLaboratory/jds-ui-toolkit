@@ -1,29 +1,60 @@
-import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { TabsModule } from 'primeng/tabs';
 
 @Component({
   selector: 'app-docs-tabs',
-  imports: [RouterModule],
+  imports: [TabsModule],
   standalone: true,
   template: `
-    <nav class="tw-flex tw-border-b tw-border-gray-200 tw-bg-white tw-px-6 tw-gap-1">
-      @for (tab of tabs; track tab.label) {
-        <a
-          [routerLink]="'/components/' + slug + '/' + tab.path"
-          routerLinkActive="tw-border-b-2 tw-border-blue-600 tw-text-blue-600 tw-font-semibold"
-          class="tw-px-4 tw-py-3 tw-text-sm tw-text-gray-600 hover:tw-text-blue-600 tw-transition-colors tw-no-underline tw-border-b-2 tw-border-transparent">
-          {{ tab.label }}
-        </a>
-      }
-    </nav>
+    <p-tabs [value]="activeTab()" (valueChange)="navigate($event)" styleClass="tw-px-4">
+      <p-tablist>
+        @for (tab of tabs; track tab.path) {
+          <p-tab [value]="tab.path">{{ tab.label }}</p-tab>
+        }
+      </p-tablist>
+    </p-tabs>
   `,
 })
-export class DocsTabsComponent {
+export class DocsTabsComponent implements OnInit, OnDestroy {
   @Input() slug = '';
+
+  private router = inject(Router);
+  private destroy$ = new Subject<void>();
+
+  readonly activeTab = signal<string>('overview');
 
   readonly tabs = [
     { label: 'Overview', path: 'overview' },
     { label: 'Properties', path: 'properties' },
     { label: 'Theming', path: 'theming' },
   ];
+
+  ngOnInit(): void {
+    this.syncFromUrl(this.router.url);
+    this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((e) => this.syncFromUrl((e as NavigationEnd).urlAfterRedirects));
+  }
+
+  navigate(value: string | number | undefined): void {
+    if (!value || value === this.activeTab()) return;
+    this.router.navigate(['/components', this.slug, value]);
+  }
+
+  private syncFromUrl(url: string): void {
+    const last = url.split('?')[0].split('/').filter(Boolean).pop() ?? '';
+    const match = this.tabs.find((t) => t.path === last);
+    this.activeTab.set(match ? match.path : 'overview');
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
