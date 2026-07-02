@@ -32,6 +32,8 @@ export const appRoutes: Route[] = [
     path: 'components',
     component: DocsShellComponent,
     children: [
+      // Landing on /components goes to the first documented component.
+      { path: '', redirectTo: 'progress-widget/overview', pathMatch: 'full' },
       {
         path: 'progress-widget',
         children: [
