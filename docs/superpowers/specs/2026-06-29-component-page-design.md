@@ -3,7 +3,7 @@
 **Date:** 2026-06-29 (revised 2026-07-02 against actual Figma design)  
 **Ticket:** IS-585 (design) / IS-562 (implementation story)  
 **Design:** [Components-and-Documentation](https://www.figma.com/design/xIz1scHUqflk0N9SGbLOvK/Components-and-Documentation?node-id=2663-552)  
-**Status:** Revised — original plan's tab structure did not match the design; corrected here
+**Status:** Implemented for the progress-widget pilot (stages 1 + 2); rollout to remaining components pending
 
 ---
 
@@ -30,7 +30,7 @@ IS-562's 4-tab routing must be restructured to match this. See Reference Impleme
 
 - Flexible, extensible docs system for all components in `libs/components`
 - Layout matches the approved design: left nav | scrolling content | right "On this page" TOC
-- **Content generated from source of truth, not hand-maintained** — Properties from JSDoc, code snippets from real example files, prose from markdown
+- **Content generated from source of truth, not hand-maintained** — Properties from JSDoc (Compodoc), code snippets extracted from the live demo templates. Prose is short structured front-matter (no markdown — the design has no long-form prose).
 - Consistent page structure across all components
 - Adding a component requires config + content only, no layout HTML edits (IS-562 scalability AC)
 
@@ -115,15 +115,17 @@ Rendered as one scrolling column, sections anchored for the TOC:
 
 | Content | Source of truth | How it reaches the viewer |
 |---------|-----------------|---------------------------|
-| Properties table | JSDoc + `@Input()`/`@Output()` on the component in `libs/components` | Compodoc → `documentation.json`; viewer reads the per-component entry |
-| Variation code block | The example component's own file in `apps/demo` | Imported as raw string (`import src from './x.component.ts?raw'`); same file is the live demo — cannot drift |
-| Overview prose + Usage text | Markdown per component | `ngx-markdown` renders into the layout |
-| Live demo | Real Angular example component | Rendered directly |
+| Properties table | JSDoc on the component's signal inputs / `@Output()`s in `libs/components` | `pnpm docs:properties` runs Compodoc → `documentation.json`; `tools/generate-docs-properties.mjs` extracts a typed `COMPONENT_PROPERTIES` map (committed); the Properties tab reads it by `compodocSymbol` |
+| Variation code block | The `snippet:<id>` markers around the widget usage in the live demo template | `pnpm docs:snippets` (`tools/generate-docs-snippets.mjs`) extracts the marked markup into `COMPONENT_SNIPPETS`; the code block shows the exact markup that renders the demo — cannot drift |
+| Overview prose + Usage text | Short structured front-matter (`description`, `usage.summary`, `usage.dos[]`, `usage.donts[]`, `activity.summary`) | Rendered directly into the structured header + do/don't panels. **No markdown** — the design has no long-form prose |
+| Live demo | Real component usage inside `<ng-template>` in the showcase | Rendered directly |
 | Theming variables | Hand-authored `theming[]` in front-matter | Rendered as a table (auto-parse from CSS is future) |
 | Front-matter (name, category, status, tags, auth, contact, description) | `[component].docs.ts` in `libs/components` | Imported by the registry |
 | Nav / routing / TOC | Central registry + section anchors | Built at runtime |
 
-Confirmed against Angular Material, Storybook + Compodoc, Taiga UI (`?raw`), ng-doc. Hand-authored API tables and hand-copied code strings drift the moment the component changes — every mature lib engineered them away. **No ngx-highlightjs** — code blocks are plain styled `<pre><code>` matching the design's dark block, with a copy button.
+Patterns confirmed against Angular Material, Storybook + Compodoc, Taiga UI, ng-doc: hand-authored API tables and hand-copied code strings drift the moment the component changes — every mature lib engineered them away. **No ngx-highlightjs** — code blocks are plain styled `<pre><code>` matching the design's dark block, with a copy button.
+
+> **`?raw` note:** the Angular esbuild builder (`@angular/build:application`) does not support `?raw` query imports. Instead of copying an example file, snippets are extracted from the *same* demo template via marker comments (`<!-- snippet:id -->…<!-- /snippet -->`), which keeps a single source of truth without a builder plugin. Regenerate both maps with `pnpm docs:generate`.
 
 ---
 
@@ -131,7 +133,7 @@ Confirmed against Angular Material, Storybook + Compodoc, Taiga UI (`?raw`), ng-
 
 ### Front-matter (`libs/components/src/lib/docs/docs.model.ts`)
 
-Only what cannot be derived from source. Properties come from Compodoc; code from `?raw`; prose from markdown — none live here.
+Front-matter holds the structured copy plus keys that tie the component to its generated data. Properties come from Compodoc; snippets from the demo-template markers — those live in the generated maps, not here.
 
 ```typescript
 export interface ComponentDoc {
@@ -143,32 +145,35 @@ export interface ComponentDoc {
   isAuthRequired: boolean;
   contact: string;
   description: string;          // header card text
-  compodocSymbol: string;       // class name Compodoc keys the Properties entry by
-  variations: VariationMeta[];  // demo/code come from example files; this is just ordering + copy
-  theming: ThemingVar[];        // hand-authored overridable CSS variables
   docsUrl?: string;
+  compodocSymbol: string;       // class name Compodoc keys the Properties entry by
+  variations: VariationDoc[];   // id ties each to its generated snippet; title/description are copy
+  usage: UsageDoc;              // structured summary + do/don't bullets
+  activity?: ActivityDoc;       // "Component Activity" copy
+  properties?: ApiDoc;          // optional fallback; normally from COMPONENT_PROPERTIES
+  theming: ThemingVar[];        // hand-authored overridable CSS variables
 }
 
-export interface VariationMeta {
-  id: string;                   // anchor id for TOC
+export interface VariationDoc {
+  id: string;                   // anchor id for TOC + key into COMPONENT_SNIPPETS
   title: string;
   description: string;
-  exampleKey: string;          // maps to an example component + its ?raw source
+  code?: string;                // optional fallback; normally from the generated snippet
+  language: 'html' | 'typescript';
 }
 
 export interface ThemingVar {
-  variable: string;             // e.g. --jds-progress-widget-color (overridable by consumers)
+  variable: string;             // e.g. --echo-progress-spinner-color (overridable by consumers)
   default: string;
   description: string;
 }
 ```
 
-Prose (`overview.md`, `usage.md`) is authored as markdown files in `apps/demo`, not in this interface.
-
 ### Co-location split
-- **Properties** co-locate with the component in the strongest form — the component's own JSDoc/decorators in `libs/components`; auto-extracted.
+- **Properties** co-locate with the component in the strongest form — the component's own JSDoc on each signal input in `libs/components`; auto-extracted by Compodoc.
 - **Front-matter** `[component].docs.ts` sits next to the component, exported via `libs/components/src/docs.ts`, **excluded from `index.ts`** so doc metadata never enters the published bundle.
-- **Prose markdown + example components** live in `apps/demo` (presentation content, not the published contract).
+- **Demo templates + snippet markers** live in `apps/demo` (presentation content, not the published contract).
+- **Generated maps** (`COMPONENT_PROPERTIES`, `COMPONENT_SNIPPETS`) are committed under `apps/demo/.../docs-shell/generated/` so a clean checkout builds without running Compodoc.
 
 ### Path alias (`tsconfig.base.json`)
 ```json
@@ -186,41 +191,47 @@ apps/demo/src/app/
 │   ├── docs-left-nav/            (PanelMenu, grouped by category, from registry)
 │   ├── docs-right-toc/           (PanelMenu "On this page" + Download Vignette; IntersectionObserver)
 │   ├── docs-tabs/                (Overview · Properties · Theming)
+│   ├── generated/               (COMMITTED generated maps — do not edit)
+│   │   ├── component-properties.generated.ts   (COMPONENT_PROPERTIES, from Compodoc)
+│   │   └── component-snippets.generated.ts      (COMPONENT_SNIPPETS, from demo markers)
 │   └── tab-content/
-│       ├── doc-overview/         (renders header + variation sections + usage + activity section; markdown prose)
-│       ├── doc-properties/       (reads Compodoc JSON → table)
+│       ├── doc-overview/         (header card; id="summary")
+│       ├── doc-variations/       (variation sections: demo + generated snippet)
+│       ├── doc-usage/            (do/don't panels; id="usage")
+│       ├── doc-activity/         (Component Activity; id="activity")
+│       ├── doc-properties/       (reads COMPONENT_PROPERTIES → table)
 │       └── doc-theming/          (CSS-variable override table from front-matter)
 ├── components/pages/[component]/
-│   ├── showcase-[component].component.ts   (live demos; imports example sources via ?raw)
-│   └── examples/                           (one real component file per variation → demo AND snippet)
-└── docs/content/[component]/
-    ├── overview.md
-    └── usage.md
+│   └── showcase-[component].component.ts/.html  (Overview composite; demo ng-templates w/ snippet markers)
 
 libs/components/src/lib/[component]/
-├── [component].component.ts      (JSDoc + @Input/@Output = Properties source of truth)
+├── [component].component.ts      (per-input JSDoc = Properties source of truth)
 ├── [component].component.css     (CSS custom properties = Theming source)
 └── [component].docs.ts           (front-matter)
 
 libs/components/src/docs.ts       (front-matter barrel; excluded from index.ts)
+
+tools/
+├── generate-docs-properties.mjs  (Compodoc → COMPONENT_PROPERTIES)
+└── generate-docs-snippets.mjs    (demo markers → COMPONENT_SNIPPETS)
 ```
 
-Compodoc `documentation.json` is generated at build/CI and served as an app asset; not committed as authored content.
+The generated maps are committed so a clean checkout builds without Compodoc; regenerate with `pnpm docs:generate` when inputs/JSDoc or demo markup change.
 
 ---
 
 ## Routing
 
 ```
-/                              → redirect to /components/progress-widget
+/                              → redirect to /components/progress-widget/overview
 /components/:slug              → DocsShellComponent
-    /overview                  → DocOverviewComponent (default)
+    /overview                  → Showcase[Component]Component (the Overview composite; default)
     /properties                → DocPropertiesComponent
     /theming                   → DocThemingComponent
     (default)                  → redirect to overview
 ```
 
-Routes built from `COMPONENT_DOC_REGISTRY` (slug → front-matter + showcase component). One entry per component keeps `app.routes.ts` DRY.
+The `/overview` route loads the per-component showcase, which composes the generic `doc-overview` (header), `doc-variations`, `doc-usage`, and `doc-activity` into one scroll. `properties`/`theming` are generic. Legacy `components/docs/*` routes remain until each component is migrated.
 
 ---
 
@@ -239,13 +250,13 @@ All docs-system components use these utilities, not hardcoded values.
 
 ## New Component Convention
 
-1. Write the component in `libs/components` with **JSDoc on the class and every `@Input()`/`@Output()`** → Properties table falls out automatically.
+1. Write the component in `libs/components` with **JSDoc on each signal input / `@Output()`** → Properties table falls out automatically.
 2. Declare overridable **CSS custom properties** in the component's `.css`, and list them in the front-matter `theming[]` → Theming table.
-3. Add `[component].docs.ts` (front-matter + variation list + theming) and export from `libs/components/src/docs.ts`.
-4. In `apps/demo`, add one example component per variation under `pages/[component]/examples/`, plus `showcase-[component].component.ts` importing each via `?raw`.
-5. Add `overview.md` and `usage.md` under `apps/demo/src/app/docs/content/[component]/`.
-6. Add one entry to `COMPONENT_DOC_REGISTRY`.
-7. Left nav, routes, tabs, TOC, Properties table, Theming table update automatically. **No layout HTML edited.**
+3. Add `[component].docs.ts` (front-matter: variations, usage, activity, theming, `compodocSymbol`) and export from `libs/components/src/docs.ts`.
+4. In `apps/demo`, add `showcase-[component].component.ts` composing the Overview (`doc-overview` + `doc-variations` + `doc-usage` + `doc-activity`), with a demo `<ng-template>` per variation wrapping the widget usage in `<!-- snippet:<id> -->…<!-- /snippet -->` markers.
+5. Add one entry to the docs registry (`ALL_DOCS`) and a route block (`overview`/`properties`/`theming`).
+6. Run `pnpm docs:generate` to refresh the Properties + snippet maps, and commit them.
+7. Left nav, TOC, tabs, Properties table, Theming table, code blocks update automatically. **No layout HTML edited.**
 
 ---
 
@@ -253,20 +264,21 @@ All docs-system components use these utilities, not hardcoded values.
 
 | Package | Purpose | Status |
 |---------|---------|--------|
-| `@compodoc/compodoc` | Properties table from JSDoc/decorators | Add (dev) |
-| `ngx-markdown` | Render overview/usage markdown | Add |
-| `?raw` import support | Example source as snippet | Verify Nx/esbuild; add raw-loader if needed |
+| `@compodoc/compodoc` | Properties table from JSDoc | Added (dev) |
+| Node generation scripts | Snippet extraction from demo markers (no `?raw` needed) | Added (`tools/`) |
 | Tailwind toolchain | Styling (from IS-279) | Present |
-| PrimeNG `PanelMenu` / `Table` / `Tag` | Left nav + TOC, Properties/Theming tables, tags | Present |
-| ~~`ngx-highlightjs` / `highlight.js`~~ | ~~Syntax highlighting~~ | **Not used** — plain styled `<pre>` |
+| PrimeNG `PanelMenu` / `Table` / `Tag` / `Button` | Left nav + TOC, Properties/Theming tables, tags | Present |
+| ~~`ngx-markdown`~~ | ~~Render markdown prose~~ | **Not used** — prose is structured front-matter |
+| ~~`ngx-highlightjs` / `highlight.js`~~ | ~~Syntax highlighting~~ | **Removed** — plain styled `<pre>` |
 
 ---
 
 ## Reference Implementations
 
-**IS-562** (`IS-562-implement-ux-ui-designed-component-section`, local) — built the shell against the *original* plan: `DocsShellComponent`, left nav (PanelMenu), right TOC, `COMPONENT_SHOWCASE_MAP`, ComponentDoc barrel + alias, generic tab components, ngx-highlightjs, progress-widget pilot.
-- **Keep:** shell/left-nav/right-TOC scaffolding, registry, barrel, alias, ComponentDoc co-location.
-- **Rework to match design:** collapse Variations + Usage into **Overview** sections (one scroll); rename API → **Properties** (switch to Compodoc); add **Theming** tab; drop the per-variation/usage routes; remove ngx-highlightjs; move code snippets to `?raw`; add markdown prose; regroup left nav by category.
+**IS-562** (`IS-562-implement-ux-ui-designed-component-section`) — now implements this design for the progress-widget pilot.
+- **Stage 1 (done):** collapsed Variations + Usage into the **Overview** scroll; renamed API → **Properties**; added **Theming** tab; dropped per-variation/usage routes; removed ngx-highlightjs (plain `<pre>` + copy); regrouped left nav by category; reshaped `ComponentDoc`.
+- **Stage 2 (done):** Properties generated from Compodoc (`COMPONENT_PROPERTIES`); code snippets extracted from demo-template markers (`COMPONENT_SNIPPETS`). Markdown intentionally **not** adopted — Overview/Usage are structured to match the design.
+- **Remaining:** roll the pattern out to the other components (async-tasks, ontology-search, etc.) still on legacy routes.
 
 **IS-279** (`IS-279-ontology-ac-impl`) — a separate ontology-search branch, **not** an implementation of this plan. Useful patterns to reuse: shared `doc-section` / `example-card` / `code-example` components, the Tailwind utility system (sanctioned), plain `<pre>` + clipboard copy. Its `HighlightPipe` is a search-term highlighter, unrelated to this docs system.
 
