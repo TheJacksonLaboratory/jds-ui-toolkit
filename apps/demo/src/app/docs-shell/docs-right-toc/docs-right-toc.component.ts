@@ -6,7 +6,6 @@ import {
   OnDestroy,
   signal,
 } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { ComponentDoc } from '@jax-data-science/component-docs';
 
 interface TocItem {
@@ -16,7 +15,7 @@ interface TocItem {
 
 @Component({
   selector: 'app-docs-right-toc',
-  imports: [ButtonModule],
+  imports: [],
   standalone: true,
   template: `
     <aside class="tw-w-56 tw-flex-shrink-0 tw-h-full tw-overflow-y-auto tw-p-4 tw-border-l tw-border-gray-200 tw-bg-white">
@@ -37,17 +36,6 @@ interface TocItem {
           </li>
         }
       </ul>
-
-      <div class="tw-mt-6">
-        <!-- TODO(open item): Download Vignette action is not yet defined. -->
-        <p-button
-          label="Download Vignette"
-          icon="pi pi-download"
-          severity="secondary"
-          [outlined]="true"
-          styleClass="tw-w-full">
-        </p-button>
-      </div>
     </aside>
   `,
 })

@@ -52,8 +52,8 @@ Three columns inside the shell, below the top navbar:
 │  Nav Bar    │  │  • Variation sections           │   │  · Component     │
 │ Input       │  │      title + anchor icon        │   │    Activity      │
 │  Facet …    │  │      description                │   │                  │
-│  Ontology…  │  │      live demo box              │   │ [Download        │
-│ Messaging   │  │      code block (some)          │   │  Vignette]       │
+│  Ontology…  │  │      live demo box              │   │                  │
+│ Messaging   │  │      code block (some)          │   │                  │
 │  Error …    │  │  • Usage section                │   │                  │
 │ Data Display│  │      do / don't panels          │   │                  │
 │  Async …    │  │  • Component Activity section    │   │                  │
@@ -79,7 +79,6 @@ Three columns inside the shell, below the top navbar:
 - PrimeNG `PanelMenu`, 220px, "On this page"
 - Items: Summary + each variation title + Usage + Component Activity
 - `IntersectionObserver` highlights the active section on scroll; click scrolls to anchor
-- **"Download Vignette"** button below the TOC (new element — action TBD)
 - Shown on the Overview tab
 
 ---
@@ -189,7 +188,7 @@ apps/demo/src/app/
 ├── docs-shell/
 │   ├── docs-shell.component.ts / .html
 │   ├── docs-left-nav/            (PanelMenu, grouped by category, from registry)
-│   ├── docs-right-toc/           (PanelMenu "On this page" + Download Vignette; IntersectionObserver)
+│   ├── docs-right-toc/           ("On this page" anchors; IntersectionObserver)
 │   ├── docs-tabs/                (Overview · Properties · Theming)
 │   ├── generated/               (COMMITTED generated maps — do not edit)
 │   │   ├── component-properties.generated.ts   (COMPONENT_PROPERTIES, from Compodoc)
@@ -287,7 +286,6 @@ All docs-system components use these utilities, not hardcoded values.
 ## Open Items
 
 1. **Component Activity** — the Overview "Component Activity" section's purpose/content source is undefined. (No Activity tab.)
-2. **Download Vignette** — button in the right TOC; action not yet defined.
 3. **Theming auto-parse** — future: derive `theming[]` from the component's CSS custom properties instead of hand-authoring.
 
 ---

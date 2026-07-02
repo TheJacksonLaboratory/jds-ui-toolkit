@@ -21,6 +21,10 @@ export class AppComponent {
       routerLink: '/components',
     },
     {
+      label: 'Services',
+      routerLink: '/services'
+    },
+    {
       label: 'Help',
       icon: 'pi pi-external-link',
       url: 'https://google.com',
