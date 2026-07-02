@@ -1,8 +1,9 @@
 # Component Documentation Page System — Design Spec
 
-**Date:** 2026-06-29  
-**Ticket:** IS-585  
-**Status:** Approved, ready for implementation planning
+**Date:** 2026-06-29 (revised 2026-07-02 against actual Figma design)  
+**Ticket:** IS-585 (design) / IS-562 (implementation story)  
+**Design:** [Components-and-Documentation](https://www.figma.com/design/xIz1scHUqflk0N9SGbLOvK/Components-and-Documentation?node-id=2663-552)  
+**Status:** Revised — original plan's tab structure did not match the design; corrected here
 
 ---
 
@@ -12,298 +13,275 @@ The demo app (`apps/demo`) has a component showcase system that is not scalable.
 
 ---
 
+## ⚠️ Correction from original plan
+
+The original spec defined four tabs — **Overview / Variations / Usage / API** — and built them as separate routes (implemented that way in IS-562). **This does not match the design.** The design has:
+
+- **Tabs:** Overview · Properties · Theming
+- **Variations, Usage, and Component Activity are *sections inside the Overview tab*** (one scrolling page), not tabs.
+- **Properties** replaces the old "API" tab.
+- **Theming** is new — per-component overridable CSS variables.
+
+IS-562's 4-tab routing must be restructured to match this. See Reference Implementation.
+
+---
+
 ## Goals
 
 - Flexible, extensible docs system for all components in `libs/components`
-- Component developers co-locate documentation with their code
+- Layout matches the approved design: left nav | scrolling content | right "On this page" TOC
+- **Content generated from source of truth, not hand-maintained** — Properties from JSDoc, code snippets from real example files, prose from markdown
 - Consistent page structure across all components
-- Live demos + syntax-highlighted code snippets with copy button
-- 3-column layout matching Figma design (left nav | content | right TOC)
+- Adding a component requires config + content only, no layout HTML edits (IS-562 scalability AC)
 
 ---
 
-## Decisions
+## Layout (from design)
 
-| Question | Decision |
-|----------|----------|
-| Tab structure | Fixed: Overview, Variations, Usage, API |
-| Code snippets | Syntax-highlighted via `ngx-highlightjs`, copy button |
-| Top navbar | Stripped to branding + auth only; left nav handles component navigation |
-| API documentation | Manual `ApiProp[]` tables defined in `.docs.ts` files |
-| Metadata location | Co-located in `libs/components` as `[component].docs.ts` |
+Three columns inside the shell, below the top navbar:
+
+```
+┌─────────────┬──────────────────────────────────────┬──────────────────┐
+│ Left nav    │  Tabs: Overview · Properties ·        │  On this page    │
+│ (240px)     │        Theming                        │  (220px)         │
+│ PanelMenu   │  ┌────────────────────────────────┐   │  PanelMenu TOC   │
+│ grouped by  │  │ Header card: name, description, │   │  · Summary       │
+│ category    │  │ tags (status/auth/contact)      │   │  · <variation>   │
+│             │  ├────────────────────────────────┤   │  · <variation>   │
+│ Navigation  │  │ Overview body (scrolls):        │   │  · Usage         │
+│  Nav Bar    │  │  • Variation sections           │   │  · Component     │
+│ Input       │  │      title + anchor icon        │   │    Activity      │
+│  Facet …    │  │      description                │   │                  │
+│  Ontology…  │  │      live demo box              │   │ [Download        │
+│ Messaging   │  │      code block (some)          │   │  Vignette]       │
+│  Error …    │  │  • Usage section                │   │                  │
+│ Data Display│  │      do / don't panels          │   │                  │
+│  Async …    │  │  • Component Activity section    │   │                  │
+│  Schema …   │  └────────────────────────────────┘   │                  │
+│ Utilities   │                                        │                  │
+│  Auth …     │                                        │                  │
+│  Progress…  │                                        │                  │
+│ [Help & Doc]│                                        │                  │
+└─────────────┴──────────────────────────────────────┴──────────────────┘
+```
+
+### Left nav (`DocsLeftNavComponent`)
+- PrimeNG `PanelMenu`, 240px, sticky
+- Grouped by **category**: Navigation, Input, Messaging, Data Display, Utilities
+- Items built from the registry; `routerLink` → `/components/:slug`
+- "Help & Documentation" button pinned at the bottom
+
+### Tabs (`DocsTabsComponent`)
+- **Overview · Properties · Theming**
+- Links relative to current component route
+
+### Right TOC (`DocsRightTocComponent`)
+- PrimeNG `PanelMenu`, 220px, "On this page"
+- Items: Summary + each variation title + Usage + Component Activity
+- `IntersectionObserver` highlights the active section on scroll; click scrolls to anchor
+- **"Download Vignette"** button below the TOC (new element — action TBD)
+- Shown on the Overview tab
 
 ---
 
-## Architecture
+## Tabs — content
 
-### Routing
+### Overview (single scrolling page)
 
-```
-/                                    → redirect to /components/progress-widget/overview
-/components                          → DocsShellComponent
-  /progress-widget
-    /overview                        → DocOverviewComponent (generic)
-    /variations                      → ShowcaseProgressWidgetComponent (per-component)
-    /usage                           → DocUsageComponent (generic)
-    /api                             → DocApiComponent (generic)
-    (default)                        → redirect to overview
-  /async-tasks
-    /overview                        → DocOverviewComponent
-    /variations                      → ShowcaseAsyncTasksComponent
-    /usage                           → DocUsageComponent
-    /api                             → DocApiComponent
-  ... (one block per component)
-/services                            → DocsShellComponent (same shell)
-  /isa-data
-    /overview → /variations → /usage → /api
-```
+Rendered as one scrolling column, sections anchored for the TOC:
 
-Routes are built from a registry (`COMPONENT_SHOWCASE_MAP`) that maps slug → showcase component type. This keeps `app.routes.ts` DRY while allowing per-component showcase components to act as the `/variations` route:
+1. **Header card** — component name, description, tags for status / auth / contact (from front-matter)
+2. **Variation sections** — for each variation: heading + anchor-link icon, description, a **live demo box**, and (where present) a **code block**
+3. **Usage section** — subheader + two designed panels: green "When and how to use" and red "Do not use", each with bullet content
+4. **Component Activity section** — "Activity/Measure" heading + details / image / visualization
 
-```typescript
-// component-showcase-map.ts
-export const COMPONENT_SHOWCASE_MAP: Record<string, Type<unknown>> = {
-  'progress-widget': ShowcaseProgressWidgetComponent,
-  'async-tasks': ShowcaseAsyncTasksComponent,
-  // one entry per component
-};
-```
+### Properties
+- The component's `@Input`/`@Output` table (formerly "API")
+- **Auto-generated** from JSDoc + decorators via Compodoc JSON
+- Columns: Name | Type | Default | Required | Description
 
-`DocsShellComponent` reads the active child route's first URL segment to determine the current slug, looks up `ComponentDoc` from the docs registry, and distributes it to left nav, right TOC, and tab bar.
+### Theming
+- Table of the **custom CSS variables** this component defines that a consumer can override
+- Columns: Variable | Default | Description
+- Source: **hand-authored** in front-matter (`theming[]`). Auto-parsing from the component `.css` is a future option.
 
-Overview, Usage, and API tabs are fully generic — same `DocOverviewComponent`, `DocUsageComponent`, `DocApiComponent` reused across all components, receiving `ComponentDoc` via a shared service or route data. The `/variations` tab loads the component-specific showcase, which internally uses the shared `DocVariationsComponent`.
-
-### File Layout
-
-```
-apps/demo/src/app/
-├── docs-shell/
-│   ├── docs-shell.component.ts
-│   ├── docs-shell.component.html
-│   ├── docs-left-nav/
-│   │   ├── docs-left-nav.component.ts
-│   │   └── docs-left-nav.component.html
-│   ├── docs-right-toc/
-│   │   ├── docs-right-toc.component.ts
-│   │   └── docs-right-toc.component.html
-│   ├── docs-tabs/
-│   │   ├── docs-tabs.component.ts
-│   │   └── docs-tabs.component.html
-│   └── tab-content/                             (shared, generic tab components)
-│       ├── doc-overview/
-│       │   ├── doc-overview.component.ts
-│       │   └── doc-overview.component.html
-│       ├── doc-variations/
-│       │   ├── doc-variations.component.ts      ← generic, accepts TemplateRef map
-│       │   └── doc-variations.component.html
-│       ├── doc-usage/
-│       │   ├── doc-usage.component.ts
-│       │   └── doc-usage.component.html
-│       └── doc-api/
-│           ├── doc-api.component.ts
-│           └── doc-api.component.html
-├── components/pages/
-│   └── [component]/
-│       └── showcase-[component].component.ts    (existing — keep, wraps doc-variations)
-
-libs/components/src/
-├── lib/
-│   └── [component]/
-│       ├── [component].component.ts             (existing)
-│       └── [component].docs.ts                  (NEW)
-├── lib/docs/
-│   └── docs.model.ts                            (NEW — shared interfaces)
-└── docs.ts                                      (NEW — docs barrel, not in index.ts)
-```
+> The Overview tab still contains a "Component Activity" section (per the design). There is no separate Activity *tab*.
 
 ---
 
-## Metadata System
+## Content Generation — the core principle
 
-### Interfaces (`libs/components/src/lib/docs/docs.model.ts`)
+**The source code / authored content is the single source of truth. Nothing is maintained twice.**
+
+| Content | Source of truth | How it reaches the viewer |
+|---------|-----------------|---------------------------|
+| Properties table | JSDoc + `@Input()`/`@Output()` on the component in `libs/components` | Compodoc → `documentation.json`; viewer reads the per-component entry |
+| Variation code block | The example component's own file in `apps/demo` | Imported as raw string (`import src from './x.component.ts?raw'`); same file is the live demo — cannot drift |
+| Overview prose + Usage text | Markdown per component | `ngx-markdown` renders into the layout |
+| Live demo | Real Angular example component | Rendered directly |
+| Theming variables | Hand-authored `theming[]` in front-matter | Rendered as a table (auto-parse from CSS is future) |
+| Front-matter (name, category, status, tags, auth, contact, description) | `[component].docs.ts` in `libs/components` | Imported by the registry |
+| Nav / routing / TOC | Central registry + section anchors | Built at runtime |
+
+Confirmed against Angular Material, Storybook + Compodoc, Taiga UI (`?raw`), ng-doc. Hand-authored API tables and hand-copied code strings drift the moment the component changes — every mature lib engineered them away. **No ngx-highlightjs** — code blocks are plain styled `<pre><code>` matching the design's dark block, with a copy button.
+
+---
+
+## Metadata / Registry
+
+### Front-matter (`libs/components/src/lib/docs/docs.model.ts`)
+
+Only what cannot be derived from source. Properties come from Compodoc; code from `?raw`; prose from markdown — none live here.
 
 ```typescript
 export interface ComponentDoc {
   name: string;
   slug: string;
-  description: string;
+  category: 'Navigation' | 'Input' | 'Messaging' | 'Data Display' | 'Utilities';
   status: 'stable' | 'in-progress' | 'deprecated';
   tags: string[];
   isAuthRequired: boolean;
   contact: string;
-  group: 'components' | 'services';
-  overview: {
-    summary: string;
-    docsUrl?: string;
-  };
-  variations: VariationDoc[];
-  usage: UsageDoc;
-  api: ApiDoc;
+  description: string;          // header card text
+  compodocSymbol: string;       // class name Compodoc keys the Properties entry by
+  variations: VariationMeta[];  // demo/code come from example files; this is just ordering + copy
+  theming: ThemingVar[];        // hand-authored overridable CSS variables
+  docsUrl?: string;
 }
 
-export interface VariationDoc {
-  id: string;
+export interface VariationMeta {
+  id: string;                   // anchor id for TOC
   title: string;
   description: string;
-  code: string;
-  language: 'html' | 'typescript';
+  exampleKey: string;          // maps to an example component + its ?raw source
 }
 
-export interface UsageDoc {
-  summary: string;
-  dos: string[];
-  donts: string[];
-}
-
-export interface ApiDoc {
-  inputs: ApiProp[];
-  outputs: ApiProp[];
-}
-
-export interface ApiProp {
-  name: string;
-  type: string;
-  default?: string;
-  required: boolean;
+export interface ThemingVar {
+  variable: string;             // e.g. --jds-progress-widget-color (overridable by consumers)
+  default: string;
   description: string;
 }
 ```
 
-### Co-location Convention
+Prose (`overview.md`, `usage.md`) is authored as markdown files in `apps/demo`, not in this interface.
 
-Each component in `libs/components` gets a `[component].docs.ts` file alongside its component file:
+### Co-location split
+- **Properties** co-locate with the component in the strongest form — the component's own JSDoc/decorators in `libs/components`; auto-extracted.
+- **Front-matter** `[component].docs.ts` sits next to the component, exported via `libs/components/src/docs.ts`, **excluded from `index.ts`** so doc metadata never enters the published bundle.
+- **Prose markdown + example components** live in `apps/demo` (presentation content, not the published contract).
 
-```
-libs/components/src/lib/progress-widget/
-├── progress-widget.component.ts
-├── progress-widget.component.html
-├── progress-widget.component.css
-└── progress-widget.docs.ts              ← NEW
-```
-
-### Docs Barrel
-
-`libs/components/src/docs.ts` exports all docs — explicitly excluded from `index.ts` so docs metadata never enters the published library bundle:
-
-```typescript
-export * from './lib/docs/docs.model';
-export * from './lib/progress-widget/progress-widget.docs';
-export * from './lib/asynctask/asynctask.docs';
-// one line per component
-```
-
-### Nx Path Alias
-
-Added to `tsconfig.base.json`:
-
+### Path alias (`tsconfig.base.json`)
 ```json
 "@jax-data-science/component-docs": ["libs/components/src/docs.ts"]
 ```
 
-`DocsShellComponent` imports all `ComponentDoc` objects, builds a `Map<string, ComponentDoc>` keyed by `slug`, and resolves the active doc from the `:name` route param.
+---
+
+## File Layout
+
+```
+apps/demo/src/app/
+├── docs-shell/
+│   ├── docs-shell.component.ts / .html
+│   ├── docs-left-nav/            (PanelMenu, grouped by category, from registry)
+│   ├── docs-right-toc/           (PanelMenu "On this page" + Download Vignette; IntersectionObserver)
+│   ├── docs-tabs/                (Overview · Properties · Theming)
+│   └── tab-content/
+│       ├── doc-overview/         (renders header + variation sections + usage + activity section; markdown prose)
+│       ├── doc-properties/       (reads Compodoc JSON → table)
+│       └── doc-theming/          (CSS-variable override table from front-matter)
+├── components/pages/[component]/
+│   ├── showcase-[component].component.ts   (live demos; imports example sources via ?raw)
+│   └── examples/                           (one real component file per variation → demo AND snippet)
+└── docs/content/[component]/
+    ├── overview.md
+    └── usage.md
+
+libs/components/src/lib/[component]/
+├── [component].component.ts      (JSDoc + @Input/@Output = Properties source of truth)
+├── [component].component.css     (CSS custom properties = Theming source)
+└── [component].docs.ts           (front-matter)
+
+libs/components/src/docs.ts       (front-matter barrel; excluded from index.ts)
+```
+
+Compodoc `documentation.json` is generated at build/CI and served as an app asset; not committed as authored content.
 
 ---
 
-## Navigation
+## Routing
 
-### Left Nav (`DocsLeftNavComponent`)
+```
+/                              → redirect to /components/progress-widget
+/components/:slug              → DocsShellComponent
+    /overview                  → DocOverviewComponent (default)
+    /properties                → DocPropertiesComponent
+    /theming                   → DocThemingComponent
+    (default)                  → redirect to overview
+```
 
-- Uses PrimeNG `PanelMenu` (already in project)
-- 240px fixed width, sticky, full height below top navbar
-- Menu items built dynamically from all `ComponentDoc` entries
-- Grouped by `ComponentDoc.group` ('components' | 'services')
-- `routerLink` points to `/components/:slug/overview` or `/services/:slug/overview`
-- Active item highlighted via Angular router's `routerLinkActive`
-
-### Tab Bar (`DocsTabsComponent`)
-
-- Uses PrimeNG `TabMenu` (referenced in Figma annotations)
-- Resized to 1.25rem (20px) per Figma spec; bold when selected
-- Four fixed tabs: Overview | Variations | Usage | API
-- Links to `./overview`, `./variations`, `./usage`, `./api` relative to current route
-
-### Right TOC (`DocsRightTocComponent`)
-
-- 220px fixed width
-- Items generated from active `ComponentDoc.variations[].title` + fixed anchors for "Usage" and "API" sections
-- `IntersectionObserver` tracks section headings, highlights current section on scroll
-- Clicking an item scrolls to the corresponding anchor
-- Visible only on Variations and Usage tabs; hidden on Overview and API
+Routes built from `COMPONENT_DOC_REGISTRY` (slug → front-matter + showcase component). One entry per component keeps `app.routes.ts` DRY.
 
 ---
 
-## Tab Content
+## Styling — Tailwind (sanctioned direction)
 
-### Overview Tab (`DocOverviewComponent`)
+Established in the IS-279 branch:
+- Utility classes: `tw-` (Tailwind) + `echo-` (theme-bound) prefixes
+- `libs/components/src/styles/components-tailwind.css`
+- Generated `libs/themes/src/utilities.css` (~670 lines) via `libs/themes/scripts/generate-utilities.ts`
+- Exposed via `@jax-data-science/themes/utilities.css` alias
+- Setup in `docs/tailwind-setup.md`
 
-Fully data-driven from `ComponentDoc`. No per-component HTML needed.
-
-- Header: component name (2.5rem / 40px per Figma), status PrimeNG Tag
-- Tags row: topic tags using PrimeNG Tag
-- Summary: `overview.summary` text
-- Sidebar info: auth requirement, contact, external docs link
-
-### Variations Tab (`DocVariationsComponent`)
-
-Iterates `ComponentDoc.variations[]`. Per variation, renders a card:
-
-1. **Title** (1.5rem / 24px per Figma) + anchor link icon (links back to this variation)
-2. **Description** text
-3. **Live demo area** — renders `TemplateRef` passed from the showcase component via `@Input() demoTemplates: Map<string, TemplateRef<void>>` keyed by `variation.id`
-4. **Code block** — `ngx-highlightjs` renders `variation.code`, language set from `variation.language`. Copy button uses `navigator.clipboard.writeText()`
-
-Each section heading gets an `id` attribute matching `variation.id` for TOC anchor navigation.
-
-The showcase component (`showcase-[component].component.ts`) is the parent. It:
-- Imports `DocVariationsComponent`
-- Declares `<ng-template>` elements for each variation's live demo
-- Passes them as a `Map` to `DocVariationsComponent`
-
-### Usage Tab (`DocUsageComponent`)
-
-Data-driven from `ComponentDoc.usage`. No per-component HTML.
-
-- Summary paragraph
-- Two-column grid: Do's (✓) and Don'ts (✗) from `UsageDoc.dos[]` / `UsageDoc.donts[]`
-
-### API Tab (`DocApiComponent`)
-
-Data-driven from `ComponentDoc.api`. No per-component HTML.
-
-- Two PrimeNG `Table` instances: Inputs and Outputs
-- Columns: Name | Type | Default | Required | Description
-- Sortable columns; no pagination (small row count)
+All docs-system components use these utilities, not hardcoded values.
 
 ---
 
 ## New Component Convention
 
-When adding a new component to `libs/components`:
-
-1. Create `[component].docs.ts` implementing `ComponentDoc` in the component folder
-2. Add export to `libs/components/src/docs.ts`
-3. Add showcase component + tab content in `apps/demo/src/app/components/pages/[component]/`
-4. Add route entry to `apps/demo/src/app/app.routes.ts`
-5. Left nav updates automatically (driven from the docs registry)
+1. Write the component in `libs/components` with **JSDoc on the class and every `@Input()`/`@Output()`** → Properties table falls out automatically.
+2. Declare overridable **CSS custom properties** in the component's `.css`, and list them in the front-matter `theming[]` → Theming table.
+3. Add `[component].docs.ts` (front-matter + variation list + theming) and export from `libs/components/src/docs.ts`.
+4. In `apps/demo`, add one example component per variation under `pages/[component]/examples/`, plus `showcase-[component].component.ts` importing each via `?raw`.
+5. Add `overview.md` and `usage.md` under `apps/demo/src/app/docs/content/[component]/`.
+6. Add one entry to `COMPONENT_DOC_REGISTRY`.
+7. Left nav, routes, tabs, TOC, Properties table, Theming table update automatically. **No layout HTML edited.**
 
 ---
 
 ## Dependencies
 
-| Package | Purpose | Already installed? |
-|---------|---------|-------------------|
-| `ngx-highlightjs` | Syntax highlighting | No — add |
-| `highlight.js` | Peer dep of ngx-highlightjs | No — add |
-| PrimeNG `PanelMenu` | Left nav | Yes |
-| PrimeNG `TabMenu` | Tab bar | Yes |
-| PrimeNG `Table` | API tab | Yes |
-| PrimeNG `Tag` | Status + topic tags | Yes |
+| Package | Purpose | Status |
+|---------|---------|--------|
+| `@compodoc/compodoc` | Properties table from JSDoc/decorators | Add (dev) |
+| `ngx-markdown` | Render overview/usage markdown | Add |
+| `?raw` import support | Example source as snippet | Verify Nx/esbuild; add raw-loader if needed |
+| Tailwind toolchain | Styling (from IS-279) | Present |
+| PrimeNG `PanelMenu` / `Table` / `Tag` | Left nav + TOC, Properties/Theming tables, tags | Present |
+| ~~`ngx-highlightjs` / `highlight.js`~~ | ~~Syntax highlighting~~ | **Not used** — plain styled `<pre>` |
+
+---
+
+## Reference Implementations
+
+**IS-562** (`IS-562-implement-ux-ui-designed-component-section`, local) — built the shell against the *original* plan: `DocsShellComponent`, left nav (PanelMenu), right TOC, `COMPONENT_SHOWCASE_MAP`, ComponentDoc barrel + alias, generic tab components, ngx-highlightjs, progress-widget pilot.
+- **Keep:** shell/left-nav/right-TOC scaffolding, registry, barrel, alias, ComponentDoc co-location.
+- **Rework to match design:** collapse Variations + Usage into **Overview** sections (one scroll); rename API → **Properties** (switch to Compodoc); add **Theming** tab; drop the per-variation/usage routes; remove ngx-highlightjs; move code snippets to `?raw`; add markdown prose; regroup left nav by category.
+
+**IS-279** (`IS-279-ontology-ac-impl`) — a separate ontology-search branch, **not** an implementation of this plan. Useful patterns to reuse: shared `doc-section` / `example-card` / `code-example` components, the Tailwind utility system (sanctioned), plain `<pre>` + clipboard copy. Its `HighlightPipe` is a search-term highlighter, unrelated to this docs system.
+
+---
+
+## Open Items
+
+1. **Component Activity** — the Overview "Component Activity" section's purpose/content source is undefined. (No Activity tab.)
+2. **Download Vignette** — button in the right TOC; action not yet defined.
+3. **Theming auto-parse** — future: derive `theming[]` from the component's CSS custom properties instead of hand-authoring.
 
 ---
 
 ## Out of Scope
 
-- Compodoc or auto-generated API docs
 - Search across all component docs
 - Versioning of docs
 - External-facing public docs site
