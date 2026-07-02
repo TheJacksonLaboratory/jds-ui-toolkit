@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { Button } from 'primeng/button';
 import { ProgressWidgetComponent } from '@jax-data-science/components';
@@ -13,6 +13,7 @@ import { DocVariationsComponent } from '../../../docs-shell/tab-content/doc-vari
   standalone: true,
 })
 export class ShowcaseProgressWidgetComponent implements OnInit, AfterViewInit, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
   readonly doc = progressWidgetDoc;
   demoTemplates = new Map<string, TemplateRef<void>>();
 
@@ -36,11 +37,14 @@ export class ShowcaseProgressWidgetComponent implements OnInit, AfterViewInit, O
   }
 
   ngAfterViewInit(): void {
-    this.demoTemplates.set('basic-spinner', this.tplBasicSpinner);
-    this.demoTemplates.set('with-message', this.tplWithMessage);
-    this.demoTemplates.set('dynamic-message', this.tplDynamicMessage);
-    this.demoTemplates.set('with-icon', this.tplWithIcon);
-    this.demoTemplates.set('block-ui', this.tplBlockUi);
+    this.demoTemplates = new Map([
+      ['basic-spinner', this.tplBasicSpinner],
+      ['with-message', this.tplWithMessage],
+      ['dynamic-message', this.tplDynamicMessage],
+      ['with-icon', this.tplWithIcon],
+      ['block-ui', this.tplBlockUi],
+    ]);
+    this.cdr.detectChanges();
   }
 
   toggleBlockUi(): void {
