@@ -21,8 +21,8 @@ const DOCS_REGISTRY = new Map<string, ComponentDoc>(ALL_DOCS.map((d) => [d.slug,
   selector: 'app-docs-shell',
   imports: [RouterModule, DocsLeftNavComponent, DocsTabsComponent, DocsRightTocComponent],
   templateUrl: './docs-shell.component.html',
-  styleUrl: './docs-shell.component.css',
   standalone: true,
+  host: { class: 'tw-flex tw-flex-1 tw-h-full tw-w-full tw-overflow-hidden' },
 })
 export class DocsShellComponent implements OnInit, OnDestroy {
   private router = inject(Router);

@@ -20,9 +20,6 @@ html {
 /* Docs tab bar — match Figma (node 2663:601). Overrides the PrimeNG theme.
    The design uses a per-tab bottom border (blue when active) sitting on the
    tablist's grey baseline, not PrimeNG's animated ink bar. */
-.docs-tabs {
-    padding: 16px 24px 0;
-}
 .docs-tabs,
 .docs-tabs * {
     background: transparent !important;
@@ -32,9 +29,9 @@ html {
 }
 .docs-tabs .p-tablist { border-bottom: 1px solid #d9d9d9 !important; }
 .docs-tabs .p-tab {
-    padding: 16px;
-    font-size: 20px;
-    line-height: 28px;
+    padding: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
     font-weight: 400;
     color: #636363;
     border: 0 !important;
@@ -45,5 +42,5 @@ html {
    Higher specificity than the `*` reset so the color wins. */
 .docs-tabs .p-tablist-active-bar {
     background: #0177b2 !important;
-    height: 2px !important;
+    height: 0.125rem !important;
 }

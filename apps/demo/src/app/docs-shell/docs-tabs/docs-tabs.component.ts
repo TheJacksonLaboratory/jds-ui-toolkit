@@ -9,7 +9,7 @@ import { TabsModule } from 'primeng/tabs';
   imports: [TabsModule],
   standalone: true,
   template: `
-    <div class="docs-tabs">
+    <div class="docs-tabs tw-pt-4 tw-px-6">
       <p-tabs [value]="activeTab()" (valueChange)="navigate($event)">
         <p-tablist>
           @for (tab of tabs; track tab.path) {
