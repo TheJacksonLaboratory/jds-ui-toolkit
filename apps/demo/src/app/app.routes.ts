@@ -8,7 +8,6 @@ import { ServiceDocsComponent } from './services/pages/docs/service-docs.compone
 // Legacy showcase components (kept on old routes until migrated)
 import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/showcase-async-tasks.component';
 import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
-import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseFacetSearchComponent } from './components/pages/facet-search/showcase-facet-search.component';
 import { ShowcaseOntologySearchComponent } from './components/pages/ontology-search/showcase-ontology-search.component';
 import { ShowcaseSchemaGridComponent } from './components/pages/schema-grid/showcase-schema-grid.component';
@@ -19,6 +18,7 @@ import { DocsShellComponent } from './docs-shell/docs-shell.component';
 import { DocPropertiesComponent } from './docs-shell/tab-content/doc-properties/doc-properties.component';
 import { DocThemingComponent } from './docs-shell/tab-content/doc-theming/doc-theming.component';
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
+import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 
 export const appRoutes: Route[] = [
   {
@@ -44,6 +44,15 @@ export const appRoutes: Route[] = [
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
+      {
+        path: 'error-widget',
+        children: [
+          { path: 'overview', component: ShowcaseErrorWidgetComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
     ],
   },
 
@@ -54,7 +63,6 @@ export const appRoutes: Route[] = [
     children: [
       { path: 'async-tasks', component: ShowcaseAsyncTasksComponent, canActivate: [AuthGuard] },
       { path: 'authentication', component: ShowcaseAuthComponent },
-      { path: 'error-widget', component: ShowcaseErrorWidgetComponent },
       { path: 'facet-search', component: ShowcaseFacetSearchComponent },
       { path: 'ontology-search', component: ShowcaseOntologySearchComponent },
       { path: 'schema-grid', component: ShowcaseSchemaGridComponent },

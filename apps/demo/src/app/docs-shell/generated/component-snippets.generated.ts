@@ -3,6 +3,10 @@
 // Regenerate with `pnpm docs:snippets`.
 
 export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
+  "error-widget": {
+    "default": "<lib-widget-error [errorMessage]=\"'Failed to load task list.'\"></lib-widget-error>",
+    "long-message": "<lib-widget-error\n  [errorMessage]=\"'Could not fetch async tasks because the requested resource was not found. Please check your network connection and try again, or contact support if the problem persists.'\">\n</lib-widget-error>"
+  },
   "progress-widget": {
     "basic-spinner": "<lib-jds-progress-widget [spinnerSize]=\"1\"></lib-jds-progress-widget>",
     "with-message": "<lib-jds-progress-widget [spinnerSize]=\"3\" [statusMessage]=\"'Loading data...'\"></lib-jds-progress-widget>",
