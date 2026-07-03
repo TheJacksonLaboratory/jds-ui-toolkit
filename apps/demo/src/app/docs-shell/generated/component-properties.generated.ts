@@ -234,7 +234,7 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "type": "string",
         "default": "''",
         "required": false,
-        "description": ""
+        "description": "Message displayed inside the error banner."
       }
     ],
     "outputs": []
