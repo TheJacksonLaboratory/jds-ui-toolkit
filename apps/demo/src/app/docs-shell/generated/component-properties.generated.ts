@@ -12,14 +12,14 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "type": "string",
         "default": "''",
         "required": false,
-        "description": ""
+        "description": "Auth0 access token used to open the real-time task-status event stream."
       },
       {
         "name": "tableConfig",
         "type": "IAsyncTableConfig",
         "default": "{\n    isExpandable: true,\n    rowsPerPage: 10,\n    rowsPerPageOptions: [5, 10, 25, 50],\n    isPaginated: true,\n    isStriped: false,\n    showActions: true,\n    allowFilters: true,\n  }",
         "required": false,
-        "description": ""
+        "description": "Table behavior: pagination, filtering, row expansion, and the expandable-row details template."
       }
     ],
     "outputs": [
@@ -27,13 +27,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "name": "editEmitter",
         "type": "EventEmitter",
         "required": false,
-        "description": ""
+        "description": "Emits the selected task when the user chooses to edit it."
       },
       {
         "name": "openEmitter",
         "type": "EventEmitter",
         "required": false,
-        "description": ""
+        "description": "Emits the selected task when the user chooses to open it."
       }
     ]
   },
@@ -43,13 +43,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "name": "bodyTemplate",
         "type": "TemplateRef<>",
         "required": false,
-        "description": ""
+        "description": "Optional template rendered inside the expanded row body; receives the task as its context."
       },
       {
         "name": "task",
         "type": "RunInput",
         "required": false,
-        "description": ""
+        "description": "The task whose details are rendered in the expanded row."
       }
     ],
     "outputs": []
