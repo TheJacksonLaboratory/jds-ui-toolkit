@@ -112,70 +112,70 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "type": "RedirectLoginOptions<AppState>",
         "default": "{}",
         "required": false,
-        "description": ""
+        "description": "Auth0 redirect-login options forwarded to the embedded Authentication component when authentication is true."
       },
       {
         "name": "authConfigLogout",
         "type": "LogoutOptions",
         "default": "{}",
         "required": false,
-        "description": ""
+        "description": "Auth0 logout options forwarded to the embedded Authentication component when authentication is true."
       },
       {
         "name": "authentication",
         "type": "boolean",
         "default": "false",
         "required": false,
-        "description": ""
+        "description": "Shows the login/avatar auth controls when true; requires an AuthService provider in the app."
       },
       {
         "name": "externalLink",
         "type": "string",
         "default": "\"https://github.com/TheJacksonLaboratory/jds-ui-components\"",
         "required": false,
-        "description": ""
+        "description": "URL for the external link shown at the end of the navbar (e.g. a GitHub repo)."
       },
       {
         "name": "externalLinkLabel",
         "type": "string",
         "default": "\"GitHub\"",
         "required": false,
-        "description": ""
+        "description": "Label text for the external link."
       },
       {
         "name": "icon",
         "type": "string",
         "default": "\"pi-cog\"",
         "required": false,
-        "description": ""
+        "description": "PrimeIcons class (e.g. pi-cog) shown as the brand mark when logo is not set."
       },
       {
         "name": "items",
         "type": "JdsMenuItem[]",
         "default": "[\n    {\n      label: \"Explore\",\n      icon: \"\",\n      items: [\n        {\n          label: \"News\",\n          url: \"www.google.com/news\",\n          styleClass: \"text-black\"\n        }, {\n          label: \"Search\",\n          routerLink: \"/search\",\n          styleClass: \"text-black\"\n        }\n      ]\n    }, {\n      label: \"Components\",\n      icon: \"\"\n    }, {\n      label: \"Contact\",\n      icon: \"\"\n    }\n  ]",
         "required": false,
-        "description": ""
+        "description": "Menu items rendered in the PrimeNG menubar; supports nested items, router links, and click commands."
       },
       {
         "name": "logo",
         "type": "string",
         "default": "\"\"",
         "required": false,
-        "description": ""
+        "description": "Optional image URL for the brand logo; falls back to icon when empty."
       },
       {
         "name": "logoLink",
         "type": "string",
         "default": "\"/\"",
         "required": false,
-        "description": ""
+        "description": "Router link the brand logo/title navigates to when clicked."
       },
       {
         "name": "title",
         "type": "string",
         "default": "\"JDS Angular Application\"",
         "required": false,
-        "description": ""
+        "description": "Application name shown in the navbar&#39;s brand area."
       }
     ],
     "outputs": []
