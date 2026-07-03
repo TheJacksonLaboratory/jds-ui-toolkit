@@ -61,14 +61,14 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "type": "RedirectLoginOptions<AppState>",
         "default": "{}",
         "required": false,
-        "description": ""
+        "description": "Auth0 redirect-login options passed to loginWithRedirect, e.g. a post-login appState.target."
       },
       {
         "name": "configLogout",
         "type": "LogoutOptions",
         "default": "{}",
         "required": false,
-        "description": ""
+        "description": "Auth0 logout options passed to logout; returnTo defaults to the current origin when not provided."
       }
     ],
     "outputs": []

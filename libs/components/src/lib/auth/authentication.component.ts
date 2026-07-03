@@ -14,7 +14,9 @@ import { AppState, AuthService, LogoutOptions, RedirectLoginOptions } from '@aut
 export class AuthenticationComponent {
   public auth = inject(AuthService);
 
+  /** Auth0 redirect-login options passed to `loginWithRedirect`, e.g. a post-login `appState.target`. */
   @Input() configLogin: RedirectLoginOptions<AppState>= {};
+  /** Auth0 logout options passed to `logout`; `returnTo` defaults to the current origin when not provided. */
   @Input() configLogout: LogoutOptions = {};
 
   /**
