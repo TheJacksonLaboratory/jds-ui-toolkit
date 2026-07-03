@@ -80,27 +80,27 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "type": "IFacetSearchConfig",
         "default": "{\n    isToggable: false,\n    isVisible: false\n  }",
         "required": false,
-        "description": ""
+        "description": "Visibility/toggle behavior configuration for the facet search panel."
       },
       {
         "name": "parentContainer",
         "type": "ElementRef<HTMLElement> | HTMLElement",
         "required": false,
-        "description": ""
+        "description": "Element the facet search drawer is appended/positioned relative to; a &lt;div&gt; is recommended."
       },
       {
         "name": "categories",
         "type": "IFacetSearchCategory[]",
         "default": "[]",
         "required": false,
-        "description": ""
+        "description": "Facet categories and their selectable options rendered in the search panel."
       },
       {
         "name": "errors",
         "type": "string[]",
         "default": "[]",
         "required": false,
-        "description": ""
+        "description": "Error messages to display within the facet search panel."
       }
     ],
     "outputs": []
