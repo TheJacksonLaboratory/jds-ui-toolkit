@@ -3,7 +3,7 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ComponentDoc, authenticationDoc, navbarDoc, progressWidgetDoc, widgetErrorDoc } from '@jax-data-science/component-docs';
+import { ComponentDoc, authenticationDoc, facetSearchDoc, navbarDoc, progressWidgetDoc, widgetErrorDoc } from '@jax-data-science/component-docs';
 
 import { DocsContextService } from './docs-context.service';
 import { DocsLeftNavComponent } from './docs-left-nav/docs-left-nav.component';
@@ -15,6 +15,7 @@ const ALL_DOCS: ComponentDoc[] = [
   widgetErrorDoc,
   authenticationDoc,
   navbarDoc,
+  facetSearchDoc,
   // append new ComponentDoc objects here as components are migrated
 ];
 

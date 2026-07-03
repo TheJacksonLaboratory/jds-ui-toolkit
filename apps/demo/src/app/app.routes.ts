@@ -72,6 +72,15 @@ export const appRoutes: Route[] = [
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
+      {
+        path: 'facet-search',
+        children: [
+          { path: 'overview', component: ShowcaseFacetSearchComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
     ],
   },
 
@@ -81,7 +90,6 @@ export const appRoutes: Route[] = [
     component: ComponentDocsComponent,
     children: [
       { path: 'async-tasks', component: ShowcaseAsyncTasksComponent, canActivate: [AuthGuard] },
-      { path: 'facet-search', component: ShowcaseFacetSearchComponent },
       { path: 'ontology-search', component: ShowcaseOntologySearchComponent },
       { path: 'schema-grid', component: ShowcaseSchemaGridComponent },
     ],

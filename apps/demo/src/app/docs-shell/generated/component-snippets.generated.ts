@@ -11,6 +11,9 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "default": "<lib-widget-error [errorMessage]=\"'Failed to load task list.'\"></lib-widget-error>",
     "long-message": "<lib-widget-error\n  [errorMessage]=\"'Could not fetch async tasks because the requested resource was not found. Please check your network connection and try again, or contact support if the problem persists.'\">\n</lib-widget-error>"
   },
+  "facet-search": {
+    "basic": "<div #facetContainer class=\"tw-relative tw-h-96 tw-border tw-border-gray-200 tw-rounded-md tw-overflow-hidden\">\n  <lib-facet-search [categories]=\"categories\" [parentContainer]=\"facetContainer\"></lib-facet-search>\n</div>"
+  },
   "navbar": {
     "basic": "<lib-jds-navbar [title]=\"'My App'\"></lib-jds-navbar>",
     "with-auth": "<lib-jds-navbar [title]=\"'My App'\" [authentication]=\"true\"></lib-jds-navbar>",

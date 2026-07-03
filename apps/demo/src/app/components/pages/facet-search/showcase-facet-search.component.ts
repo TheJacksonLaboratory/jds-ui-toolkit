@@ -1,203 +1,64 @@
-import { Component, ElementRef, OnInit, ViewChild, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { AuthService } from '@auth0/auth0-angular';
-import { Observable, catchError, of } from 'rxjs';
-// components
-import { FacetSearchComponent, FacetSearchFacade } from '@jax-data-science/components';
-// models
-import { IFacetSearchCategory, IFacetOption } from '@jax-data-science/components';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, TemplateRef, ViewChild, inject } from '@angular/core';
+import { FacetSearchComponent, FacetSearchFacade, IFacetSearchCategory } from '@jax-data-science/components';
+import { facetSearchDoc } from '@jax-data-science/component-docs';
+import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
+import { DocVariationsComponent } from '../../../docs-shell/tab-content/doc-variations/doc-variations.component';
+import { DocUsageComponent } from '../../../docs-shell/tab-content/doc-usage/doc-usage.component';
+import { DocActivityComponent } from '../../../docs-shell/tab-content/doc-activity/doc-activity.component';
 
-// API Response interfaces
-interface FilterOption {
-  value: string;
-  displayName: string;
-  sampleCount: number;
-  metadata: any;
-}
-
-interface AvailableFilters {
-  strain: FilterOption[];
-  site: FilterOption[];
-  dose: FilterOption[];
-  sex: FilterOption[];
-  compound: FilterOption[];
-}
-
-interface StudyMetadata {
-  studyId: string;
-  treatments: string[];
-  dosages: string[];
-  characteristics: {
-    strain: string[];
-    sex: string[];
-    site: string[];
-  };
-  description: string;
-  sourceInfo: {
-    service: string;
-    timestamp: string;
-    version: string;
-    metadata: any;
-  };
-}
-
-interface ApiResponse {
-  studyMetadata: StudyMetadata;
-  availableFilters: AvailableFilters;
-  plotData: any;
-}
+// Static mock categories for the demo — the legacy showcase called a
+// non-existent local backend (localhost:28080) which always failed; using
+// fixed data here keeps the demo deterministic and actually filterable.
+const MOCK_CATEGORIES: IFacetSearchCategory[] = [
+  {
+    name: 'species',
+    label: 'Species',
+    isOpen: true,
+    options: [
+      { id: 'mouse', label: 'Mouse', selected: false, count: 128 },
+      { id: 'human', label: 'Human', selected: false, count: 42 },
+      { id: 'rat', label: 'Rat', selected: false, count: 0 },
+    ],
+  },
+  {
+    name: 'sex',
+    label: 'Sex',
+    isOpen: false,
+    options: [
+      { id: 'male', label: 'Male', selected: false, count: 86 },
+      { id: 'female', label: 'Female', selected: false, count: 84 },
+    ],
+  },
+];
 
 @Component({
   selector: 'app-showcase-facet-search',
-  imports: [CommonModule, FacetSearchComponent],
+  imports: [
+    DocOverviewComponent,
+    DocVariationsComponent,
+    DocUsageComponent,
+    DocActivityComponent,
+    FacetSearchComponent,
+  ],
   templateUrl: './showcase-facet-search.component.html',
   styleUrl: './showcase-facet-search.component.css',
-  standalone: true
+  standalone: true,
 })
-export class ShowcaseFacetSearchComponent implements OnInit {
-  private auth = inject(AuthService);
+export class ShowcaseFacetSearchComponent implements AfterViewInit {
+  private cdr = inject(ChangeDetectorRef);
   private facetSearchFacade = inject(FacetSearchFacade);
-  private http = inject(HttpClient);
+  readonly doc = facetSearchDoc;
+  demoTemplates = new Map<string, TemplateRef<void>>();
 
-  // facet search categories
-  searchCategories: IFacetSearchCategory[] = [];
+  readonly categories = MOCK_CATEGORIES;
 
-  @ViewChild('facetSearchContainer') facetSearchContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('tplBasic') tplBasic!: TemplateRef<void>;
+  @ViewChild('facetContainer') facetContainer!: ElementRef<HTMLDivElement>;
 
-  // Computed signal to track applied searches
-  appliedSearchesDisplay = computed(() => {
-    const appliedSearches = this.facetSearchFacade.getAppliedSearches$()();
-
-    // Create a readable display structure
-    const displayData = {
-      appliedSearches: appliedSearches,
-      summary: this.createSearchSummary(appliedSearches),
-      isEmpty: Object.keys(appliedSearches).length === 0
-    };
-
-    console.log('Applied searches changed:', displayData);
-    return displayData;
-  });
-
-  ngOnInit() {
+  ngAfterViewInit(): void {
+    this.demoTemplates = new Map([['basic', this.tplBasic]]);
+    // the drawer is only shown when the facade's visibility signal is true
     this.facetSearchFacade.setIsSearchVisible(true);
-
-    // Load facet search data
-    this.loadVisualizationData().subscribe({
-      next: (data) => {
-        this.searchCategories = this.transformToFacetCategories(data.availableFilters);
-        console.log('Search categories populated:', this.searchCategories);
-      },
-      error: (error) => {
-        console.error('Error loading visualization data:', error);
-        // Optionally set some default categories or show error message
-        this.searchCategories = [];
-      }
-    });
-  }
-
-  isFacetSearchEnabled(): boolean {
-    return true;
-  }
-
-  /**
-   * Makes HTTP call to get visualization data
-   */
-  private loadVisualizationData(): Observable<ApiResponse> {
-    const url = 'http://localhost:28080/api/v1/studies/1/visualization-data';
-    const params = { measureIds: '1' };
-
-    return this.http.get<ApiResponse>(url, { params }).pipe(
-      catchError((error) => {
-        console.error('HTTP request failed:', error);
-        // Return empty data structure on error
-        return of({
-          studyMetadata: {
-            studyId: '',
-            treatments: [],
-            dosages: [],
-            characteristics: { strain: [], sex: [], site: [] },
-            description: '',
-            sourceInfo: { service: '', timestamp: '', version: '', metadata: null }
-          },
-          availableFilters: {
-            strain: [],
-            site: [],
-            dose: [],
-            sex: [],
-            compound: []
-          },
-          plotData: null
-        } as ApiResponse);
-      })
-    );
-  }
-
-  /**
-   * Transforms API response availableFilters to IFacetSearchCategory[]
-   */
-  private transformToFacetCategories(availableFilters: AvailableFilters): IFacetSearchCategory[] {
-    const categories: IFacetSearchCategory[] = [];
-
-    // Transform each filter category
-    Object.entries(availableFilters).forEach(([categoryName, filterOptions]) => {
-      if (filterOptions && filterOptions.length > 0) {
-        const category: IFacetSearchCategory = {
-          name: categoryName,
-          label: this.getCategoryDisplayLabel(categoryName),
-          isOpen: false, // Start with categories closed
-          options: filterOptions.map((option: FilterOption) => ({
-            id: option.value,
-            label: option.displayName,
-            selected: false, // Start with no options selected
-            count: option.sampleCount
-          } as IFacetOption))
-        };
-
-        categories.push(category);
-      }
-    });
-
-    return categories;
-  }
-
-  /**
-   * Maps category names to user-friendly labels
-   */
-  private getCategoryDisplayLabel(categoryName: string): string {
-    const labelMap: Record<string, string> = {
-      'strain': 'Strain',
-      'site': 'Study Site',
-      'dose': 'Dosage',
-      'sex': 'Sex',
-      'compound': 'Treatment Compound'
-    };
-
-    return labelMap[categoryName] || this.capitalizeFirst(categoryName);
-  }
-
-  /**
-   * Helper method to capitalize first letter
-   */
-  private capitalizeFirst(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  /**
-   * Creates a human-readable summary of applied searches
-   */
-  private createSearchSummary(appliedSearches: Record<string, string[]>): string[] {
-    const summary: string[] = [];
-
-    Object.entries(appliedSearches).forEach(([categoryName, selectedOptions]) => {
-      if (selectedOptions.length > 0) {
-        const categoryLabel = this.getCategoryDisplayLabel(categoryName);
-        const optionsText = selectedOptions.join(', ');
-        summary.push(`${categoryLabel}: ${optionsText}`);
-      }
-    });
-
-    return summary;
+    this.cdr.detectChanges();
   }
 }
