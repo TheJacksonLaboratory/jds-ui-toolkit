@@ -19,6 +19,7 @@ import { DocPropertiesComponent } from './docs-shell/tab-content/doc-properties/
 import { DocThemingComponent } from './docs-shell/tab-content/doc-theming/doc-theming.component';
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
+import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
 
 export const appRoutes: Route[] = [
   {
@@ -57,6 +58,15 @@ export const appRoutes: Route[] = [
         path: 'auth',
         children: [
           { path: 'overview', component: ShowcaseAuthComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
+      {
+        path: 'navbar',
+        children: [
+          { path: 'overview', component: ShowcaseNavbarComponent },
           { path: 'properties', component: DocPropertiesComponent },
           { path: 'theming', component: DocThemingComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },

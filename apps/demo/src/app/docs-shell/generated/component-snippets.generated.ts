@@ -11,6 +11,11 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "default": "<lib-widget-error [errorMessage]=\"'Failed to load task list.'\"></lib-widget-error>",
     "long-message": "<lib-widget-error\n  [errorMessage]=\"'Could not fetch async tasks because the requested resource was not found. Please check your network connection and try again, or contact support if the problem persists.'\">\n</lib-widget-error>"
   },
+  "navbar": {
+    "basic": "<lib-jds-navbar [title]=\"'My App'\"></lib-jds-navbar>",
+    "with-auth": "<lib-jds-navbar [title]=\"'My App'\" [authentication]=\"true\"></lib-jds-navbar>",
+    "custom-branding": "<lib-jds-navbar\n  [title]=\"'JAX Data Science'\"\n  [icon]=\"'pi-flask'\"\n  [externalLink]=\"'https://www.jax.org'\"\n  [externalLinkLabel]=\"'jax.org'\">\n</lib-jds-navbar>"
+  },
   "progress-widget": {
     "basic-spinner": "<lib-jds-progress-widget [spinnerSize]=\"1\"></lib-jds-progress-widget>",
     "with-message": "<lib-jds-progress-widget [spinnerSize]=\"3\" [statusMessage]=\"'Loading data...'\"></lib-jds-progress-widget>",
