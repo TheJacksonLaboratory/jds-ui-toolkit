@@ -3,7 +3,15 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ComponentDoc, authenticationDoc, facetSearchDoc, navbarDoc, progressWidgetDoc, widgetErrorDoc } from '@jax-data-science/component-docs';
+import {
+  ComponentDoc,
+  asyncTaskDoc,
+  authenticationDoc,
+  facetSearchDoc,
+  navbarDoc,
+  progressWidgetDoc,
+  widgetErrorDoc,
+} from '@jax-data-science/component-docs';
 
 import { DocsContextService } from './docs-context.service';
 import { DocsLeftNavComponent } from './docs-left-nav/docs-left-nav.component';
@@ -16,7 +24,7 @@ const ALL_DOCS: ComponentDoc[] = [
   authenticationDoc,
   navbarDoc,
   facetSearchDoc,
-  // append new ComponentDoc objects here as components are migrated
+  asyncTaskDoc,
 ];
 
 const DOCS_REGISTRY = new Map<string, ComponentDoc>(ALL_DOCS.map((d) => [d.slug, d]));

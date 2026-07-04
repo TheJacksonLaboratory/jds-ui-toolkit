@@ -3,6 +3,9 @@
 // Regenerate with `pnpm docs:snippets`.
 
 export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
+  "async-tasks": {
+    "basic": "@if (accessToken$ | async; as accessToken) {\n  <lib-jds-async-tasks\n    [tableConfig]=\"tableConfiguration\"\n    [accessToken]=\"accessToken\"\n    (editEmitter)=\"editTask($event)\"\n    (openEmitter)=\"openTask($event)\">\n  </lib-jds-async-tasks>\n}"
+  },
   "auth": {
     "basic": "<lib-jds-auth></lib-jds-auth>",
     "custom-redirect": "<lib-jds-auth [configLogin]=\"customConfigLogin\" [configLogout]=\"customConfigLogout\"></lib-jds-auth>"

@@ -1,11 +1,22 @@
-@if (accessToken$ | async; as accessToken) {
-  <lib-jds-async-tasks
-    [tableConfig]="tableConfiguration"
-    [accessToken]="accessToken"
-    (editEmitter)="editTask($event)"
-    (openEmitter)="openTask($event)">
-  </lib-jds-async-tasks>
-}
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
+</div>
+
+<ng-template #tplBasic>
+  <!-- snippet:basic -->
+  @if (accessToken$ | async; as accessToken) {
+    <lib-jds-async-tasks
+      [tableConfig]="tableConfiguration"
+      [accessToken]="accessToken"
+      (editEmitter)="editTask($event)"
+      (openEmitter)="openTask($event)">
+    </lib-jds-async-tasks>
+  }
+  <!-- /snippet -->
+</ng-template>
 
 <ng-template #detailsTemplate let-task>
   <div>
