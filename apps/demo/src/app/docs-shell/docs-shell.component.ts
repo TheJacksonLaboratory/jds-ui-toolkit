@@ -18,7 +18,7 @@ import { DocsLeftNavComponent } from './docs-left-nav/docs-left-nav.component';
 import { DocsTabsComponent } from './docs-tabs/docs-tabs.component';
 import { DocsRightTocComponent } from './docs-right-toc/docs-right-toc.component';
 
-const ALL_DOCS: ComponentDoc[] = [
+export const ALL_DOCS: ComponentDoc[] = [
   progressWidgetDoc,
   widgetErrorDoc,
   authenticationDoc,
