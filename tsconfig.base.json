@@ -18,7 +18,8 @@
       "@jax-data-science/api-clients": ["libs/api-clients/src/index.ts"],
       "@jax-data-science/components": ["libs/components/src/index.ts"],
       "@jax-data-science/themes": ["libs/themes/src/index.ts"],
-      "@jax-data-science/component-docs": ["libs/components/src/docs.ts"]
+      "@jax-data-science/component-docs": ["libs/components/src/docs.ts"],
+      "@jax-data-science/service-docs": ["libs/api-clients/src/docs.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "**/node_modules"]
