@@ -26,6 +26,10 @@ import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navb
 import { ServicesShellComponent } from './services-shell/services-shell.component';
 import { ShowcaseOntologyComponent } from './services/pages/ontology/showcase-ontology.component';
 
+// New getting-started shell
+import { GettingStartedShellComponent } from './getting-started-shell/getting-started-shell.component';
+import { GettingStartedOverviewComponent } from './getting-started/pages/overview/getting-started-overview.component';
+
 export const appRoutes: Route[] = [
   {
     path: '',
@@ -113,6 +117,16 @@ export const appRoutes: Route[] = [
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
+    ],
+  },
+
+  // ── New getting-started shell (pilot: overview) ──────────────────────────
+  {
+    path: 'getting-started',
+    component: GettingStartedShellComponent,
+    children: [
+      { path: '', redirectTo: 'overview', pathMatch: 'full' },
+      { path: 'overview', component: GettingStartedOverviewComponent },
     ],
   },
 

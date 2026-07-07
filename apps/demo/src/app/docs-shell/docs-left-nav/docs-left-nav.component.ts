@@ -35,6 +35,7 @@ interface CategoryGroup {
           </button>
           @if (gettingStartedOpen) {
             <div class="tw-bg-white tw-border tw-border-[#d9d9d9] tw-rounded-md tw-p-1 tw-flex tw-flex-col">
+              <a class="tw-flex tw-items-center tw-p-2 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]" routerLink="/getting-started/overview" routerLinkActive="tw-bg-[#0177b2] tw-text-white">Overview</a>
               <a class="tw-flex tw-items-center tw-p-2 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]" routerLink="/getting-started/installation" routerLinkActive="tw-bg-[#0177b2] tw-text-white">Installation</a>
               <a class="tw-flex tw-items-center tw-p-2 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]" routerLink="/getting-started/about" routerLinkActive="tw-bg-[#0177b2] tw-text-white">About Echo</a>
               <a class="tw-flex tw-items-center tw-p-2 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]" routerLink="/getting-started/citation" routerLinkActive="tw-bg-[#0177b2] tw-text-white">Citation/License?</a>
