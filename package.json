@@ -11,8 +11,9 @@
     "e2e": "nx run-many -t e2e --no-cloud",
     "run": "nx run",
     "docs:properties": "node tools/generate-docs-properties.mjs",
+    "docs:methods": "node tools/generate-docs-methods.mjs",
     "docs:snippets": "node tools/generate-docs-snippets.mjs",
-    "docs:generate": "pnpm docs:properties && pnpm docs:snippets"
+    "docs:generate": "pnpm docs:properties && pnpm docs:methods && pnpm docs:snippets"
   },
   "private": true,
   "devDependencies": {
