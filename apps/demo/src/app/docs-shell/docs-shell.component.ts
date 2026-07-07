@@ -43,6 +43,8 @@ export class DocsShellComponent implements OnInit, OnDestroy {
 
   readonly allDocs = ALL_DOCS;
   readonly currentDoc = this.docsContext.currentDoc;
+  // Only ever rendered on a Components route, where currentDoc() is a ComponentDoc.
+  readonly currentComponentDoc = computed(() => this.currentDoc() as ComponentDoc | null);
   readonly currentSlug = signal<string>('');
 
   readonly showToc = computed(() => {

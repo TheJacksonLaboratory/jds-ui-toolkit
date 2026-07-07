@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import { ComponentDoc } from '@jax-data-science/component-docs';
+import { DocBase } from '@jax-data-science/component-docs';
 
 @Injectable({ providedIn: 'root' })
 export class DocsContextService {
-  private _currentDoc = signal<ComponentDoc | null>(null);
+  private _currentDoc = signal<DocBase | null>(null);
   readonly currentDoc = this._currentDoc.asReadonly();
 
-  setCurrentDoc(doc: ComponentDoc | null): void {
+  setCurrentDoc(doc: DocBase | null): void {
     this._currentDoc.set(doc);
   }
 }

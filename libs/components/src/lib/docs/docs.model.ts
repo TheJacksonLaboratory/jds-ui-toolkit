@@ -6,17 +6,14 @@ export type ComponentCategory =
   | 'Utilities';
 
 /**
- * Front-matter for a documented component.
- *
- * Properties and variation code are hand-authored here for now; the plan is to
- * source properties from Compodoc JSON and variation code from raw imports
- * (`?raw`) in a later stage.
- * See docs/superpowers/specs/2026-06-29-component-page-design.md.
+ * Fields shared by every documented "thing" (component or service) — what
+ * the domain-agnostic Overview/Usage/Activity tab-content components and
+ * DocsContextService key off of, regardless of which domain the doc
+ * belongs to.
  */
-export interface ComponentDoc {
+export interface DocBase {
   name: string;
   slug: string;
-  category: ComponentCategory;
   status: 'stable' | 'in-progress' | 'deprecated';
   tags: string[];
   isAuthRequired: boolean;
@@ -24,15 +21,27 @@ export interface ComponentDoc {
   /** Short description shown on the Overview header card. */
   description: string;
   docsUrl?: string;
+  /** Overview tab: usage guidance (do / don't panels). */
+  usage: UsageDoc;
+  /** Overview tab: activity section. */
+  activity?: ActivityDoc;
+}
+
+/**
+ * Front-matter for a documented component.
+ *
+ * Properties and variation code are hand-authored here for now; the plan is to
+ * source properties from Compodoc JSON and variation code from raw imports
+ * (`?raw`) in a later stage.
+ * See docs/superpowers/specs/2026-06-29-component-page-design.md.
+ */
+export interface ComponentDoc extends DocBase {
+  category: ComponentCategory;
   /** Class name Compodoc keys the generated Properties table by. */
   compodocSymbol: string;
 
   /** Overview tab: variation sections (live demo + code). */
   variations: VariationDoc[];
-  /** Overview tab: usage guidance (do / don't panels). */
-  usage: UsageDoc;
-  /** Overview tab: component activity section. */
-  activity?: ActivityDoc;
 
   /**
    * Properties tab fallback. Prefer the Compodoc-generated map

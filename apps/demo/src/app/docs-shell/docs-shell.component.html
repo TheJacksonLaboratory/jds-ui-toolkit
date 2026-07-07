@@ -16,8 +16,8 @@
       </div>
 
       <!-- Right TOC ("On this page"): shown on the Overview tab -->
-      @if (showToc() && currentDoc()) {
-        <app-docs-right-toc [doc]="currentDoc()!"></app-docs-right-toc>
+      @if (showToc() && currentComponentDoc()) {
+        <app-docs-right-toc [doc]="currentComponentDoc()!"></app-docs-right-toc>
       }
     </div>
   </div>
