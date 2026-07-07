@@ -24,7 +24,7 @@ import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navb
 
 // New services shell
 import { ServicesShellComponent } from './services-shell/services-shell.component';
-import { ShowcaseOntologyComponent } from './services/pages/ontology/showcase-ontology.component';
+import { ServiceOverviewComponent } from './services-shell/service-overview/service-overview.component';
 
 // New getting-started shell
 import { GettingStartedShellComponent } from './getting-started-shell/getting-started-shell.component';
@@ -112,7 +112,7 @@ export const appRoutes: Route[] = [
       {
         path: 'ontology',
         children: [
-          { path: 'overview', component: ShowcaseOntologyComponent },
+          { path: 'overview', component: ServiceOverviewComponent },
           { path: 'methods', component: DocMethodsComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
