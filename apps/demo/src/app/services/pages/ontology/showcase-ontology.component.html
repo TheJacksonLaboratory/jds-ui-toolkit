@@ -5,44 +5,12 @@
     <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Using JaxOntologyService</h2>
     <p class="tw-text-gray-700 tw-mb-4">{{ doc.usageExamples[0].description }}</p>
     <pre class="tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-overflow-auto"><code>{{ doc.usageExamples[0].code }}</code></pre>
-    <h3 class="tw-text-lg tw-font-semibold tw-mt-4 tw-mb-2">Live result — search('fever', 5, Ontology.HP)</h3>
-    @if (jaxError()) {
-      <p class="tw-text-red-600 tw-mb-2">{{ jaxError() }}</p>
-    }
-    @if (jaxResults$ | async; as jaxResults) {
-      <ul class="tw-list-disc tw-pl-6">
-        @for (term of jaxResults.data; track term.id) {
-          <li>{{ term.id }} — {{ term.name }}</li>
-        }
-        @empty {
-          <li class="tw-text-gray-500">No results.</li>
-        }
-      </ul>
-    } @else {
-      <p class="tw-text-gray-500">Loading…</p>
-    }
   </section>
 
   <section id="ols-ontology" class="tw-mt-12">
     <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">Using OLSOntologyService</h2>
     <p class="tw-text-gray-700 tw-mb-4">{{ doc.usageExamples[1].description }}</p>
     <pre class="tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-overflow-auto"><code>{{ doc.usageExamples[1].code }}</code></pre>
-    <h3 class="tw-text-lg tw-font-semibold tw-mt-4 tw-mb-2">Live result — search('fever', 5, Ontology.HP)</h3>
-    @if (olsError()) {
-      <p class="tw-text-red-600 tw-mb-2">{{ olsError() }}</p>
-    }
-    @if (olsResults$ | async; as olsResults) {
-      <ul class="tw-list-disc tw-pl-6">
-        @for (term of olsResults.data; track term.id) {
-          <li>{{ term.id }} — {{ term.name }}</li>
-        }
-        @empty {
-          <li class="tw-text-gray-500">No results.</li>
-        }
-      </ul>
-    } @else {
-      <p class="tw-text-gray-500">Loading…</p>
-    }
   </section>
 
   <app-doc-usage></app-doc-usage>

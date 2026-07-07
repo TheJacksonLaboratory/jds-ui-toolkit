@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ComponentCategory, ComponentDoc } from '@jax-data-science/component-docs';
-import { ServiceCategory, ServiceDoc } from '@jax-data-science/service-docs';
+import { ServiceDoc } from '@jax-data-science/service-docs';
 
 const CATEGORY_ORDER: ComponentCategory[] = [
   'Navigation',
@@ -11,21 +11,9 @@ const CATEGORY_ORDER: ComponentCategory[] = [
   'Utilities',
 ];
 
-const SERVICE_CATEGORY_ORDER: ServiceCategory[] = [
-  'Ontology',
-  'Data Access',
-  'Async Processing',
-  'Genomics',
-];
-
 interface CategoryGroup {
   category: ComponentCategory;
   docs: ComponentDoc[];
-}
-
-interface ServiceCategoryGroup {
-  category: ServiceCategory;
-  docs: ServiceDoc[];
 }
 
 @Component({
@@ -88,13 +76,10 @@ interface ServiceCategoryGroup {
           </button>
           @if (servicesOpen) {
             <div class="tw-bg-white tw-border tw-border-[#d9d9d9] tw-rounded-md tw-p-1 tw-flex tw-flex-col">
-              @for (group of serviceCategoryGroups; track group.category) {
-                <span class="tw-block tw-px-2 tw-pt-2 tw-pb-1 tw-text-base tw-font-bold tw-text-[#222] tw-leading-none">{{ group.category }}</span>
-                @for (doc of group.docs; track doc.slug) {
-                  <a class="tw-flex tw-items-center tw-p-2 tw-pl-6 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]"
-                     [routerLink]="['/services', doc.slug, 'overview']"
-                     routerLinkActive="tw-bg-[#0177b2] tw-text-white">{{ doc.name }}</a>
-                }
+              @for (doc of services; track doc.slug) {
+                <a class="tw-flex tw-items-center tw-p-2 tw-rounded-md tw-text-base tw-text-[#222] tw-no-underline tw-leading-none hover:tw-bg-[rgba(1,119,178,0.08)]"
+                   [routerLink]="['/services', doc.slug, 'overview']"
+                   routerLinkActive="tw-bg-[#0177b2] tw-text-white">{{ doc.name }}</a>
               }
             </div>
           }
@@ -109,7 +94,6 @@ export class DocsLeftNavComponent implements OnChanges {
   @Input() services: ServiceDoc[] = [];
 
   categoryGroups: CategoryGroup[] = [];
-  serviceCategoryGroups: ServiceCategoryGroup[] = [];
   gettingStartedOpen = true;
   componentsOpen = true;
   servicesOpen = true;
@@ -117,10 +101,6 @@ export class DocsLeftNavComponent implements OnChanges {
   ngOnChanges(): void {
     this.categoryGroups = CATEGORY_ORDER.flatMap((category) => {
       const docs = this.docs.filter((d) => d.category === category);
-      return docs.length ? [{ category, docs }] : [];
-    });
-    this.serviceCategoryGroups = SERVICE_CATEGORY_ORDER.flatMap((category) => {
-      const docs = this.services.filter((d) => d.category === category);
       return docs.length ? [{ category, docs }] : [];
     });
   }
