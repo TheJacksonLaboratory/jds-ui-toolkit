@@ -13,6 +13,7 @@ import {
   widgetErrorDoc,
 } from '@jax-data-science/component-docs';
 
+import { ALL_SERVICE_DOCS } from '../services-shell/services-shell.component';
 import { DocsContextService } from './docs-context.service';
 import { DocsLeftNavComponent } from './docs-left-nav/docs-left-nav.component';
 import { DocsTabsComponent } from './docs-tabs/docs-tabs.component';
@@ -42,6 +43,7 @@ export class DocsShellComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   readonly allDocs = ALL_DOCS;
+  readonly allServices = ALL_SERVICE_DOCS;
   readonly currentDoc = this.docsContext.currentDoc;
   // Only ever rendered on a Components route, where currentDoc() is a ComponentDoc.
   readonly currentComponentDoc = computed(() => this.currentDoc() as ComponentDoc | null);
