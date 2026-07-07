@@ -17,9 +17,14 @@ import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa
 import { DocsShellComponent } from './docs-shell/docs-shell.component';
 import { DocPropertiesComponent } from './docs-shell/tab-content/doc-properties/doc-properties.component';
 import { DocThemingComponent } from './docs-shell/tab-content/doc-theming/doc-theming.component';
+import { DocMethodsComponent } from './docs-shell/tab-content/doc-methods/doc-methods.component';
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
+
+// New services shell
+import { ServicesShellComponent } from './services-shell/services-shell.component';
+import { ShowcaseOntologyComponent } from './services/pages/ontology/showcase-ontology.component';
 
 export const appRoutes: Route[] = [
   {
@@ -88,6 +93,23 @@ export const appRoutes: Route[] = [
           { path: 'overview', component: ShowcaseAsyncTasksComponent },
           { path: 'properties', component: DocPropertiesComponent },
           { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
+    ],
+  },
+
+  // ── New services shell (pilot: ontology) ─────────────────────────────────
+  {
+    path: 'services',
+    component: ServicesShellComponent,
+    children: [
+      { path: '', redirectTo: 'ontology/overview', pathMatch: 'full' },
+      {
+        path: 'ontology',
+        children: [
+          { path: 'overview', component: ShowcaseOntologyComponent },
+          { path: 'methods', component: DocMethodsComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
