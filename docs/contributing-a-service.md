@@ -15,6 +15,10 @@ Use the shipped **`ontology`** service as a reference implementation while you
 read. See [`docs/superpowers/specs/2026-07-07-services-docs-design.md`](./superpowers/specs/2026-07-07-services-docs-design.md)
 for the design rationale.
 
+Every service shares one generic `ServiceOverviewComponent` for its Overview
+tab — there's no per-service component to write. Adding a service is
+front-matter + registration + a route, nothing else.
+
 ---
 
 ## How a service page is assembled
@@ -37,7 +41,7 @@ One committed, generated file backs the Methods tab:
 
 - `apps/demo/src/app/docs-shell/generated/service-methods.generated.ts`
 
-Regenerate it with `pnpm docs:methods` (details in step 5).
+Regenerate it with `pnpm docs:methods` (details in step 4).
 
 ---
 
@@ -45,10 +49,14 @@ Regenerate it with `pnpm docs:methods` (details in step 5).
 
 1. Author the service with per-method JSDoc
 2. Write the front-matter (`[service].docs.ts`) and export it
-3. Build the showcase (Overview) with static usage-example code blocks
-4. Register the service (services registry + route)
-5. Generate the Methods map
-6. Verify
+3. Register the service (services registry + route)
+4. Generate the Methods map
+5. Verify
+
+There's no "build a showcase" step — every service's Overview tab is rendered
+by the same shared `ServiceOverviewComponent`, driven entirely by your
+front-matter's `usageExamples`. Adding a service means writing data, not a
+new component.
 
 ---
 
@@ -87,7 +95,7 @@ export abstract class MyServiceContract {
 ```
 
 Compodoc categorizes plain classes (no `@Injectable()`) under a different
-JSON key than `@Injectable` services — the generator in step 5 already
+JSON key than `@Injectable` services — the generator in step 4 already
 handles both, so this doesn't require any extra configuration on your part.
 
 ## 2. Front-matter — `[service].docs.ts`
@@ -164,65 +172,24 @@ export * from './lib/services/my-service/my-service.docs';
 > exported from `index.ts` — docs metadata never ships in the published
 > `api-clients` bundle.
 
-## 3. Showcase (Overview) — static usage examples
+## 3. Register the service
 
-In `apps/demo/src/app/services/pages/<service>/`, create
-`showcase-<service>.component.ts` + `.html`. Unlike components, there's no
-live demo template — just render each usage example's `code` as a static
-block, using the generic `DocOverview`/`DocUsage`/`DocActivity` tab-content
-components for everything else.
+There's no showcase file to write. Every service's Overview tab is rendered
+by `apps/demo/src/app/services-shell/service-overview/service-overview.component.ts`
+— a single component that reads whatever `ServiceDoc` is currently in
+context (via `DocsContextService`, set by `ServicesShellComponent` off the
+URL slug) and loops over its `usageExamples`, rendering each one as a
+`<section>` with a header, description, and static code block, followed by
+the generic `DocOverview`/`DocUsage`/`DocActivity` tab-content pieces. All of
+that content comes from your front-matter — there is nothing to build here.
 
-`showcase-<service>.component.ts`:
-
-```ts
-import { Component } from '@angular/core';
-import { myServiceDoc } from '@jax-data-science/service-docs';
-import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
-import { DocUsageComponent } from '../../../docs-shell/tab-content/doc-usage/doc-usage.component';
-import { DocActivityComponent } from '../../../docs-shell/tab-content/doc-activity/doc-activity.component';
-
-@Component({
-  selector: 'app-showcase-my-service',
-  imports: [DocOverviewComponent, DocUsageComponent, DocActivityComponent],
-  templateUrl: './showcase-my-service.component.html',
-  styleUrl: './showcase-my-service.component.css',
-  standalone: true,
-})
-export class ShowcaseMyServiceComponent {
-  readonly doc = myServiceDoc;
-}
-```
-
-`showcase-<service>.component.html` — one `<section>` per usage example,
-matching its `id` to the anchor the right-side TOC links to:
-
-```html
-<div class="tw-p-8 tw-max-w-4xl">
-  <app-doc-overview></app-doc-overview>
-
-  <section id="basic" class="tw-mt-12">
-    <h2 class="tw-text-2xl tw-font-semibold tw-mb-2">{{ doc.usageExamples[0].title }}</h2>
-    <p class="tw-text-gray-700 tw-mb-4">{{ doc.usageExamples[0].description }}</p>
-    <pre class="tw-bg-gray-100 tw-p-4 tw-rounded tw-text-sm tw-overflow-auto"><code>{{ doc.usageExamples[0].code }}</code></pre>
-  </section>
-
-  <app-doc-usage></app-doc-usage>
-  <app-doc-activity></app-doc-activity>
-</div>
-```
-
-**Key rule:** if you're tempted to make a usage example call the service live
-(inject it and subscribe in the showcase component), only do that if the
-service is safe to call with no auth, no side effects, and a real backend
-that's actually reachable — verify the URL resolves *before* wiring it up.
-Prefer static code blocks by default; that's why `usageExamples[].code` is a
-plain hand-authored string rather than something scraped from a live
-template.
-
-Also add a spec (same `should create` pattern as every other showcase page —
-see any existing `showcase-*.component.spec.ts` for the shape).
-
-## 4. Register the service
+**Key rule:** usage examples are hand-authored, static code — not live
+calls. If you're tempted to make one inject the service and call it for
+real, only do that if the service is safe to call with no auth, no side
+effects, and a real backend that's actually reachable (verify the URL
+resolves *before* wiring it up), and even then, prefer adding that logic in
+a one-off page rather than the shared `ServiceOverviewComponent`. Static
+code blocks are the default for a reason: they can't drift, break, or throw.
 
 Add the doc to `ALL_SERVICE_DOCS` in
 `apps/demo/src/app/services-shell/services-shell.component.ts`:
@@ -232,13 +199,13 @@ export const ALL_SERVICE_DOCS: ServiceDoc[] = [ontologyDoc, myServiceDoc];
 ```
 
 Add a route block in `apps/demo/src/app/app.routes.ts` under the `services`
-shell:
+shell, reusing the same `ServiceOverviewComponent` every other service uses:
 
 ```ts
 {
   path: 'my-service',
   children: [
-    { path: 'overview', component: ShowcaseMyServiceComponent },
+    { path: 'overview', component: ServiceOverviewComponent },
     { path: 'methods', component: DocMethodsComponent },
     { path: '', redirectTo: 'overview', pathMatch: 'full' },
   ],
@@ -251,7 +218,7 @@ flat list (no category grouping, unlike Components); if/when that changes,
 it'll be a change to `DocsLeftNavComponent` alone, not to individual
 service front-matter.
 
-## 5. Generate the Methods map
+## 4. Generate the Methods map
 
 ```bash
 pnpm docs:methods
@@ -265,7 +232,7 @@ committed so a clean checkout builds without running Compodoc. **Rerun
 `pnpm docs:methods` whenever you change a service's public methods or their
 JSDoc.**
 
-## 6. Verify
+## 5. Verify
 
 ```bash
 npx nx build api-clients
@@ -302,15 +269,21 @@ service appears in the left nav under Services.
   `@jax-data-science/component-docs` from somewhere in `libs/api-clients`.
   Declare the shared fields locally instead (see the note in step 2).
 - **Service missing from the left nav** → not added to `ALL_SERVICE_DOCS`.
-- **Synchronous throw when injecting a service in a showcase** → some
+- **Private/protected methods leaking into the Methods table** → the
+  generator filters out TypeScript's `private`/`protected` modifiers, but
+  only for methods it recognizes as such via Compodoc's `modifierKind`. If a
+  method shows up that shouldn't, check it's actually declared `private`/
+  `protected` (not just conventionally named) and rerun `pnpm docs:methods`.
+- **Synchronous throw when injecting a service somewhere live** → some
   service methods build their request eagerly (e.g. resolving a config
   loaded asynchronously in the constructor) and throw before you even
   subscribe if called too early. This is exactly why usage examples are
-  static code by default rather than live calls — if you do wire up a live
-  call anyway, wrap it in `defer(() => service.method(...))` so a failure
-  becomes an observable error instead of an exception during component
-  construction, and `catchError` it into a visible error state rather than
-  letting it crash the page.
+  static code by default rather than live calls — if you ever do wire up a
+  live call (outside `ServiceOverviewComponent`, in a one-off page), wrap it
+  in `defer(() => service.method(...))` so a failure becomes an observable
+  error instead of an exception during component construction, and
+  `catchError` it into a visible error state rather than letting it crash
+  the page.
 - **No syntax highlighting** — intentional, same rule as components. Code
   blocks are plain styled `<pre>`; do not add `ngx-highlightjs`.
 - **No live demo variations** — intentional. Services have no UI to render,
