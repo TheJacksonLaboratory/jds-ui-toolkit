@@ -133,6 +133,14 @@ export const appRoutes: Route[] = [
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
+      {
+        path: 'snp-grid',
+        children: [
+          { path: 'overview', component: ServiceOverviewComponent },
+          { path: 'methods', component: DocMethodsComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
     ],
   },
 

@@ -3,7 +3,13 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
 
-import { ServiceDoc, asyncTaskServiceDoc, isaDataDoc, ontologyDoc } from '@jax-data-science/service-docs';
+import {
+  ServiceDoc,
+  asyncTaskServiceDoc,
+  isaDataDoc,
+  ontologyDoc,
+  snpGridServiceDoc,
+} from '@jax-data-science/service-docs';
 
 import { ALL_DOCS } from '../docs-shell/docs-shell.component';
 import { DocsContextService } from '../docs-shell/docs-context.service';
@@ -11,7 +17,12 @@ import { DocsLeftNavComponent } from '../docs-shell/docs-left-nav/docs-left-nav.
 import { ServicesTabsComponent } from './services-tabs/services-tabs.component';
 import { ServicesRightTocComponent } from './services-right-toc/services-right-toc.component';
 
-export const ALL_SERVICE_DOCS: ServiceDoc[] = [ontologyDoc, isaDataDoc, asyncTaskServiceDoc];
+export const ALL_SERVICE_DOCS: ServiceDoc[] = [
+  ontologyDoc,
+  isaDataDoc,
+  asyncTaskServiceDoc,
+  snpGridServiceDoc,
+];
 
 const SERVICES_REGISTRY = new Map<string, ServiceDoc>(ALL_SERVICE_DOCS.map((d) => [d.slug, d]));
 
