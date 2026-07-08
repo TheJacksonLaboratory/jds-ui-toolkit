@@ -107,55 +107,55 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "addInput",
         "signature": "addInput(inputSubmission: InputSubmission)",
         "returnType": "Observable<Response<Input>>",
-        "description": ""
+        "description": "Creates a new input."
       },
       {
         "name": "createRun",
         "signature": "createRun(inputId: number, inputSubmission: InputSubmission)",
         "returnType": "Observable<Response<Run>>",
-        "description": ""
+        "description": "Creates a new run, optionally for an existing input or a new input submission."
       },
       {
         "name": "getApiBaseUrl",
         "signature": "getApiBaseUrl()",
         "returnType": "string",
-        "description": ""
+        "description": "Gets the configured API base URL this service sends requests to."
       },
       {
         "name": "getHealthCheck",
         "signature": "getHealthCheck()",
         "returnType": "Observable<any>",
-        "description": ""
+        "description": "Checks whether the async task backend is reachable and healthy."
       },
       {
         "name": "getInput",
         "signature": "getInput(id: number)",
         "returnType": "Observable<Response<Input>>",
-        "description": ""
+        "description": "Gets an input by its ID."
       },
       {
         "name": "getInputs",
         "signature": "getInputs()",
         "returnType": "Observable<CollectionResponse<InputReference>>",
-        "description": ""
+        "description": "Gets all inputs."
       },
       {
         "name": "getResult",
         "signature": "getResult(resId: number)",
         "returnType": "Observable<Response<Result>>",
-        "description": ""
+        "description": "Gets a result by its ID."
       },
       {
         "name": "getResults",
         "signature": "getResults()",
         "returnType": "Observable<CollectionResponse<ResultReference>>",
-        "description": ""
+        "description": "Gets all results."
       },
       {
         "name": "getRun",
         "signature": "getRun(id: number)",
         "returnType": "Observable<Response<Run>>",
-        "description": ""
+        "description": "Gets a run by its ID."
       },
       {
         "name": "getRunEvents",
@@ -179,13 +179,13 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "getRuns",
         "signature": "getRuns(workflowId: string)",
         "returnType": "Observable<CollectionResponse<Run>>",
-        "description": ""
+        "description": "Gets all runs, optionally filtered to a specific workflow."
       },
       {
         "name": "setApiBaseUrl",
         "signature": "setApiBaseUrl(baseUrl: string)",
         "returnType": "void",
-        "description": ""
+        "description": "Overrides the API base URL. Appends /asynctask/api if the given URL doesn&#39;t already end with it, and rebuilds the underlying API service."
       },
       {
         "name": "updateInput",
