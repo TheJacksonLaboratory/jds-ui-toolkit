@@ -7,6 +7,7 @@ import {
   ServiceDoc,
   asyncTaskServiceDoc,
   isaDataDoc,
+  mvarServiceDoc,
   ontologyDoc,
   snpGridServiceDoc,
 } from '@jax-data-science/service-docs';
@@ -22,6 +23,7 @@ export const ALL_SERVICE_DOCS: ServiceDoc[] = [
   isaDataDoc,
   asyncTaskServiceDoc,
   snpGridServiceDoc,
+  mvarServiceDoc,
 ];
 
 const SERVICES_REGISTRY = new Map<string, ServiceDoc>(ALL_SERVICE_DOCS.map((d) => [d.slug, d]));
