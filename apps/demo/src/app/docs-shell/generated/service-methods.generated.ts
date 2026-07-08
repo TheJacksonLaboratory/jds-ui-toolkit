@@ -32,24 +32,6 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "description": "Get a user-friendly error message based on the HTTP status code"
       },
       {
-        "name": "handleCollectionResponse",
-        "signature": "handleCollectionResponse(response: CollectionResponse<T>)",
-        "returnType": "CollectionResponse<T>",
-        "description": "Get a collection of resources"
-      },
-      {
-        "name": "handleHttpError",
-        "signature": "handleHttpError(error: any)",
-        "returnType": "Observable<never>",
-        "description": "Handles HTTP errors by catching them and rethrowing a consistent error response that contains an error code, numeric code, and a user-friendly message. TO-DO: [GIK 6/10/2025] consider adding error logging capabilities to an external service"
-      },
-      {
-        "name": "handleResponse",
-        "signature": "handleResponse(response: Response<T> | CollectionResponse<T>)",
-        "returnType": "Response | CollectionResponse",
-        "description": "Handles API response errors and HTTP errors"
-      },
-      {
         "name": "patch",
         "signature": "patch(url: string, body: any)",
         "returnType": "Observable<Response<T>>",
@@ -222,22 +204,16 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
   "ISADataService": {
     "methods": [
       {
-        "name": "buildUrl",
-        "signature": "buildUrl(endpoint: string, params: Record<string, string>)",
-        "returnType": "string",
-        "description": "Builds the URL for the ISA data service."
-      },
-      {
         "name": "getApiBaseUrl",
         "signature": "getApiBaseUrl()",
         "returnType": "string",
-        "description": ""
+        "description": "Gets the configured base URL this service sends requests to."
       },
       {
         "name": "getHealthCheck",
         "signature": "getHealthCheck()",
         "returnType": "Observable<any>",
-        "description": ""
+        "description": "Checks whether the ISA data backend is reachable and healthy."
       },
       {
         "name": "getMeasureSeriesCharacteristics",

@@ -36,6 +36,12 @@ try {
       .replace(/\s+/g, ' ')
       .trim();
 
+  // TypeScript SyntaxKind values Compodoc surfaces in `modifierKind`.
+  // PrivateKeyword = 123, ProtectedKeyword = 125 — exclude both; a service's
+  // Methods tab should only ever show its public API surface.
+  const NON_PUBLIC_MODIFIERS = new Set([123, 125]);
+  const isPublic = (m) => !(m.modifierKind || []).some((k) => NON_PUBLIC_MODIFIERS.has(k));
+
   const toMethod = (m) => ({
     name: m.name,
     signature: `${m.name}(${(m.args || [])
@@ -49,8 +55,9 @@ try {
   // Abstract/plain classes (e.g. an abstract service contract) live under
   // `classes`; concrete @Injectable services live under `injectables`.
   for (const c of [...(doc.classes || []), ...(doc.injectables || [])]) {
-    if (!c.methods || c.methods.length === 0) continue;
-    map[c.name] = { methods: c.methods.map(toMethod) };
+    const publicMethods = (c.methods || []).filter(isPublic);
+    if (publicMethods.length === 0) continue;
+    map[c.name] = { methods: publicMethods.map(toMethod) };
   }
 
   const banner =

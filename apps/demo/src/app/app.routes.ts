@@ -117,6 +117,14 @@ export const appRoutes: Route[] = [
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
         ],
       },
+      {
+        path: 'isa-data',
+        children: [
+          { path: 'overview', component: ServiceOverviewComponent },
+          { path: 'methods', component: DocMethodsComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
     ],
   },
 
