@@ -29,6 +29,8 @@ import { ServiceOverviewComponent } from './services-shell/service-overview/serv
 // New getting-started shell
 import { GettingStartedShellComponent } from './getting-started-shell/getting-started-shell.component';
 import { GettingStartedOverviewComponent } from './getting-started/pages/overview/getting-started-overview.component';
+import { CreatingAComponentComponent } from './getting-started/pages/creating-a-component/creating-a-component.component';
+import { CreatingAServiceComponent } from './getting-started/pages/creating-a-service/creating-a-service.component';
 
 export const appRoutes: Route[] = [
   {
@@ -159,6 +161,8 @@ export const appRoutes: Route[] = [
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: GettingStartedOverviewComponent },
+      { path: 'creating-a-component', component: CreatingAComponentComponent },
+      { path: 'creating-a-service', component: CreatingAServiceComponent },
     ],
   },
 
