@@ -69,7 +69,7 @@ interface CategoryGroup {
         <div class="tw-flex tw-flex-col tw-gap-2">
           <button class="tw-flex tw-items-center tw-w-full tw-bg-transparent tw-border-none tw-cursor-pointer tw-p-0 tw-text-[#454545]" (click)="servicesOpen = !servicesOpen">
             <span class="tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-text-base tw-flex-shrink-0"><i class="pi pi-globe"></i></span>
-            <span class="tw-flex-1 tw-text-xl tw-font-normal tw-text-left tw-py-2">Services</span>
+            <span class="tw-flex-1 tw-text-xl tw-font-normal tw-text-left tw-py-2">API Clients</span>
             <span class="tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-text-sm tw-flex-shrink-0 tw-transition-transform tw-duration-150" [class.-tw-rotate-90]="!servicesOpen">
               <i class="pi pi-chevron-down"></i>
             </span>
