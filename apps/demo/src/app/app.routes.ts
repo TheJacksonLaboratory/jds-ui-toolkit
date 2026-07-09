@@ -33,7 +33,7 @@ import { GettingStartedOverviewComponent } from './getting-started/pages/overvie
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'components/progress-widget/overview',
+    redirectTo: 'getting-started/overview',
     pathMatch: 'full',
   },
 
@@ -181,7 +181,7 @@ export const appRoutes: Route[] = [
 
   {
     path: '**',
-    redirectTo: 'components/progress-widget/overview',
+    redirectTo: 'getting-started/overview',
     pathMatch: 'full',
   },
 ];
