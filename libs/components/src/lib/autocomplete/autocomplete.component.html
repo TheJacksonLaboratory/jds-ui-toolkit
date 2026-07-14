@@ -30,7 +30,9 @@
       <span
         class="jds-ac-label tw-text-base tw-leading-5 tw-overflow-hidden tw-text-ellipsis tw-whitespace-nowrap"
         [innerHTML]="highlightMatch(item.label, currentQuery())"></span>
-      <span class="jds-ac-id tw-text-sm tw-leading-4 tw-text-[var(--echo-grey-700,#636363)]">{{ item.id }}</span>
+      <span
+        class="jds-ac-id tw-text-sm tw-leading-4 tw-text-[var(--echo-grey-700,#636363)]"
+        [innerHTML]="highlightMatch(item.id, currentQuery())"></span>
     </div>
   </ng-template>
 
