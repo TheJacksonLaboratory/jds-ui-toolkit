@@ -90,6 +90,12 @@ export class ShowcaseAutocompleteComponent {
   flatSelected = signal<JdsAutocompleteItem | null>(null);
   flatLastEvent = signal<string>('');
 
+  // Truncation example — narrow, resizable container to exercise label/id truncation
+  truncationWidth = signal(220);
+  truncationSuggestions = signal<JdsAutocompleteItem[]>([]);
+  truncationSelected = signal<JdsAutocompleteItem | null>(null);
+  truncationLastEvent = signal<string>('');
+
   onGroupedSearch(event: { query: string }): void {
     const q = event.query.toLowerCase();
     const filtered: JdsAutocompleteGroup[] = ALL_DATA
@@ -137,5 +143,28 @@ export class ShowcaseAutocompleteComponent {
   onFlatClear(): void {
     this.flatSelected.set(null);
     this.flatLastEvent.set('Cleared');
+  }
+
+  onTruncationWidthChange(event: Event): void {
+    this.truncationWidth.set(Number((event.target as HTMLInputElement).value));
+  }
+
+  onTruncationSearch(event: { query: string }): void {
+    const q = event.query.toLowerCase();
+    this.truncationSuggestions.set(
+      FLAT_DATA.filter(
+        item => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
+      )
+    );
+  }
+
+  onTruncationSelect(item: JdsAutocompleteItem): void {
+    this.truncationSelected.set(item);
+    this.truncationLastEvent.set(`Selected: ${item.label} (${item.id})`);
+  }
+
+  onTruncationClear(): void {
+    this.truncationSelected.set(null);
+    this.truncationLastEvent.set('Cleared');
   }
 }

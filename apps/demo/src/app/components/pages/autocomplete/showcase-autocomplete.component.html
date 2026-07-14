@@ -50,4 +50,40 @@
     }
   </section>
 
+  <!-- Truncation example -->
+  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
+    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Truncation (narrow container)</h3>
+    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
+      Drag the slider to resize the container and see label/id truncation kick in (e.g. search "abnormality" or "disability").
+    </p>
+
+    <label class="tw-flex tw-items-center tw-gap-3 tw-mb-4 tw-text-sm tw-text-gray-600">
+      Container width: {{ truncationWidth() }}px
+      <input
+        type="range"
+        min="120"
+        max="400"
+        step="10"
+        [value]="truncationWidth()"
+        (input)="onTruncationWidthChange($event)"
+        class="tw-w-48" />
+    </label>
+
+    <div [style.width.px]="truncationWidth()">
+      <lib-jds-autocomplete
+        [suggestions]="truncationSuggestions()"
+        placeholder="Search terms…"
+        (completeMethod)="onTruncationSearch($event)"
+        (selectItem)="onTruncationSelect($event)"
+        (cleared)="onTruncationClear()">
+      </lib-jds-autocomplete>
+    </div>
+
+    @if (truncationLastEvent()) {
+      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+        {{ truncationLastEvent() }}
+      </div>
+    }
+  </section>
+
 </div>
