@@ -103,7 +103,7 @@ export class ShowcaseAutocompleteComponent {
 
     this.groupedSuggestions.set(filtered);
     const total = filtered.reduce((sum, g) => sum + g.items.length, 0);
-    this.groupedTotalCount.set(total > 5 ? total : null);
+    this.groupedTotalCount.set(total > 8 ? total : null);
   }
 
   onGroupedSelect(item: JdsAutocompleteItem): void {

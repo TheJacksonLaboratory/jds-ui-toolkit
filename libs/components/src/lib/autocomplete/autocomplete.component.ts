@@ -4,6 +4,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import type { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { JdsAutocompleteGroup, JdsAutocompleteItem } from './autocomplete.model';
 
+const MAX_PER_GROUP = 4;
+const MAX_TOTAL_ITEMS = 8;
+
 @Component({
   selector: 'lib-jds-autocomplete',
   standalone: true,
@@ -44,6 +47,33 @@ export class JdsAutocompleteComponent {
   });
 
   protected showAllFooter = computed(() => this.totalCount() !== null);
+
+  protected displaySuggestions = computed(() => {
+    const s = this.suggestions();
+    if (!this.isGrouped()) {
+      return (s as JdsAutocompleteItem[]).slice(0, MAX_TOTAL_ITEMS);
+    }
+
+    const groups = s as JdsAutocompleteGroup[];
+    const taken = new Array(groups.length).fill(0);
+    let total = 0;
+
+    while (total < MAX_TOTAL_ITEMS) {
+      let addedThisRound = false;
+      for (let i = 0; i < groups.length && total < MAX_TOTAL_ITEMS; i++) {
+        if (taken[i] < MAX_PER_GROUP && taken[i] < groups[i].items.length) {
+          taken[i]++;
+          total++;
+          addedThisRound = true;
+        }
+      }
+      if (!addedThisRound) break;
+    }
+
+    return groups
+      .map((group, i) => ({ ...group, items: group.items.slice(0, taken[i]) }))
+      .filter((group) => group.items.length > 0);
+  });
 
   onComplete(event: AutoCompleteCompleteEvent): void {
     this.currentQuery.set(event.query);
