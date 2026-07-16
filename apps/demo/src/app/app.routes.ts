@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { AuthGuard } from '@auth0/auth0-angular';
 
 // Legacy shell components (kept while migrating remaining components)
 import { ComponentDocsComponent } from './components/pages/docs/component-docs.component';
@@ -14,7 +13,7 @@ import { ShowcaseSchemaGridComponent } from './components/pages/schema-grid/show
 import { ShowcaseISADataComponent } from './services/pages/isa-data/showcase-isa-data.component';
 
 // New docs shell
-import { DocsShellComponent } from './docs-shell/docs-shell.component';
+import { ALL_DOCS, DocsShellComponent } from './docs-shell/docs-shell.component';
 import { DocPropertiesComponent } from './docs-shell/tab-content/doc-properties/doc-properties.component';
 import { DocThemingComponent } from './docs-shell/tab-content/doc-theming/doc-theming.component';
 import { DocMethodsComponent } from './docs-shell/tab-content/doc-methods/doc-methods.component';
@@ -23,7 +22,7 @@ import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/sh
 import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
 
 // New services shell
-import { ServicesShellComponent } from './services-shell/services-shell.component';
+import { ALL_SERVICE_DOCS, ServicesShellComponent } from './services-shell/services-shell.component';
 import { ServiceOverviewComponent } from './services-shell/service-overview/service-overview.component';
 
 // New getting-started shell
@@ -31,6 +30,25 @@ import { GettingStartedShellComponent } from './getting-started-shell/getting-st
 import { GettingStartedOverviewComponent } from './getting-started/pages/overview/getting-started-overview.component';
 import { CreatingAComponentComponent } from './getting-started/pages/creating-a-component/creating-a-component.component';
 import { CreatingAServiceComponent } from './getting-started/pages/creating-a-service/creating-a-service.component';
+
+/**
+ * Picks the slug of whichever component doc sorts first alphabetically by
+ * name — the same order the (flattened) left nav displays components in —
+ * so the landing redirect stays correct as components are added, removed,
+ * or renamed, with nothing hardcoded.
+ */
+function firstComponentSlug(docs: { slug: string; name: string }[]): string {
+  return [...docs].sort((a, b) => a.name.localeCompare(b.name))[0].slug;
+}
+
+/**
+ * Picks the slug of whichever service doc is listed first — the left nav's
+ * Services list is not alphabetically re-sorted (unlike Components), so this
+ * intentionally preserves registry order rather than re-sorting by name.
+ */
+function firstServiceSlug(docs: { slug: string }[]): string {
+  return docs[0].slug;
+}
 
 export const appRoutes: Route[] = [
   {
@@ -44,8 +62,8 @@ export const appRoutes: Route[] = [
     path: 'components',
     component: DocsShellComponent,
     children: [
-      // Landing on /components goes to the first documented component.
-      { path: '', redirectTo: 'progress-widget/overview', pathMatch: 'full' },
+      // Landing on /components defaults to the first documented component's overview.
+      { path: '', redirectTo: () => `${firstComponentSlug(ALL_DOCS)}/overview`, pathMatch: 'full' },
       {
         path: 'progress-widget',
         children: [
@@ -94,7 +112,6 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'async-tasks',
-        canActivate: [AuthGuard],
         children: [
           { path: 'overview', component: ShowcaseAsyncTasksComponent },
           { path: 'properties', component: DocPropertiesComponent },
@@ -110,7 +127,8 @@ export const appRoutes: Route[] = [
     path: 'services',
     component: ServicesShellComponent,
     children: [
-      { path: '', redirectTo: 'ontology/overview', pathMatch: 'full' },
+      // Landing on /services defaults to the first documented service's overview.
+      { path: '', redirectTo: () => `${firstServiceSlug(ALL_SERVICE_DOCS)}/overview`, pathMatch: 'full' },
       {
         path: 'ontology',
         children: [

@@ -6,16 +6,30 @@
 </div>
 
 <ng-template #tplBasic>
-  <!-- snippet:basic -->
-  @if (accessToken$ | async; as accessToken) {
-    <lib-jds-async-tasks
-      [tableConfig]="tableConfiguration"
-      [accessToken]="accessToken"
-      (editEmitter)="editTask($event)"
-      (openEmitter)="openTask($event)">
-    </lib-jds-async-tasks>
+  @if (demoEnabled()) {
+    <!-- snippet:basic -->
+    @if (accessToken$ | async; as accessToken) {
+      <lib-jds-async-tasks
+        [tableConfig]="tableConfiguration"
+        [accessToken]="accessToken"
+        (editEmitter)="editTask($event)"
+        (openEmitter)="openTask($event)">
+      </lib-jds-async-tasks>
+    }
+    <!-- /snippet -->
+  } @else {
+    <div class="tw-p-8 tw-border tw-border-gray-200 tw-rounded-lg tw-bg-gray-50 tw-text-center">
+      <p class="tw-text-gray-600 tw-mb-4">
+        This live demo calls a real, authenticated task backend. Enable it to try it out.
+      </p>
+      <button
+        type="button"
+        (click)="enableDemo()"
+        class="tw-bg-[#0177b2] tw-text-white tw-px-4 tw-py-2 tw-rounded-md tw-border-none tw-cursor-pointer hover:tw-bg-[#005d8b] tw-transition-colors">
+        {{ isAuthenticated() ? 'Enable live demo' : 'Log in to enable live demo' }}
+      </button>
+    </div>
   }
-  <!-- /snippet -->
 </ng-template>
 
 <ng-template #detailsTemplate let-task>

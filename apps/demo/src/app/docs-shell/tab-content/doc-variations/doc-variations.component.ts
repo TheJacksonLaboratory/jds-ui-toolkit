@@ -3,10 +3,11 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ComponentDoc, VariationDoc } from '@jax-data-science/component-docs';
 import { COMPONENT_SNIPPETS } from '../../generated/component-snippets.generated';
+import { CopySectionLinkComponent } from '../copy-section-link/copy-section-link.component';
 
 @Component({
   selector: 'app-doc-variations',
-  imports: [NgTemplateOutlet, ButtonModule],
+  imports: [NgTemplateOutlet, ButtonModule, CopySectionLinkComponent],
   templateUrl: './doc-variations.component.html',
   standalone: true,
 })

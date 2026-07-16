@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Subject, takeUntil } from 'rxjs';
@@ -49,6 +49,8 @@ export class DocsShellComponent implements OnInit, OnDestroy {
   readonly currentComponentDoc = computed(() => this.currentDoc() as ComponentDoc | null);
   readonly currentSlug = signal<string>('');
 
+  @ViewChild('scrollContainer') private scrollContainer?: ElementRef<HTMLDivElement>;
+
   readonly showToc = computed(() => {
     // TOC ("On this page") is shown on the Overview tab, which is the single
     // scrolling page. currentSlug() ties the computed to navigation changes.
@@ -74,6 +76,9 @@ export class DocsShellComponent implements OnInit, OnDestroy {
     const segments = url.split('/').filter(Boolean);
     // URL shape: /components/:slug/:tab — segments[0]='components', segments[1]=slug
     const slug = segments[1] ?? '';
+    if (slug !== this.currentSlug()) {
+      this.scrollContainer?.nativeElement.scrollTo({ top: 0 });
+    }
     this.currentSlug.set(slug);
     this.docsContext.setCurrentDoc(DOCS_REGISTRY.get(slug) ?? null);
   }

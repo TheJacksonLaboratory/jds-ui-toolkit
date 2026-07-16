@@ -5,11 +5,7 @@
       <!-- Title with anchor -->
       <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
         <h2 class="tw-text-2xl tw-font-semibold tw-m-0">{{ variation.title }}</h2>
-        <a [href]="'#' + variation.id"
-           class="tw-text-gray-400 hover:tw-text-blue-600 tw-transition-colors"
-           aria-label="Link to section">
-          <i class="pi pi-link tw-text-sm"></i>
-        </a>
+        <app-copy-section-link [sectionId]="variation.id"></app-copy-section-link>
       </div>
 
       <!-- Description -->

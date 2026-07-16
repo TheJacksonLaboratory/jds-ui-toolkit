@@ -47,9 +47,13 @@ export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDes
 
   private observer?: IntersectionObserver;
   private needsObserverRebind = false;
+  private readonly intersecting = new Set<string>();
 
   ngOnChanges(): void {
-    this.items.set(this.buildItems());
+    const built = this.buildItems();
+    this.items.set(built);
+    this.intersecting.clear();
+    this.activeId.set(built[0]?.id ?? '');
     this.needsObserverRebind = true;
   }
 
@@ -62,6 +66,7 @@ export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDes
 
   scrollTo(id: string, event: Event): void {
     event.preventDefault();
+    this.activeId.set(id);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -83,16 +88,29 @@ export class DocsRightTocComponent implements OnChanges, AfterViewChecked, OnDes
     this.observer?.disconnect();
     this.observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length) {
-          this.activeId.set(visible[0].target.id);
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.intersecting.add(entry.target.id);
+          } else {
+            this.intersecting.delete(entry.target.id);
+          }
         }
+        this.updateActiveFromIntersecting();
       },
       { threshold: 0.2, rootMargin: '-80px 0px -60% 0px' }
     );
     for (const item of this.items()) {
       const el = document.getElementById(item.id);
       if (el) this.observer.observe(el);
+    }
+  }
+
+  /** Picks the topmost item (in document/TOC order) that is currently intersecting. */
+  private updateActiveFromIntersecting(): void {
+    if (this.intersecting.size === 0) return;
+    const topmost = this.items().find((item) => this.intersecting.has(item.id));
+    if (topmost) {
+      this.activeId.set(topmost.id);
     }
   }
 
