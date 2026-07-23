@@ -49,11 +49,21 @@ export class ServicesRightTocComponent implements OnChanges, AfterViewChecked, O
   private needsObserverRebind = false;
   private readonly intersecting = new Set<string>();
 
+  /**
+   * Id of a TOC item the user just clicked. While set, the observer must not
+   * override activeId — a smooth scroll to a short section can leave an
+   * earlier section still (or newly) intersecting before the clicked target
+   * does, which would otherwise flip the highlight back mid-scroll.
+   */
+  private pendingClickId: string | null = null;
+  private pendingClickTimer?: ReturnType<typeof setTimeout>;
+
   ngOnChanges(): void {
     const built = this.buildItems();
     this.items.set(built);
     this.intersecting.clear();
     this.activeId.set(built[0]?.id ?? '');
+    this.clearPendingClick();
     this.needsObserverRebind = true;
   }
 
@@ -67,7 +77,15 @@ export class ServicesRightTocComponent implements OnChanges, AfterViewChecked, O
   scrollTo(id: string, event: Event): void {
     event.preventDefault();
     this.activeId.set(id);
+    this.pendingClickId = id;
+    clearTimeout(this.pendingClickTimer);
+    this.pendingClickTimer = setTimeout(() => this.clearPendingClick(), 600);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  private clearPendingClick(): void {
+    clearTimeout(this.pendingClickTimer);
+    this.pendingClickId = null;
   }
 
   /** Summary + each usage example + Usage + Activity (per the services docs design). */
@@ -107,6 +125,13 @@ export class ServicesRightTocComponent implements OnChanges, AfterViewChecked, O
 
   /** Picks the topmost item (in document/TOC order) that is currently intersecting. */
   private updateActiveFromIntersecting(): void {
+    if (this.pendingClickId) {
+      if (this.intersecting.has(this.pendingClickId)) {
+        this.clearPendingClick();
+      } else {
+        return;
+      }
+    }
     if (this.intersecting.size === 0) return;
     const topmost = this.items().find((item) => this.intersecting.has(item.id));
     if (topmost) {
@@ -116,5 +141,6 @@ export class ServicesRightTocComponent implements OnChanges, AfterViewChecked, O
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.clearPendingClick();
   }
 }

@@ -37,11 +37,21 @@ export class GettingStartedTocComponent implements OnDestroy {
   private observer?: IntersectionObserver;
   private readonly intersecting = new Set<string>();
 
+  /**
+   * Id of a TOC item the user just clicked. While set, the observer must not
+   * override activeId — a smooth scroll to a short section can leave an
+   * earlier section still (or newly) intersecting before the clicked target
+   * does, which would otherwise flip the highlight back mid-scroll.
+   */
+  private pendingClickId: string | null = null;
+  private pendingClickTimer?: ReturnType<typeof setTimeout>;
+
   constructor() {
     effect(() => {
       const headings = this.tocContext.headings();
       this.intersecting.clear();
       this.activeId.set(headings[0]?.id ?? '');
+      this.clearPendingClick();
       queueMicrotask(() => this.rebindObserver());
     });
   }
@@ -49,7 +59,15 @@ export class GettingStartedTocComponent implements OnDestroy {
   scrollTo(id: string, event: Event): void {
     event.preventDefault();
     this.activeId.set(id);
+    this.pendingClickId = id;
+    clearTimeout(this.pendingClickTimer);
+    this.pendingClickTimer = setTimeout(() => this.clearPendingClick(), 600);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  private clearPendingClick(): void {
+    clearTimeout(this.pendingClickTimer);
+    this.pendingClickId = null;
   }
 
   private rebindObserver(): void {
@@ -61,6 +79,13 @@ export class GettingStartedTocComponent implements OnDestroy {
             this.intersecting.add(entry.target.id);
           } else {
             this.intersecting.delete(entry.target.id);
+          }
+        }
+        if (this.pendingClickId) {
+          if (this.intersecting.has(this.pendingClickId)) {
+            this.clearPendingClick();
+          } else {
+            return;
           }
         }
         const topmost = this.tocContext.headings().find((h) => this.intersecting.has(h.id));
@@ -76,5 +101,6 @@ export class GettingStartedTocComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.clearPendingClick();
   }
 }
