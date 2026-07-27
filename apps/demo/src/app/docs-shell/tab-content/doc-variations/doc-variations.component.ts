@@ -1,0 +1,36 @@
+import { Component, Input, TemplateRef } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ComponentDoc, VariationDoc } from '@jax-data-science/component-docs';
+import { COMPONENT_SNIPPETS } from '../../generated/component-snippets.generated';
+import { CopySectionLinkComponent } from '../copy-section-link/copy-section-link.component';
+
+@Component({
+  selector: 'app-doc-variations',
+  imports: [NgTemplateOutlet, ButtonModule, CopySectionLinkComponent],
+  templateUrl: './doc-variations.component.html',
+  standalone: true,
+})
+export class DocVariationsComponent {
+  @Input() doc!: ComponentDoc;
+  @Input() demoTemplates!: Map<string, TemplateRef<void>>;
+
+  copied = '';
+
+  /** Prefer the generated snippet (extracted from the live demo template). */
+  code(variation: VariationDoc): string {
+    return COMPONENT_SNIPPETS[this.doc.slug]?.[variation.id] ?? variation.code ?? '';
+  }
+
+  copyCode(code: string, id: string): void {
+    navigator.clipboard.writeText(code);
+    this.copied = id;
+    setTimeout(() => {
+      if (this.copied === id) this.copied = '';
+    }, 2000);
+  }
+
+  getTemplate(id: string): TemplateRef<void> | null {
+    return this.demoTemplates?.get(id) ?? null;
+  }
+}

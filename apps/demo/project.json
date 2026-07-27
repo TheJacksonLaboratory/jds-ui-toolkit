@@ -28,7 +28,10 @@
           }
         ],
         "styles": ["apps/demo/src/styles.css"],
-        "scripts": []
+        "scripts": [],
+        "loader": {
+          ".md": "text"
+        }
       },
       "configurations": {
         "production": {

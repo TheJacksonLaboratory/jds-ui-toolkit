@@ -11,20 +11,19 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
 })
 /**
  * A progress widget component that displays a loading spinner with an optional status message.
- *
- * @input isLoading - A boolean indicating the current loading state. Default is true.
- * @input statusMessage - A string representing the status message to be displayed below the spinner. Default is an empty string.
- * @input spinnerSize - A number representing the size of the spinner in rem units. Default is 5.
- * @input blockUi - A boolean indicating whether to block user interaction while loading. Default is false.
- * @input iconClass - A string representing additional CSS classes to apply to the spinner icon. Default is an empty string.
- * @input iconLeft - A boolean indicating whether the spinner icon should be aligned to the left. Default is false.
  */
 export class ProgressWidgetComponent {
+  /** Controls spinner visibility. */
   isLoading = input(true);
+  /** Text displayed below the spinner. */
   statusMessage = input('');
+  /** Spinner diameter in rem. */
   spinnerSize = input(5);
+  /** Enables the full-screen BlockUI overlay. */
   blockUi = input(false);
+  /** PrimeIcons or custom CSS class for an icon beside the message. */
   iconClass = input('');
+  /** Places the icon to the left of the message when true. */
   iconLeft = input(false);
 
   sizeObject = computed(() => {

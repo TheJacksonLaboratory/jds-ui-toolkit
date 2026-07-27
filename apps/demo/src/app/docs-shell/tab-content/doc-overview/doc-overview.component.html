@@ -1,0 +1,35 @@
+@let doc = docsContext.currentDoc();
+@if (doc) {
+  <section id="summary" class="tw-mb-10">
+    <h1 class="tw-text-4xl tw-font-bold tw-m-0 tw-mb-3">{{ doc.name }}</h1>
+    <p class="tw-text-gray-600 tw-leading-relaxed tw-max-w-3xl tw-mb-4">{{ doc.description }}</p>
+
+    <!-- Badge row: status, auth, contact -->
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-4 tw-text-sm">
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-amber-600">
+        <i class="pi pi-info-circle"></i>{{ statusLabel(doc.status) }}
+      </span>
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-emerald-600">
+        <i class="pi pi-shield"></i>{{ doc.isAuthRequired ? 'Authentication Required' : 'No Authentication Required' }}
+      </span>
+      <span class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-gray-600">
+        <i class="pi pi-envelope"></i>Contact: {{ doc.contact }}
+      </span>
+      @if (doc.docsUrl) {
+        <a [href]="doc.docsUrl" target="_blank" rel="noopener noreferrer"
+           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-text-blue-600 hover:tw-text-blue-800 tw-no-underline">
+          <i class="pi pi-external-link"></i>Docs
+        </a>
+      }
+    </div>
+
+    <!-- Topic tags -->
+    @if (doc.tags.length) {
+      <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-4">
+        @for (tag of doc.tags; track tag) {
+          <p-tag [value]="tag" severity="secondary"></p-tag>
+        }
+      </div>
+    }
+  </section>
+}

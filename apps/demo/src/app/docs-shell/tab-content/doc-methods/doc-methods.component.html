@@ -1,0 +1,28 @@
+@let api = apiMethods();
+<div class="tw-p-8 tw-max-w-5xl">
+  <section>
+    <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Methods</h2>
+    @if (api.methods.length === 0) {
+      <p class="tw-text-gray-500">No methods.</p>
+    } @else {
+      <p-table [value]="api.methods" [sortField]="'name'" [sortOrder]="1">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Signature</th>
+            <th>Return Type</th>
+            <th>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-method>
+          <tr>
+            <td><code>{{ method.name }}</code></td>
+            <td><code>{{ method.signature }}</code></td>
+            <td><code>{{ method.returnType }}</code></td>
+            <td>{{ method.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </section>
+</div>

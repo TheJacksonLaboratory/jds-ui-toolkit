@@ -1,0 +1,33 @@
+<div class="tw-space-y-12">
+  @for (variation of doc.variations; track variation.id) {
+    @let snippet = code(variation);
+    <section [id]="variation.id">
+      <!-- Title with anchor -->
+      <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
+        <h2 class="tw-text-2xl tw-font-semibold tw-m-0">{{ variation.title }}</h2>
+        <app-copy-section-link [sectionId]="variation.id"></app-copy-section-link>
+      </div>
+
+      <!-- Description -->
+      <p class="tw-text-gray-600 tw-mb-4">{{ variation.description }}</p>
+
+      <!-- Live demo -->
+      <div class="tw-p-6 tw-border tw-border-gray-200 tw-rounded-lg tw-bg-white tw-mb-3">
+        <ng-container [ngTemplateOutlet]="getTemplate(variation.id)"></ng-container>
+      </div>
+
+      <!-- Code block (plain, no syntax-highlight library) -->
+      <div class="tw-relative tw-rounded-lg tw-overflow-hidden echo-bg-slate-900">
+        <button
+          (click)="copyCode(snippet, variation.id)"
+          class="tw-absolute tw-top-2 tw-right-2 tw-z-10 tw-text-white tw-text-xs tw-px-2 tw-py-1 tw-rounded tw-transition-colors"
+          [class.echo-bg-cyan-600]="copied === variation.id"
+          [class.echo-bg-slate-700]="copied !== variation.id"
+          type="button">
+          {{ copied === variation.id ? 'Copied!' : 'Copy' }}
+        </button>
+        <pre class="tw-m-0 tw-p-4 tw-overflow-x-auto tw-text-sm"><code class="echo-text-grey-100">{{ snippet }}</code></pre>
+      </div>
+    </section>
+  }
+</div>

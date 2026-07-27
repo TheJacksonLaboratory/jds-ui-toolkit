@@ -27,6 +27,11 @@ export class AsyncTaskService {
   private apiBaseService: ApiBaseService =
     this.apiServiceFactory.create(this.apiBaseUrl);
 
+  /**
+   * Overrides the API base URL. Appends `/asynctask/api` if the given URL
+   * doesn't already end with it, and rebuilds the underlying API service.
+   * @param baseUrl - the new base URL
+   */
   setApiBaseUrl(baseUrl: string): void {
     this.apiBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
@@ -39,17 +44,33 @@ export class AsyncTaskService {
     this.apiBaseService = this.apiServiceFactory.create(this.apiBaseUrl);
   }
 
+  /**
+   * Gets the configured API base URL this service sends requests to.
+   */
   getApiBaseUrl(): string {
     return this.apiBaseUrl;
   }
 
   // INPUT
+  /**
+   * Creates a new input.
+   * @param inputSubmission - the input data to submit
+   */
   addInput(inputSubmission: InputSubmission): Observable<Response<Input>> {
     return this.apiBaseService.post<Input>('/inputs', inputSubmission);
   }
+
+  /**
+   * Gets an input by its ID.
+   * @param id - the input ID
+   */
   getInput(id: number): Observable<Response<Input>> {
     return this.apiBaseService.get<Input>(`/inputs/${id}`);
   }
+
+  /**
+   * Gets all inputs.
+   */
   getInputs(): Observable<CollectionResponse<InputReference>> {
     return this.apiBaseService.getCollection<InputReference>('/inputs');
   }
@@ -73,18 +94,27 @@ export class AsyncTaskService {
   }
 
   // RUN
+  /**
+   * Creates a new run, optionally for an existing input or a new input submission.
+   * @param inputId - (optional) an existing input's ID to run against
+   * @param inputSubmission - (optional) input data to submit and run against
+   */
   createRun(inputId?: number, inputSubmission?: InputSubmission): Observable<Response<Run>> {
     const url = inputId ? `/runs?input_id=${inputId}` : '/runs';
 
     return this.apiBaseService.post<Run>(url, inputSubmission || null);
   }
 
+  /**
+   * Gets a run by its ID.
+   * @param id - the run ID
+   */
   getRun(id: number): Observable<Response<Run>> {
     return this.apiBaseService.get<Run>(`/runs/${id}`);
   }
 
   /**
-   *
+   * Gets all runs, optionally filtered to a specific workflow.
    * @param workflowId - (optional) workflow identifier
    */
   getRuns(workflowId?: string): Observable<CollectionResponse<Run>> {
@@ -192,10 +222,17 @@ export class AsyncTaskService {
   }
 
   // RESULT
+  /**
+   * Gets a result by its ID.
+   * @param resId - the result ID
+   */
   getResult(resId: number): Observable<Response<Result>> {
     return this.apiBaseService.get<Result>(`/results/${resId}`);
   }
 
+  /**
+   * Gets all results.
+   */
   getResults(): Observable<CollectionResponse<ResultReference>> {
     return this.apiBaseService.getCollection<ResultReference>('/results');
   }
@@ -219,6 +256,9 @@ export class AsyncTaskService {
   }
 
   // HEALTH CHECK
+  /**
+   * Checks whether the async task backend is reachable and healthy.
+   */
   // TO-DO [GIK 05/30/2025]: should be moved outside this service
   getHealthCheck(): Observable<any> {
     return this.apiBaseService.get<any>('/monitors/servers/health');

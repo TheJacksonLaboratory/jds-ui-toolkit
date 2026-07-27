@@ -1,3 +1,20 @@
-<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100 tw-p-5">
-  Error Widget Showcase - Coming Soon!
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
 </div>
+
+<ng-template #tplDefault>
+  <!-- snippet:default -->
+  <lib-widget-error [errorMessage]="'Failed to load task list.'"></lib-widget-error>
+  <!-- /snippet -->
+</ng-template>
+
+<ng-template #tplLongMessage>
+  <!-- snippet:long-message -->
+  <lib-widget-error
+    [errorMessage]="'Could not fetch async tasks because the requested resource was not found. Please check your network connection and try again, or contact support if the problem persists.'">
+  </lib-widget-error>
+  <!-- /snippet -->
+</ng-template>

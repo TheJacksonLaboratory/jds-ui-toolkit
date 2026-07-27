@@ -20,7 +20,8 @@ const mockAsyncTaskFacade = {
 };
 
 const mockAuthService = {
-  getAccessTokenSilently: jest.fn().mockReturnValue(of('mock-token'))
+  getAccessTokenSilently: jest.fn().mockReturnValue(of('mock-token')),
+  isAuthenticated$: of(false),
 };
 
 describe('ShowcaseAsyncTasksComponent', () => {

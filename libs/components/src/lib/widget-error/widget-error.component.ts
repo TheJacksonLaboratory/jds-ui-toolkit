@@ -9,5 +9,6 @@ import { Component, Input } from '@angular/core';
   standalone: true
 })
 export class WidgetErrorComponent {
+  /** Message displayed inside the error banner. */
   @Input() errorMessage = '';
 }

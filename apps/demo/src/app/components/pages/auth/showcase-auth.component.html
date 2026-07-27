@@ -1,6 +1,18 @@
-<div class="tw-flex tw-flex-col tw-flex-1 tw-h-full tw-w-full tw-bg-blue-100 tw-p-5">
-  <lib-jds-auth
-    [configLogin]="configLogin"
-    [configLogout]="configLogout"
-  ></lib-jds-auth>
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
 </div>
+
+<ng-template #tplBasic>
+  <!-- snippet:basic -->
+  <lib-jds-auth></lib-jds-auth>
+  <!-- /snippet -->
+</ng-template>
+
+<ng-template #tplCustomRedirect>
+  <!-- snippet:custom-redirect -->
+  <lib-jds-auth [configLogin]="customConfigLogin" [configLogout]="customConfigLogout"></lib-jds-auth>
+  <!-- /snippet -->
+</ng-template>

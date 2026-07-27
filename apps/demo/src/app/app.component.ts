@@ -14,63 +14,21 @@ import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
-  navbarItems: JdsMenuItem[] =
-    [
-      {
-        label: "Components",
-        icon: "pi-database",
-        items:
-          [
-            {
-              label: "Async Tasks",
-              routerLink: "components/docs/async-tasks"
-            },
-            {
-              label: "Authentication",
-              routerLink: "components/docs/authentication"
-            },
-            {
-              label: "Error Widget",
-              routerLink: "components/docs/error-widget"
-            },
-            {
-              label: "Facet Search",
-              routerLink: "components/docs/facet-search"
-            },
-            {
-              label: "Navbar",
-              routerLink: "components/docs/navbar"
-            },
-            {
-              label: "Ontology Search",
-              routerLink: "components/docs/ontology-search"
-            },
-            {
-              label: "Progress Widget",
-              routerLink: "components/docs/progress-widget"
-            },
-            {
-              label: "Schema Based Grid",
-              routerLink: "components/docs/schema-grid"
-            }
-          ]
-      },
-      {
-        label: "Services",
-        icon: "",
-        items:
-          [
-            {
-              label: "ISA Data",
-              routerLink: "services/docs/isa-data",
-            }
-          ]
-      },
-      {
-        label: "Help",
-        icon: "pi pi-external-link",
-        url : "https://google.com",
-        iconEnd: true
-      }
-    ]
+  navbarItems: JdsMenuItem[] = [
+    {
+      label: 'Components',
+      icon: 'pi pi-box',
+      routerLink: '/components',
+    },
+    {
+      label: 'Services',
+      routerLink: '/services'
+    },
+    {
+      label: 'Help',
+      icon: 'pi pi-external-link',
+      url: 'https://google.com',
+      iconEnd: true,
+    },
+  ];
 }
