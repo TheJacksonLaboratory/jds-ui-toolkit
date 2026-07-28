@@ -7,7 +7,7 @@ export const menubar: MenubarDesignTokens = {
   colorScheme: {
     light: {
       root: {
-        background: '{surface.400}',
+        background: '{surface.700}',
         color: '{surface.0}'
       },
       item: {

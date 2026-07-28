@@ -1,0 +1,24 @@
+<div class="tw-flex tw-h-full tw-min-h-0 tw-w-full">
+  <!-- Left nav: 240px sticky -->
+  <app-docs-left-nav [docs]="allDocs" [services]="allServices"></app-docs-left-nav>
+
+  <!-- Main area -->
+  <div class="tw-flex tw-flex-col tw-flex-1 tw-min-w-0 tw-min-h-0 tw-overflow-hidden">
+    <!-- Tab bar -->
+    @if (currentDoc()) {
+      <app-docs-tabs [slug]="currentDoc()!.slug"></app-docs-tabs>
+    }
+
+    <!-- Content + right TOC -->
+    <div class="tw-flex tw-flex-1 tw-min-h-0 tw-overflow-hidden">
+      <div #scrollContainer class="tw-flex-1 tw-min-w-0 tw-min-h-0 tw-overflow-y-auto">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- Right TOC ("On this page"): shown on the Overview tab -->
+      @if (showToc() && currentComponentDoc()) {
+        <app-docs-right-toc [doc]="currentComponentDoc()!"></app-docs-right-toc>
+      }
+    </div>
+  </div>
+</div>

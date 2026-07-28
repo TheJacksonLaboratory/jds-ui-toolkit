@@ -30,19 +30,19 @@ import { FacetSearchFacade } from './facet-search.facade';
   standalone: true
 })
 export class FacetSearchComponent implements OnInit {
-  // categories input signal
+  /** Facet categories and their selectable options rendered in the search panel. */
   categories = input<IFacetSearchCategory[]>([]);
 
-  // errors input signal
+  /** Error messages to display within the facet search panel. */
   errors = input<string[]>([]);
 
-  // default facet search configuration
+  /** Visibility/toggle behavior configuration for the facet search panel. */
   @Input() config: IFacetSearchConfig = {
     isToggable: false,
     isVisible: false
   };
 
-  // facet search containing element (<div> is recommended)
+  /** Element the facet search drawer is appended/positioned relative to; a `<div>` is recommended. */
   @Input() parentContainer!: ElementRef<HTMLElement> | HTMLElement;
 
   private facetSearchFacade = inject(FacetSearchFacade);

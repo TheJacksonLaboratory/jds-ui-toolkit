@@ -1,0 +1,42 @@
+@let doc = docsContext.currentDoc();
+@if (doc) {
+  <section id="usage" class="tw-mt-4">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
+      <h2 class="tw-text-2xl tw-font-semibold tw-m-0">Usage</h2>
+      <app-copy-section-link sectionId="usage"></app-copy-section-link>
+    </div>
+    <p class="tw-text-gray-700 tw-leading-relaxed tw-mb-6">{{ doc.usage.summary }}</p>
+
+    <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+      <!-- Dos -->
+      <div class="tw-bg-green-50 tw-rounded-xl tw-p-6 tw-border tw-border-green-200">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-green-800 tw-mb-4">
+          <i class="pi pi-check-circle tw-mr-2"></i>When and how to use
+        </h3>
+        <ul class="tw-space-y-3 tw-list-none tw-p-0 tw-m-0">
+          @for (item of doc.usage.dos; track item) {
+            <li class="tw-flex tw-items-start tw-gap-2">
+              <i class="pi pi-check tw-text-green-600 tw-mt-0.5 tw-flex-shrink-0"></i>
+              <span class="tw-text-gray-700 tw-text-sm">{{ item }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Donts -->
+      <div class="tw-bg-red-50 tw-rounded-xl tw-p-6 tw-border tw-border-red-200">
+        <h3 class="tw-text-lg tw-font-semibold tw-text-red-800 tw-mb-4">
+          <i class="pi pi-times-circle tw-mr-2"></i>Do not use
+        </h3>
+        <ul class="tw-space-y-3 tw-list-none tw-p-0 tw-m-0">
+          @for (item of doc.usage.donts; track item) {
+            <li class="tw-flex tw-items-start tw-gap-2">
+              <i class="pi pi-times tw-text-red-600 tw-mt-0.5 tw-flex-shrink-0"></i>
+              <span class="tw-text-gray-700 tw-text-sm">{{ item }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+}

@@ -1,0 +1,29 @@
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
+</div>
+
+<ng-template #tplBasic>
+  <!-- snippet:basic -->
+  <lib-jds-navbar [title]="'My App'"></lib-jds-navbar>
+  <!-- /snippet -->
+</ng-template>
+
+<ng-template #tplWithAuth>
+  <!-- snippet:with-auth -->
+  <lib-jds-navbar [title]="'My App'" [authentication]="true"></lib-jds-navbar>
+  <!-- /snippet -->
+</ng-template>
+
+<ng-template #tplCustomBranding>
+  <!-- snippet:custom-branding -->
+  <lib-jds-navbar
+    [title]="'JAX Data Science'"
+    [icon]="'pi-flask'"
+    [externalLink]="'https://www.jax.org'"
+    [externalLinkLabel]="'jax.org'">
+  </lib-jds-navbar>
+  <!-- /snippet -->
+</ng-template>

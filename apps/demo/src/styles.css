@@ -16,3 +16,31 @@ html {
     font-family: Inter var,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol;
     line-height: 1.2
 }
+
+/* Docs tab bar — match Figma (node 2663:601). Overrides the PrimeNG theme.
+   The design uses a per-tab bottom border (blue when active) sitting on the
+   tablist's grey baseline, not PrimeNG's animated ink bar. */
+.docs-tabs,
+.docs-tabs * {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+}
+.docs-tabs .p-tablist { border-bottom: 1px solid #d9d9d9 !important; }
+.docs-tabs .p-tab {
+    padding: 1rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 400;
+    color: #636363;
+    border: 0 !important;
+}
+.docs-tabs .p-tab.p-tab-active { color: #0177b2; font-weight: 700; }
+.docs-tabs .p-tab:not(.p-tab-active):hover { color: #0177b2; }
+/* PrimeNG's active bar sits at the tablist baseline — just recolor it.
+   Higher specificity than the `*` reset so the color wins. */
+.docs-tabs .p-tablist-active-bar {
+    background: #0177b2 !important;
+    height: 0.125rem !important;
+}

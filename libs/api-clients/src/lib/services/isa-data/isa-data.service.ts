@@ -31,6 +31,9 @@ export class ISADataService {
     this.apiBaseService = this.apiServiceFactory.create(this.apiConfig.baseUrl);
   }
 
+  /**
+   * Gets the configured base URL this service sends requests to.
+   */
   getApiBaseUrl(): string {
     return this.apiConfig.baseUrl;
   }
@@ -140,7 +143,9 @@ export class ISADataService {
     return queryParams ? `${endpoint}?${queryParams}` : endpoint;
   }
 
-  // HEALTH CHECK
+  /**
+   * Checks whether the ISA data backend is reachable and healthy.
+   */
   // TO-DO [GIK 05/30/2025]: should be moved outside this service
   getHealthCheck(): Observable<any> {
     return this.apiBaseService!.get<any>('/monitors/servers/health');

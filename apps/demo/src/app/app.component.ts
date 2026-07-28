@@ -14,6 +14,7 @@ import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
+<<<<<<< HEAD
   navbarItems: JdsMenuItem[] =
     [
       {
@@ -77,4 +78,23 @@ export class AppComponent {
         iconEnd: true
       }
     ]
+=======
+  navbarItems: JdsMenuItem[] = [
+    {
+      label: 'Components',
+      icon: 'pi pi-box',
+      routerLink: '/components',
+    },
+    {
+      label: 'Services',
+      routerLink: '/services'
+    },
+    {
+      label: 'Help',
+      icon: 'pi pi-external-link',
+      url: 'https://google.com',
+      iconEnd: true,
+    },
+  ];
+>>>>>>> main
 }

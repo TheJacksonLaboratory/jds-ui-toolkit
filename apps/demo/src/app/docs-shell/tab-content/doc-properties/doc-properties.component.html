@@ -1,0 +1,61 @@
+@let props = properties();
+<div class="tw-p-8 tw-max-w-5xl tw-space-y-10">
+  <!-- Inputs -->
+  <section>
+    <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Inputs</h2>
+    @if (props.inputs.length === 0) {
+      <p class="tw-text-gray-500">No inputs.</p>
+    } @else {
+      <p-table [value]="props.inputs" [sortField]="'name'" [sortOrder]="1">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Required</th>
+            <th>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prop>
+          <tr>
+            <td><code>{{ prop.name }}</code></td>
+            <td><code>{{ prop.type }}</code></td>
+            <td>{{ prop.default ?? '—' }}</td>
+            <td>
+              <p-tag
+                [value]="prop.required ? 'Yes' : 'No'"
+                [severity]="prop.required ? 'danger' : 'secondary'">
+              </p-tag>
+            </td>
+            <td>{{ prop.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </section>
+
+  <!-- Outputs -->
+  <section>
+    <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Outputs</h2>
+    @if (props.outputs.length === 0) {
+      <p class="tw-text-gray-500">No outputs.</p>
+    } @else {
+      <p-table [value]="props.outputs" [sortField]="'name'" [sortOrder]="1">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-prop>
+          <tr>
+            <td><code>{{ prop.name }}</code></td>
+            <td><code>{{ prop.type }}</code></td>
+            <td>{{ prop.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </section>
+</div>

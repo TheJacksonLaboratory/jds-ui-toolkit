@@ -56,9 +56,10 @@ import { FacetSearchFacade } from '../facet-search/facet-search.facade';
   standalone: true,
 })
 export class AsyncTaskComponent implements OnInit, OnDestroy {
+  /** Auth0 access token used to open the real-time task-status event stream. */
   @Input() accessToken = '';
 
-  // table configuration (with defaults)
+  /** Table behavior: pagination, filtering, row expansion, and the expandable-row details template. */
   @Input() tableConfig: IAsyncTableConfig = {
     isExpandable: true,
     rowsPerPage: 10,
@@ -107,7 +108,9 @@ export class AsyncTaskComponent implements OnInit, OnDestroy {
     return tempVisibleTasks;
   });
 
+  /** Emits the selected task when the user chooses to edit it. */
   @Output() editEmitter = new EventEmitter<RunInput>();
+  /** Emits the selected task when the user chooses to open it. */
   @Output() openEmitter = new EventEmitter<RunInput>();
   // tracking expanded rows
   expandedRows: Record<string, boolean> = {};

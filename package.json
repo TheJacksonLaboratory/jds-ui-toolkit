@@ -9,7 +9,11 @@
     "test": "nx run-many -t test --no-cloud",
     "lint": "nx run-many -t lint --parallel --no-cloud",
     "e2e": "nx run-many -t e2e --no-cloud",
-    "run": "nx run"
+    "run": "nx run",
+    "docs:properties": "node tools/generate-docs-properties.mjs",
+    "docs:methods": "node tools/generate-docs-methods.mjs",
+    "docs:snippets": "node tools/generate-docs-snippets.mjs",
+    "docs:generate": "pnpm docs:properties && pnpm docs:methods && pnpm docs:snippets"
   },
   "private": true,
   "devDependencies": {
@@ -28,6 +32,7 @@
     "@angular/platform-browser": "20.3.16",
     "@angular/platform-browser-dynamic": "20.3.16",
     "@angular/router": "20.3.16",
+    "@compodoc/compodoc": "^2.0.0",
     "@eslint/js": "^9.8.0",
     "@nx/angular": "22.5.0",
     "@nx/cypress": "22.5.0",
@@ -42,6 +47,7 @@
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.12.0",
     "@typescript-eslint/utils": "^8.33.1",
@@ -67,5 +73,8 @@
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.33.1",
     "zone.js": "~0.15.0"
+  },
+  "dependencies": {
+    "marked": "^18.0.6"
   }
 }

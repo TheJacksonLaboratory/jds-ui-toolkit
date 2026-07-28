@@ -29,12 +29,18 @@ import { AuthenticationComponent } from '../auth/authentication.component';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
+  /** Shows the login/avatar auth controls when true; requires an `AuthService` provider in the app. */
   @Input() authentication = false;
+  /** Application name shown in the navbar's brand area. */
   @Input() title = "JDS Angular Application";
+  /** Optional image URL for the brand logo; falls back to `icon` when empty. */
   @Input() logo = "";
+  /** PrimeIcons class (e.g. `pi-cog`) shown as the brand mark when `logo` is not set. */
   @Input() icon = "pi-cog";
+  /** Router link the brand logo/title navigates to when clicked. */
   @Input() logoLink = "/";
 
+  /** Menu items rendered in the PrimeNG menubar; supports nested items, router links, and click commands. */
   @Input() items: JdsMenuItem[] = [
     {
       label: "Explore",
@@ -58,9 +64,13 @@ export class NavbarComponent implements OnInit {
       icon: ""
     }
   ];
+  /** URL for the external link shown at the end of the navbar (e.g. a GitHub repo). */
   @Input() externalLink = "https://github.com/TheJacksonLaboratory/jds-ui-components";
+  /** Label text for the external link. */
   @Input() externalLinkLabel = "GitHub";
+  /** Auth0 redirect-login options forwarded to the embedded Authentication component when `authentication` is true. */
   @Input() authConfigLogin: RedirectLoginOptions<AppState> = {};
+  /** Auth0 logout options forwarded to the embedded Authentication component when `authentication` is true. */
   @Input() authConfigLogout: LogoutOptions = {};
 
   public injector = inject(Injector);
