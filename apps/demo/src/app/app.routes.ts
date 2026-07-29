@@ -4,12 +4,7 @@ import { Route } from '@angular/router';
 import { ComponentDocsComponent } from './components/pages/docs/component-docs.component';
 import { ServiceDocsComponent } from './services/pages/docs/service-docs.component';
 
-<<<<<<< HEAD
-// showcase components
-import { ShowcaseAutocompleteComponent } from './components/pages/autocomplete/showcase-autocomplete.component';
-=======
 // Legacy showcase components (kept on old routes until migrated)
->>>>>>> main
 import { ShowcaseAsyncTasksComponent } from './components/pages/async-tasks/showcase-async-tasks.component';
 import { ShowcaseAuthComponent } from './components/pages/auth/showcase-auth.component';
 import { ShowcaseFacetSearchComponent } from './components/pages/facet-search/showcase-facet-search.component';
@@ -25,6 +20,7 @@ import { DocMethodsComponent } from './docs-shell/tab-content/doc-methods/doc-me
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
+import { ShowcaseAutocompleteComponent } from './components/pages/autocomplete/showcase-autocomplete.component';
 
 // New services shell
 import { ALL_SERVICE_DOCS, ServicesShellComponent } from './services-shell/services-shell.component';
@@ -74,6 +70,15 @@ export const appRoutes: Route[] = [
         children: [
           // Overview is the single scrolling page (header + variations + usage + activity).
           { path: 'overview', component: ShowcaseProgressWidgetComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
+      {
+        path: 'autocomplete',
+        children: [
+          { path: 'overview', component: ShowcaseAutocompleteComponent },
           { path: 'properties', component: DocPropertiesComponent },
           { path: 'theming', component: DocThemingComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
@@ -194,44 +199,8 @@ export const appRoutes: Route[] = [
     path: 'components/docs',
     component: ComponentDocsComponent,
     children: [
-<<<<<<< HEAD
-      {
-        path: 'autocomplete',
-        component: ShowcaseAutocompleteComponent,
-      },
-      {
-        path: 'async-tasks',
-        component: ShowcaseAsyncTasksComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'authentication',
-        component: ShowcaseAuthComponent,
-      },
-      {
-        path: 'error-widget',
-        component: ShowcaseErrorWidgetComponent,
-      },
-      {
-        path: 'facet-search',
-        component: ShowcaseFacetSearchComponent,
-      },
-      {
-        path: 'ontology-search',
-        component: ShowcaseOntologySearchComponent,
-      },
-      {
-        path: 'progress-widget',
-        component: ShowcaseProgressWidgetComponent,
-      },
-      {
-        path: 'schema-grid',
-        component: ShowcaseSchemaGridComponent,
-      },
-=======
       { path: 'ontology-search', component: ShowcaseOntologySearchComponent },
       { path: 'schema-grid', component: ShowcaseSchemaGridComponent },
->>>>>>> main
     ],
   },
   {

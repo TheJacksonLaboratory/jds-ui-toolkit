@@ -1175,8 +1175,12 @@ video {
   }
 }
 
-.hover\:tw-bg-\[var\(--echo-cyan-50\2c \#f0faff\)\]:hover {
-  background-color: var(--echo-cyan-50,#f0faff);
+.hover\:tw-bg-\[var\(--echo-cyan-700\2c \#0177b2\)\]:hover {
+  background-color: var(--echo-cyan-700,#0177b2);
+}
+
+.hover\:tw-text-\[var\(--echo-grey-0\2c \#ffffff\)\]:hover {
+  color: var(--echo-grey-0,#ffffff);
 }
 
 @media (min-width: 1024px) {

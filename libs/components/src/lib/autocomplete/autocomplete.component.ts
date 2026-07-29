@@ -16,27 +16,46 @@ const MAX_TOTAL_ITEMS = 8;
   encapsulation: ViewEncapsulation.None,
 })
 export class JdsAutocompleteComponent {
-  // Two-way bindable selected value
+  /** Two-way bound selected item, or `null` when nothing is chosen. */
   value = model<JdsAutocompleteItem | null>(null);
 
-  // Data
+  /**
+   * Suggestions to display. Pass a flat `JdsAutocompleteItem[]` for an ungrouped
+   * list, or a `JdsAutocompleteGroup[]` to render section headers. The panel caps
+   * display at 4 items per group and 8 items total.
+   */
   suggestions = model<JdsAutocompleteGroup[] | JdsAutocompleteItem[]>([]);
+  /**
+   * Total number of matches available on the server. When non-null, a
+   * "Show all N results" footer is rendered and the `showAll` output fires when
+   * it is clicked.
+   */
   totalCount = model<number | null>(null);
 
-  // PrimeNG pass-through inputs
+  /** Placeholder text for the input field. */
   placeholder = model('');
+  /** Disables the input when true. */
   disabled = model(false);
+  /** Minimum number of characters typed before `completeMethod` fires. */
   minLength = model(2);
+  /** Debounce in milliseconds between keystroke and `completeMethod`. */
   delay = model(250);
+  /** Max height of the suggestions panel before it scrolls (CSS length). */
   scrollHeight = model('400px');
+  /** Target the overlay panel is appended to; defaults to `body`. */
   appendTo = model<string | HTMLElement>('body');
+  /** Requires the typed value to match a suggestion, clearing it otherwise. */
   forceSelection = model(false);
+  /** Shows a dropdown trigger button that opens the panel on click. */
   dropdown = model(false);
 
-  // Outputs
+  /** Emits the current query when the user types past `minLength`; fetch suggestions here. */
   completeMethod = output<{ query: string }>();
+  /** Emits the chosen item when a suggestion is selected. */
   selectItem = output<JdsAutocompleteItem>();
+  /** Emits the current query when the "Show all results" footer is clicked. */
   showAll = output<{ query: string }>();
+  /** Emits when the input is cleared. */
   cleared = output<void>();
 
   protected currentQuery = signal('');

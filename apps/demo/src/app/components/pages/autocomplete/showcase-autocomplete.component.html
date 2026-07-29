@@ -1,89 +1,85 @@
-<div class="tw-p-6 tw-space-y-10 tw-min-h-screen">
-
-  <!-- Grouped example -->
-  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
-    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Grouped suggestions</h3>
-    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
-      Type at least 2 characters (e.g. "br", "sei", "rett"). Results grouped by Phenotypes, Diseases, Genes.
-    </p>
-
-    <div class="tw-max-w-md">
-      <lib-jds-autocomplete
-        [suggestions]="groupedSuggestions()"
-        [totalCount]="groupedTotalCount()"
-        placeholder="Search phenotypes, diseases, genes…"
-        (completeMethod)="onGroupedSearch($event)"
-        (selectItem)="onGroupedSelect($event)"
-        (showAll)="onGroupedShowAll($event)"
-        (cleared)="onGroupedClear()">
-      </lib-jds-autocomplete>
-    </div>
-
-    @if (groupedLastEvent()) {
-      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
-        {{ groupedLastEvent() }}
-      </div>
-    }
-  </section>
-
-  <!-- Flat example -->
-  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
-    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Flat suggestions (no groups)</h3>
-    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
-      Same component, flat array — no section headers rendered.
-    </p>
-
-    <div class="tw-max-w-md">
-      <lib-jds-autocomplete
-        [suggestions]="flatSuggestions()"
-        placeholder="Search terms…"
-        (completeMethod)="onFlatSearch($event)"
-        (selectItem)="onFlatSelect($event)"
-        (cleared)="onFlatClear()">
-      </lib-jds-autocomplete>
-    </div>
-
-    @if (flatLastEvent()) {
-      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
-        {{ flatLastEvent() }}
-      </div>
-    }
-  </section>
-
-  <!-- Truncation example -->
-  <section class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-shadow-sm tw-p-6">
-    <h3 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-1">Truncation (narrow container)</h3>
-    <p class="tw-text-sm tw-text-gray-500 tw-mb-4">
-      Drag the slider to resize the container and see label/id truncation kick in (e.g. search "abnormality" or "disability").
-    </p>
-
-    <label class="tw-flex tw-items-center tw-gap-3 tw-mb-4 tw-text-sm tw-text-gray-600">
-      Container width: {{ truncationWidth() }}px
-      <input
-        type="range"
-        min="120"
-        max="400"
-        step="10"
-        [value]="truncationWidth()"
-        (input)="onTruncationWidthChange($event)"
-        class="tw-w-48" />
-    </label>
-
-    <div [style.width.px]="truncationWidth()">
-      <lib-jds-autocomplete
-        [suggestions]="truncationSuggestions()"
-        placeholder="Search terms…"
-        (completeMethod)="onTruncationSearch($event)"
-        (selectItem)="onTruncationSelect($event)"
-        (cleared)="onTruncationClear()">
-      </lib-jds-autocomplete>
-    </div>
-
-    @if (truncationLastEvent()) {
-      <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
-        {{ truncationLastEvent() }}
-      </div>
-    }
-  </section>
-
+<!-- Overview tab: single scrolling page (header + variations + usage + activity) -->
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
 </div>
+
+<!--
+  Live demo templates — referenced by @ViewChild and rendered by app-doc-variations.
+  The markup between `snippet:<id>` / `/snippet` markers is extracted into the
+  generated code block by `pnpm docs:snippets`, so each snippet is the exact widget
+  usage that renders its live demo and cannot drift. Interactive harness (event log,
+  width slider) lives outside the markers.
+-->
+<ng-template #tplGrouped>
+  <div class="tw-max-w-md">
+    <!-- snippet:grouped -->
+    <lib-jds-autocomplete
+      [suggestions]="groupedSuggestions()"
+      [totalCount]="groupedTotalCount()"
+      placeholder="Search phenotypes, diseases, genes…"
+      (completeMethod)="onGroupedSearch($event)"
+      (selectItem)="onGroupedSelect($event)"
+      (showAll)="onGroupedShowAll($event)"
+      (cleared)="onGroupedClear()">
+    </lib-jds-autocomplete>
+    <!-- /snippet -->
+  </div>
+  @if (groupedLastEvent()) {
+    <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+      {{ groupedLastEvent() }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #tplFlat>
+  <div class="tw-max-w-md">
+    <!-- snippet:flat -->
+    <lib-jds-autocomplete
+      [suggestions]="flatSuggestions()"
+      placeholder="Search terms…"
+      (completeMethod)="onFlatSearch($event)"
+      (selectItem)="onFlatSelect($event)"
+      (cleared)="onFlatClear()">
+    </lib-jds-autocomplete>
+    <!-- /snippet -->
+  </div>
+  @if (flatLastEvent()) {
+    <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+      {{ flatLastEvent() }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #tplTruncation>
+  <label class="tw-flex tw-items-center tw-gap-3 tw-mb-4 tw-text-sm tw-text-gray-600">
+    Container width: {{ truncationWidth() }}px
+    <input
+      type="range"
+      min="120"
+      max="400"
+      step="10"
+      [value]="truncationWidth()"
+      (input)="onTruncationWidthChange($event)"
+      class="tw-w-48" />
+  </label>
+
+  <div [style.width.px]="truncationWidth()">
+    <!-- snippet:truncation -->
+    <lib-jds-autocomplete
+      [suggestions]="truncationSuggestions()"
+      placeholder="Search terms…"
+      (completeMethod)="onTruncationSearch($event)"
+      (selectItem)="onTruncationSelect($event)"
+      (cleared)="onTruncationClear()">
+    </lib-jds-autocomplete>
+    <!-- /snippet -->
+  </div>
+  @if (truncationLastEvent()) {
+    <div class="tw-mt-3 tw-text-sm tw-text-gray-600 tw-bg-gray-50 tw-rounded tw-px-3 tw-py-2 tw-font-mono">
+      {{ truncationLastEvent() }}
+    </div>
+  }
+</ng-template>

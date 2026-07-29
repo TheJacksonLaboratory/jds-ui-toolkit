@@ -1,6 +1,18 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  TemplateRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { JdsAutocompleteComponent, JdsAutocompleteGroup, JdsAutocompleteItem } from '@jax-data-science/components';
+import { autocompleteDoc } from '@jax-data-science/component-docs';
+import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
+import { DocVariationsComponent } from '../../../docs-shell/tab-content/doc-variations/doc-variations.component';
+import { DocUsageComponent } from '../../../docs-shell/tab-content/doc-usage/doc-usage.component';
+import { DocActivityComponent } from '../../../docs-shell/tab-content/doc-activity/doc-activity.component';
 
 const ALL_DATA: JdsAutocompleteGroup[] = [
   {
@@ -70,15 +82,29 @@ const ALL_DATA: JdsAutocompleteGroup[] = [
   },
 ];
 
-const FLAT_DATA: JdsAutocompleteItem[] = ALL_DATA.flatMap(group => group.items);
+const FLAT_DATA: JdsAutocompleteItem[] = ALL_DATA.flatMap((group) => group.items);
 
 @Component({
   selector: 'app-showcase-autocomplete',
   standalone: true,
-  imports: [CommonModule, JdsAutocompleteComponent],
+  imports: [
+    DocOverviewComponent,
+    DocVariationsComponent,
+    DocUsageComponent,
+    DocActivityComponent,
+    JdsAutocompleteComponent,
+  ],
   templateUrl: './showcase-autocomplete.component.html',
 })
-export class ShowcaseAutocompleteComponent {
+export class ShowcaseAutocompleteComponent implements AfterViewInit {
+  private cdr = inject(ChangeDetectorRef);
+  readonly doc = autocompleteDoc;
+  demoTemplates = new Map<string, TemplateRef<void>>();
+
+  @ViewChild('tplGrouped') tplGrouped!: TemplateRef<void>;
+  @ViewChild('tplFlat') tplFlat!: TemplateRef<void>;
+  @ViewChild('tplTruncation') tplTruncation!: TemplateRef<void>;
+
   // Grouped example
   groupedSuggestions = signal<JdsAutocompleteGroup[]>([]);
   groupedSelected = signal<JdsAutocompleteItem | null>(null);
@@ -96,16 +122,25 @@ export class ShowcaseAutocompleteComponent {
   truncationSelected = signal<JdsAutocompleteItem | null>(null);
   truncationLastEvent = signal<string>('');
 
+  ngAfterViewInit(): void {
+    this.demoTemplates = new Map([
+      ['grouped', this.tplGrouped],
+      ['flat', this.tplFlat],
+      ['truncation', this.tplTruncation],
+    ]);
+    this.cdr.detectChanges();
+  }
+
   onGroupedSearch(event: { query: string }): void {
     const q = event.query.toLowerCase();
     const filtered: JdsAutocompleteGroup[] = ALL_DATA
-      .map(group => ({
+      .map((group) => ({
         ...group,
         items: group.items.filter(
-          item => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
+          (item) => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
         ),
       }))
-      .filter(group => group.items.length > 0);
+      .filter((group) => group.items.length > 0);
 
     this.groupedSuggestions.set(filtered);
     const total = filtered.reduce((sum, g) => sum + g.items.length, 0);
@@ -130,7 +165,7 @@ export class ShowcaseAutocompleteComponent {
     const q = event.query.toLowerCase();
     this.flatSuggestions.set(
       FLAT_DATA.filter(
-        item => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
+        (item) => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
       )
     );
   }
@@ -153,7 +188,7 @@ export class ShowcaseAutocompleteComponent {
     const q = event.query.toLowerCase();
     this.truncationSuggestions.set(
       FLAT_DATA.filter(
-        item => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
+        (item) => item.label.toLowerCase().includes(q) || item.id.toLowerCase().includes(q)
       )
     );
   }
