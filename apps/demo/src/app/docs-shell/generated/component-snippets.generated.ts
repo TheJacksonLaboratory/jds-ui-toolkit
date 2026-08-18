@@ -10,6 +10,11 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "basic": "<lib-jds-auth></lib-jds-auth>",
     "custom-redirect": "<lib-jds-auth [configLogin]=\"customConfigLogin\" [configLogout]=\"customConfigLogout\"></lib-jds-auth>"
   },
+  "autocomplete": {
+    "grouped": "<lib-jds-autocomplete\n  [suggestions]=\"groupedSuggestions()\"\n  [totalCount]=\"groupedTotalCount()\"\n  placeholder=\"Search phenotypes, diseases, genes…\"\n  (completeMethod)=\"onGroupedSearch($event)\"\n  (selectItem)=\"onGroupedSelect($event)\"\n  (showAll)=\"onGroupedShowAll($event)\"\n  (cleared)=\"onGroupedClear()\">\n</lib-jds-autocomplete>",
+    "flat": "<lib-jds-autocomplete\n  [suggestions]=\"flatSuggestions()\"\n  placeholder=\"Search terms…\"\n  (completeMethod)=\"onFlatSearch($event)\"\n  (selectItem)=\"onFlatSelect($event)\"\n  (cleared)=\"onFlatClear()\">\n</lib-jds-autocomplete>",
+    "truncation": "<lib-jds-autocomplete\n  [suggestions]=\"truncationSuggestions()\"\n  placeholder=\"Search terms…\"\n  (completeMethod)=\"onTruncationSearch($event)\"\n  (selectItem)=\"onTruncationSelect($event)\"\n  (cleared)=\"onTruncationClear()\">\n</lib-jds-autocomplete>"
+  },
   "error-widget": {
     "default": "<lib-widget-error [errorMessage]=\"'Failed to load task list.'\"></lib-widget-error>",
     "long-message": "<lib-widget-error\n  [errorMessage]=\"'Could not fetch async tasks because the requested resource was not found. Please check your network connection and try again, or contact support if the problem persists.'\">\n</lib-widget-error>"

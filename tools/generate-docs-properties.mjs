@@ -44,14 +44,22 @@ try {
 
   const map = {};
   for (const c of doc.components || []) {
+    const inputs = (c.inputsClass || []).map(toProp);
+    const inputNames = new Set(inputs.map((i) => i.name));
     map[c.name] = {
-      inputs: (c.inputsClass || []).map(toProp),
-      outputs: (c.outputsClass || []).map((o) => ({
-        name: o.name,
-        type: o.type || o.defaultValue || 'EventEmitter',
-        required: false,
-        description: stripHtml(o.description),
-      })),
+      inputs,
+      // A `model()` two-way binding appears in BOTH inputsClass and outputsClass
+      // (Angular auto-generates its `<name>Change` emitter). It's really an input,
+      // so drop the duplicated output row and keep only genuine output()/@Output()
+      // events (whose names never collide with an input).
+      outputs: (c.outputsClass || [])
+        .filter((o) => !inputNames.has(o.name))
+        .map((o) => ({
+          name: o.name,
+          type: o.type || o.defaultValue || 'EventEmitter',
+          required: false,
+          description: stripHtml(o.description),
+        })),
     };
   }
 

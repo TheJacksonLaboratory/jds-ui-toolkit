@@ -105,6 +105,113 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
     ],
     "outputs": []
   },
+  "JdsAutocompleteComponent": {
+    "inputs": [
+      {
+        "name": "appendTo",
+        "type": "string | HTMLElement",
+        "default": "'body'",
+        "required": false,
+        "description": "Target the overlay panel is appended to; defaults to body."
+      },
+      {
+        "name": "delay",
+        "type": "number",
+        "default": "250",
+        "required": false,
+        "description": "Debounce in milliseconds between keystroke and completeMethod."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "description": "Disables the input when true."
+      },
+      {
+        "name": "dropdown",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "description": "Shows a dropdown trigger button that opens the panel on click."
+      },
+      {
+        "name": "forceSelection",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "description": "Requires the typed value to match a suggestion, clearing it otherwise."
+      },
+      {
+        "name": "minLength",
+        "type": "number",
+        "default": "2",
+        "required": false,
+        "description": "Minimum number of characters typed before completeMethod fires."
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "default": "''",
+        "required": false,
+        "description": "Placeholder text for the input field."
+      },
+      {
+        "name": "scrollHeight",
+        "type": "string",
+        "default": "'400px'",
+        "required": false,
+        "description": "Max height of the suggestions panel before it scrolls (CSS length)."
+      },
+      {
+        "name": "suggestions",
+        "type": "JdsAutocompleteGroup[] | JdsAutocompleteItem[]",
+        "default": "[]",
+        "required": false,
+        "description": "Suggestions to display. Pass a flat JdsAutocompleteItem[] for an ungrouped list, or a JdsAutocompleteGroup[] to render section headers. The panel caps display at 4 items per group and 8 items total."
+      },
+      {
+        "name": "totalCount",
+        "type": "number | null",
+        "default": "null",
+        "required": false,
+        "description": "Total number of matches available on the server. When non-null, a &quot;Show all N results&quot; footer is rendered and the showAll output fires when it is clicked."
+      },
+      {
+        "name": "value",
+        "type": "JdsAutocompleteItem | null",
+        "default": "null",
+        "required": false,
+        "description": "Two-way bound selected item, or null when nothing is chosen."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "cleared",
+        "type": "void",
+        "required": false,
+        "description": "Emits when the input is cleared."
+      },
+      {
+        "name": "completeMethod",
+        "type": "{ query: string }",
+        "required": false,
+        "description": "Emits the current query when the user types past minLength; fetch suggestions here."
+      },
+      {
+        "name": "selectItem",
+        "type": "JdsAutocompleteItem",
+        "required": false,
+        "description": "Emits the chosen item when a suggestion is selected."
+      },
+      {
+        "name": "showAll",
+        "type": "{ query: string }",
+        "required": false,
+        "description": "Emits the current query when the &quot;Show all results&quot; footer is clicked."
+      }
+    ]
+  },
   "NavbarComponent": {
     "inputs": [
       {

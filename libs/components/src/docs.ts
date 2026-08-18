@@ -1,4 +1,5 @@
 export * from './lib/docs/docs.model';
+export * from './lib/autocomplete/autocomplete.docs';
 export * from './lib/progress-widget/progress-widget.docs';
 export * from './lib/widget-error/widget-error.docs';
 export * from './lib/auth/authentication.docs';

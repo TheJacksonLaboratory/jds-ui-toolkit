@@ -20,6 +20,7 @@ import { DocMethodsComponent } from './docs-shell/tab-content/doc-methods/doc-me
 import { ShowcaseProgressWidgetComponent } from './components/pages/progress-widget/showcase-progress-widget.component';
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
+import { ShowcaseAutocompleteComponent } from './components/pages/autocomplete/showcase-autocomplete.component';
 
 // New services shell
 import { ALL_SERVICE_DOCS, ServicesShellComponent } from './services-shell/services-shell.component';
@@ -69,6 +70,15 @@ export const appRoutes: Route[] = [
         children: [
           // Overview is the single scrolling page (header + variations + usage + activity).
           { path: 'overview', component: ShowcaseProgressWidgetComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
+      {
+        path: 'autocomplete',
+        children: [
+          { path: 'overview', component: ShowcaseAutocompleteComponent },
           { path: 'properties', component: DocPropertiesComponent },
           { path: 'theming', component: DocThemingComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },
