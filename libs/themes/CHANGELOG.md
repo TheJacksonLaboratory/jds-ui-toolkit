@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.2] - 2026-08-20
+
+### Changed
+- Menubar: darkened light-mode root background from `{surface.400}` to `{surface.700}` per design feedback
+
+---
+
 ## [0.2.0-a.1] - 2026-06-19
 
 ### Changed

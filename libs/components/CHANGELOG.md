@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.5] - 2026-08-20
+
+### Added
+- **Autocomplete** (first pass): new component with dropdown capped to 4 items per group / 8 total, query-match highlighting on the ID line, and item hover weight matched to the "show all" footer
+- **Docs system**: `ComponentDoc` interfaces and docs barrel; Properties tables and variation code snippets now auto-generated from Compodoc and live demos; docs restructured to match the Figma design; `progress-widget` and `widget-error` ComponentDoc pilots; JSDoc front-matter added for asynctask, facet-search, navbar, auth, and widget-error
+
+### Chores
+- Extracted shared `DocBase` so the docs context/tab-content can serve services as well as components
+
+---
+
 ## [0.2.0-a.4] - 2026-06-29
 
 ### Fixed
