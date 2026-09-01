@@ -10,32 +10,31 @@ export const isaDataDoc: ServiceDoc = {
   contact: 'npm@jax.org',
   compodocSymbol: 'ISADataService',
   description:
-    'Fetches ISA (Investigation-Study-Assay) measure series metadata and characteristics ' +
-    'for a given study.',
+    'Fetches ISA (Investigation-Study-Assay) measure series metadata and characteristics.',
   usageExamples: [
     {
       id: 'basic',
       title: 'Fetching Measure Series Metadata',
       description:
-        'Inject the service and request metadata for a measure series within a study. ' +
-        'Only a single measure series ID and study ID are currently supported.',
+        'Inject the service and request metadata for a measure series. ' +
+        'Only a single measure series ID is currently supported.',
       code: `import { inject } from '@angular/core';
 import { ISADataService } from '@jax-data-science/api-clients';
 
 export class MyComponent {
   private isaDataService = inject(ISADataService);
 
-  loadMetadata(measureSeriesId: string, studyId: string) {
-    return this.isaDataService.getMeasureSeriesMetadata([measureSeriesId], [studyId]);
+  loadMetadata(measureSeriesId: string) {
+    return this.isaDataService.getMeasureSeriesMetadata([measureSeriesId]);
   }
 }`,
       language: 'typescript',
     },
   ],
   usage: {
-    summary: 'Use ISADataService to look up measure series metadata and characteristics for a study.',
+    summary: 'Use ISADataService to look up measure series metadata and characteristics.',
     dos: [
-      'Pass exactly one measure series ID and one study ID — only single-ID lookups are currently supported.',
+      'Pass exactly one measure series ID — only single-ID lookups are currently supported.',
     ],
     donts: [
       'Do not call getMeasuresMetadata() — it is a placeholder for future API growth and always returns an empty response today.',

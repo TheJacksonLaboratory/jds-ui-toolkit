@@ -41,14 +41,13 @@ export class ISADataService {
   // measure operations
 
   /**
-   * Fetches measure series metadata for the given measure series IDs and study IDs.
+   * Fetches measure series metadata for the given measure series IDs.
    *
    * @param measureSeriesIds - measure series identifiers to fetch metadata for. ONLY ONE ID IS SUPPORTED.
-   * @param studyIds - ONLY ONE ID IS SUPPORTED. REQUIRED!! WILL BE REMOVED IN THE FUTURE.
    *
    * @return Observable<Response<MeasureSeriesMetadata>> - an observable containing the measure series metadata.
    */
-  getMeasureSeriesMetadata(measureSeriesIds: string[], studyIds: string[]) :
+  getMeasureSeriesMetadata(measureSeriesIds: string[]) :
     Observable<Response<MeasureSeriesMetadata>> {
     if(!measureSeriesIds?.length) {
       const errorResponse: ErrorResponse = {
@@ -62,8 +61,7 @@ export class ISADataService {
 
 
     const url = this.buildUrl('/visualization/measures/metadata', {
-      measureSeriesIds: measureSeriesIds.join(','),
-      studyId: studyIds.join(',')
+      measureSeriesIds: measureSeriesIds.join(',')
     });
 
 
@@ -73,21 +71,20 @@ export class ISADataService {
   /**
    * THIS METHOD SHOULD NOT BE USED. PLACEHOLDER FOR FUTURE IMPLEMENTATION ONCE THE API GROWS.
    */
-  getMeasuresMetadata(measureIds: string[], studyIds: string[]) :
+  getMeasuresMetadata(measureIds: string[]) :
     Observable<Response<MeasureMetadata>>  {
     const reqUrl = '';
     return this.apiBaseService.get<MeasureMetadata>(reqUrl);
   }
 
   /**
-   * Fetches measure series characteristics for the given measure series IDs and study IDs.
+   * Fetches measure series characteristics for the given measure series IDs.
    *
    * @param measureSeriesIds - measure series identifiers to fetch metadata for. ONLY ONE ID IS SUPPORTED.
-   * @param studyIds - ONLY ONE ID IS SUPPORTED. REQUIRED!! WILL BE REMOVED IN THE FUTURE.
    *
    * @return Observable<Response<MeasureSeriesMetadata>> - an observable containing the measure series metadata.
    */
-  getMeasureSeriesCharacteristics(measureSeriesIds: string[], studyIds: string[]) :
+  getMeasureSeriesCharacteristics(measureSeriesIds: string[]) :
     Observable<Response<IsaCharacteristic>> {
     if(!measureSeriesIds?.length) {
       const errorResponse: ErrorResponse = {
@@ -100,8 +97,7 @@ export class ISADataService {
     }
 
     const url = this.buildUrl('/visualization/measures/characteristics', {
-      measureSeriesIds: measureSeriesIds.join(','),
-      studyIds: studyIds.join(',')
+      measureSeriesIds: measureSeriesIds.join(',')
     });
 
 
