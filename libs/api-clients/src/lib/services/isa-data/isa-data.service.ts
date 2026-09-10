@@ -80,9 +80,9 @@ export class ISADataService {
   /**
    * Fetches measure series characteristics for the given measure series IDs.
    *
-   * @param measureSeriesIds - measure series identifiers to fetch metadata for. ONLY ONE ID IS SUPPORTED.
+   * @param measureSeriesIds - measure series identifiers to fetch characteristics for. ONLY ONE ID IS SUPPORTED.
    *
-   * @return Observable<Response<MeasureSeriesMetadata>> - an observable containing the measure series metadata.
+   * @return Observable<Response<IsaCharacteristic>> - an observable containing the measure series characteristics.
    */
   getMeasureSeriesCharacteristics(measureSeriesIds: string[]) :
     Observable<Response<IsaCharacteristic>> {
