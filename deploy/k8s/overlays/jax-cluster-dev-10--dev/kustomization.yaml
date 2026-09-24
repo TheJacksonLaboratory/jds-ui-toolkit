@@ -3,5 +3,4 @@ kind: Kustomization
 namespace: dev
 resources:
 - ../../base
-patchesStrategicMerge:
-  - ingress.yaml
+- httproute.yaml

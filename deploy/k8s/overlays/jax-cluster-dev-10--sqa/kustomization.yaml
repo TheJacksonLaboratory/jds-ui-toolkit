@@ -3,5 +3,5 @@ kind: Kustomization
 namespace: sqa
 resources:
 - ../../base
-patchesStrategicMerge:
-  - ingress.yaml
+- ingress.yaml
+

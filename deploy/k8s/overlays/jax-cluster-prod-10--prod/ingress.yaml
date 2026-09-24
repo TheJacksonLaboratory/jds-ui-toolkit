@@ -4,28 +4,34 @@ metadata:
   name:  jds-ui-demo-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://*.jax.org, http://localhost:4200, http://localhost:8080"
 spec:
   tls:
     - hosts:
         - "jds-apps.jax.org"
       secretName: jds-apps-jax-org-tls
   rules:
-  - host: "jds-apps.jax.org"
-    http:
-      paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: jds-ui-demo
-              port:
-                number: 80
-        - pathType: Prefix
-          path: "/echo"
-          backend:
-            service:
-              name: jds-ui-demo
-              port:
-                number: 80
-
-
+    - host: "jds-apps.jax.org"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/echo"
+            backend:
+              service:
+                name: jds-ui-demo
+                port:
+                  number: 80
+  ingressClassName: nginx
