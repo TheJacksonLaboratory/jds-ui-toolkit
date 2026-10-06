@@ -57,13 +57,13 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "ancestors",
         "signature": "ancestors(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the ancestors of a term."
+        "description": "Get the ancestors of a term. Every returned term populates {@link OntologyTerm.parents}, so the result describes the ancestor sub-graph rather than a flat set. Implementations that cannot supply parents cannot be used to build a term tree."
       },
       {
         "name": "children",
         "signature": "children(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the children of a term."
+        "description": "Get the immediate children of a term."
       },
       {
         "name": "descendants",
@@ -75,11 +75,11 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "parents",
         "signature": "parents(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the parents of a term."
+        "description": "Get the immediate parents of a term."
       },
       {
         "name": "search",
-        "signature": "search(query: string, limit: number, ontology: Ontology)",
+        "signature": "search(query: string, limit: number, ontology: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
         "description": "Search for terms in an ontology."
       },
@@ -241,43 +241,37 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "ancestors",
         "signature": "ancestors(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the ancestors of a term"
+        "description": "Get the ancestors of a term, each carrying the ids of its immediate parents."
       },
       {
         "name": "children",
         "signature": "children(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the children of a term"
+        "description": "Get the immediate children of a term."
       },
       {
         "name": "descendants",
         "signature": "descendants(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the descendants of a term"
-      },
-      {
-        "name": "ontologyBaseResolver",
-        "signature": "ontologyBaseResolver(ontology: Ontology)",
-        "returnType": "string",
-        "description": "Get the ontology api base url configuration"
+        "description": "Get the descendants of a term."
       },
       {
         "name": "parents",
         "signature": "parents(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Get the parents of a term"
+        "description": "Get the immediate parents of a term."
       },
       {
         "name": "search",
-        "signature": "search(query: string, limit: number, ontology: Ontology)",
+        "signature": "search(query: string, limit: number, ontology: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": "Search for terms in an ontology"
+        "description": "Search for terms in an ontology."
       },
       {
         "name": "term",
         "signature": "term(id: string)",
         "returnType": "Observable<Response<OntologyTerm>>",
-        "description": "Get a term by its ID"
+        "description": "Get a term by its ID."
       }
     ]
   },
@@ -309,43 +303,43 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "ancestors",
         "signature": "ancestors(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": ""
+        "description": "Get the ancestors of a term, each carrying the ids of its immediate parents."
       },
       {
         "name": "children",
         "signature": "children(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": ""
+        "description": "Get the immediate children of a term."
       },
       {
         "name": "descendants",
         "signature": "descendants(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": ""
+        "description": "Get the descendants of a term."
       },
       {
         "name": "mapOLSTermToOntologyTerm",
         "signature": "mapOLSTermToOntologyTerm(olsTerm: OLSTerm)",
         "returnType": "OntologyTerm",
-        "description": ""
+        "description": "Convert an OLS entity to a term. parents is left undefined when OLS supplies no hierarchical parents for the entity, which is the case for the stub entities inlined under linkedEntities."
       },
       {
         "name": "parents",
         "signature": "parents(id: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": ""
+        "description": "Get the immediate parents of a term. OLS serves no parents relation, so the parents are read from the term itself and resolved against the entities OLS inlines alongside it."
       },
       {
         "name": "search",
-        "signature": "search(query: string, limit: number, ontology: Ontology)",
+        "signature": "search(query: string, limit: number, ontology: string)",
         "returnType": "Observable<CollectionResponse<OntologyTerm>>",
-        "description": ""
+        "description": "Search for terms in an ontology."
       },
       {
         "name": "term",
         "signature": "term(id: string)",
         "returnType": "Observable<Response<OntologyTerm>>",
-        "description": ""
+        "description": "Get a term by its ID."
       }
     ]
   },

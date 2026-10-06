@@ -1,31 +1,13 @@
-export interface OntologyConfig {
-  name: string;
-  prefix: string;
-  github: {
-    api: string;
-    home: string;
-  };
-  home: string;
-  api: {
-    docs: string;
-    base: string;
-  };
-  base_file: string;
-  international: boolean;
-  description: string;
-}
-
-export enum Ontology {
-  HP = 'HP',
-  MONDO = 'MONDO',
-  MP = 'MP',
-  CL = 'CL',
-  MAXO = 'MAXO'
-}
-
 export interface OntologyTerm {
   id: string;
   name: string;
+  /**
+   * Ids of the term's immediate parents.
+   *
+   * Populated by {@link OntologyService.ancestors}, so a set of ancestors describes its own
+   * graph. Absent means the relation was not requested; an empty array means the term is a root.
+   */
+  parents?: string[];
 }
 
 // OLS Term interface based on provided JSON
