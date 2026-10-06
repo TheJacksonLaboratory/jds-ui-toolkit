@@ -42,7 +42,12 @@ console.log(`\nterm    ${id}`);
 console.log(`backend ${base}\n`);
 
 const focus = await get(`${base}/terms/${encodeURIComponent(id)}`);
-let ancestors = await get(`${base}/terms/${encodeURIComponent(id)}/ancestors`);
+// The relation routes reject a replaced id even though /terms resolves it, so follow the
+// id the server returned rather than the one asked for.
+if (focus.id !== id) {
+  console.log(`!  ${id} was replaced by ${focus.id} (${focus.name})\n`);
+}
+let ancestors = await get(`${base}/terms/${encodeURIComponent(focus.id)}/ancestors`);
 
 // Deployments predating the parents field answer with a flat set carrying no edges.
 if (ancestors.length && ancestors.every(t => t.parents === undefined)) {
