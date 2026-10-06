@@ -19,6 +19,7 @@ export * from './lib/services/ontology/ontology.service.jax';
 export * from './lib/services/ontology/ontology.service.ols';
 export * from './lib/services/ontology/ontology.model';
 export * from './lib/services/ontology/ontology.shared';
+export * from './lib/services/ontology/ontology.tree';
 
 // MVar API client
 export * from './lib/services/mvar/mvar.service';
