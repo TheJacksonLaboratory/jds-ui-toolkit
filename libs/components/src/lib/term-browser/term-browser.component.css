@@ -1,15 +1,30 @@
 /*
- * Only what utilities cannot express: an indent that depends on runtime depth, and the hit
- * areas WCAG 2.5.8 requires, which must not shift the design's 16px chevron column.
+ * Colours resolve through the PrimeNG semantic layer so the component takes on whichever
+ * theme the consumer has installed. The fallbacks are the values from the design, so the
+ * component still looks right with no theme at all.
  */
+:host {
+  --jds-term-browser-background: var(--p-surface-0, #ffffff);
+  --jds-term-browser-title-color: var(--p-text-color, #1e293b);
+  --jds-term-browser-label-color: var(--p-text-color, #222222);
+  --jds-term-browser-muted-color: var(--p-text-muted-color, #454545);
+  --jds-term-browser-twisty-color: var(--p-text-muted-color, #636363);
+  --jds-term-browser-selected-background: var(--p-highlight-background, #94e1dc);
+  --jds-term-browser-selected-color: var(--p-highlight-color, #16191d);
+  --jds-term-browser-focus-ring-color: var(--p-primary-color, #0177b2);
+  --jds-term-browser-radius: var(--p-content-border-radius, 6px);
+  --jds-term-indent: 1rem;
+}
+
+/* Indent depends on runtime depth, which no utility can express. */
 .jds-term-row {
-  padding-inline-start: calc(var(--jds-level, 0) * var(--jds-term-indent, 1rem));
+  padding-inline-start: calc(var(--jds-level, 0) * var(--jds-term-indent));
   min-height: 1.5rem;
 }
 
 /*
- * The design draws a 16px chevron column. 2.5.8 wants a 24px target, so the hit area is
- * grown with a pseudo-element rather than the box, which would widen every row.
+ * The design draws a 16px chevron column. WCAG 2.5.8 wants a 24px target, so the hit area
+ * grows through a pseudo-element rather than the box, which would widen every row.
  */
 .jds-term-twisty {
   position: relative;
@@ -28,7 +43,7 @@
 
 /* HPO's left rail is 284px; a flat 16px per level leaves no room for the label at depth. */
 @container (max-width: 20rem) {
-  .jds-term-row {
+  :host {
     --jds-term-indent: 0.5rem;
   }
 }
