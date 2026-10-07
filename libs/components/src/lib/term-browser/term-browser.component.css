@@ -47,3 +47,42 @@
     --jds-term-indent: 0.5rem;
   }
 }
+
+/*
+ * State colours live here rather than in utilities: they read theme tokens, and a class
+ * binding carrying an arbitrary value with a custom property inside it is not something
+ * Tailwind's scanner can see.
+ */
+.jds-term-title {
+  color: var(--jds-term-browser-title-color);
+}
+
+.jds-term-row {
+  border-radius: var(--jds-term-browser-radius);
+  color: var(--jds-term-browser-label-color);
+}
+
+.jds-term-row:focus-visible {
+  outline: 2px solid var(--jds-term-browser-focus-ring-color);
+  outline-offset: -2px;
+}
+
+.jds-term-row[aria-selected='true'] {
+  background: var(--jds-term-browser-selected-background);
+  color: var(--jds-term-browser-selected-color);
+}
+
+.jds-term-count,
+.jds-term-empty {
+  color: var(--jds-term-browser-muted-color);
+}
+
+.jds-term-twisty {
+  color: var(--jds-term-browser-twisty-color);
+}
+
+/* The selected row's glyph and count take the contrast colour with the rest of the row. */
+.jds-term-row[aria-selected='true'] .jds-term-twisty,
+.jds-term-row[aria-selected='true'] .jds-term-count {
+  color: inherit;
+}

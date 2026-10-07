@@ -1,5 +1,5 @@
 <div class="tw-flex tw-items-center tw-justify-between tw-pb-3">
-  <h2 class="tw-font-bold tw-text-base tw-leading-6 tw-text-[color:var(--jds-term-browser-title-color)]">{{ title() }}</h2>
+  <h2 class="jds-term-title tw-text-base tw-font-bold tw-leading-6">{{ title() }}</h2>
 </div>
 
 <p class="tw-sr-only" role="status" aria-live="polite">{{ status() }}</p>
@@ -9,8 +9,7 @@
     <div role="tree" [attr.aria-label]="ariaLabel()" class="tw-flex tw-flex-col tw-gap-0.5">
       @for (row of rows(); track row.node.key) {
         <div
-          class="jds-term-row tw-flex tw-cursor-pointer tw-items-center tw-gap-2 tw-rounded-[var(--jds-term-browser-radius)] tw-py-1.5 tw-pr-4 focus-visible:tw-outline focus-visible:tw-outline-2 focus-visible:tw-outline-offset-[-2px] focus-visible:tw-outline-[color:var(--jds-term-browser-focus-ring-color)]"
-          [class.tw-bg-[var(--jds-term-browser-selected-background)]]="row.selected"
+          class="jds-term-row tw-flex tw-cursor-pointer tw-items-center tw-gap-2 tw-py-1.5 tw-pr-4"
           role="treeitem"
           [attr.data-key]="row.node.key"
           [attr.aria-level]="row.level"
@@ -33,25 +32,19 @@
               (click)="toggleRow(row); $event.stopPropagation()">
               <i
                 class="pi pi-chevron-down tw-text-[10px] tw-transition-transform tw-duration-150"
-                [class.-tw-rotate-90]="!row.expanded"
-                [class.tw-text-[color:var(--jds-term-browser-twisty-color)]]="!row.selected"
-                [class.tw-text-[color:var(--jds-term-browser-selected-color)]]="row.selected"></i>
+                [class.-tw-rotate-90]="!row.expanded"></i>
             </span>
           }
 
           <span
             class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-sm hover:tw-underline"
-            [class.tw-font-bold]="row.selected"
-            [class.tw-text-[color:var(--jds-term-browser-selected-color)]]="row.selected"
-            [class.tw-text-[color:var(--jds-term-browser-label-color)]]="!row.selected">
-            {{ row.node.term.name }}<span
-              class="tw-font-normal"
-              [class.tw-text-[color:var(--jds-term-browser-muted-color)]]="!row.selected">{{ countOf(row.node.term) }}</span>
+            [class.tw-font-bold]="row.selected">
+            {{ row.node.term.name }}<span class="jds-term-count tw-font-normal">{{ countOf(row.node.term) }}</span>
           </span>
         </div>
       }
     </div>
   } @else {
-    <p class="tw-text-sm tw-text-[color:var(--jds-term-browser-muted-color)]">{{ text().empty }}</p>
+    <p class="jds-term-empty tw-text-sm">{{ text().empty }}</p>
   }
 </div>

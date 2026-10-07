@@ -107,6 +107,16 @@ describe('JdsTermBrowserComponent', () => {
     expect(resolver).not.toHaveBeenCalled();
   });
 
+  it('marks the selected rows in the DOM, which is what the theme styles key off', () => {
+    render(polyhierarchy);
+    component.term.set({ id: 'HP:0001166', name: 'Arachnodactyly' });
+    fixture.detectChanges();
+
+    const selected = fixture.nativeElement.querySelectorAll('.jds-term-row[aria-selected="true"]');
+    expect(selected.length).toEqual(2);
+    expect(fixture.nativeElement.querySelectorAll('.jds-term-row').length).toEqual(5);
+  });
+
   it('keeps the tree a single tab stop', () => {
     render(polyhierarchy);
     const tabbable = component.rows().filter(r => component.tabindexOf(r) === 0);
