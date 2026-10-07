@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Observable, catchError, map, of, startWith, switchMap } from 'rxjs';
 import { OntologyService, buildTermTree } from '@jax-data-science/api-clients';
 import { JdsTerm, JdsTermResolver, JdsTermTreeNode } from './term-browser.model';
 
@@ -40,7 +41,19 @@ const EMPTY: TermBrowserState = {
 })
 export class JdsTermBrowserFacade {
   private ontology = inject(OntologyService);
-  private state = signal<TermBrowserState>(EMPTY);
+
+  /**
+   * The term the tree should be centred on.
+   *
+   * Never equal to itself, so asking for the term already on screen loads it again. That
+   * is what makes `load` a retry after a failure rather than a no-op.
+   */
+  private requested = signal<string | null>(null, { equal: () => false });
+
+  private state = toSignal(
+    toObservable(this.requested).pipe(switchMap(id => (id === null ? of(EMPTY) : this.fetch(id)))),
+    { initialValue: EMPTY }
+  );
 
   /** The term the tree is centred on. */
   readonly term = computed(() => this.state().term);
@@ -76,9 +89,23 @@ export class JdsTermBrowserFacade {
    * @param id - the term to centre the tree on
    */
   load(id: string): void {
-    this.state.set({ ...EMPTY, loading: true });
+    this.requested.set(id);
+  }
 
-    this.ontology.term(id).pipe(
+  /** Discard the loaded tree. */
+  clear(): void {
+    this.requested.set(null);
+  }
+
+  /**
+   * Fetch a term and the tree of its ancestors, reporting progress as it goes.
+   *
+   * Emits the loading state first, then either the tree or the failure, so a subscriber
+   * never has to track the request itself.
+   * @param id - the term to centre the tree on
+   */
+  private fetch(id: string): Observable<TermBrowserState> {
+    return this.ontology.term(id).pipe(
       switchMap(response => {
         const focus = response.object;
         if (!focus) {
@@ -98,12 +125,8 @@ export class JdsTermBrowserFacade {
           })
         );
       }),
-      catchError(error => of({ ...EMPTY, error }))
-    ).subscribe(state => this.state.set(state));
-  }
-
-  /** Discard the loaded tree. */
-  clear(): void {
-    this.state.set(EMPTY);
+      catchError(error => of({ ...EMPTY, error })),
+      startWith({ ...EMPTY, loading: true })
+    );
   }
 }
