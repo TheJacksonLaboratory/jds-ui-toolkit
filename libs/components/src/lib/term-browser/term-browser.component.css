@@ -1,0 +1,34 @@
+/*
+ * Only what utilities cannot express: an indent that depends on runtime depth, and the hit
+ * areas WCAG 2.5.8 requires, which must not shift the design's 16px chevron column.
+ */
+.jds-term-row {
+  padding-inline-start: calc(var(--jds-level, 0) * var(--jds-term-indent, 1rem));
+  min-height: 1.5rem;
+}
+
+/*
+ * The design draws a 16px chevron column. 2.5.8 wants a 24px target, so the hit area is
+ * grown with a pseudo-element rather than the box, which would widen every row.
+ */
+.jds-term-twisty {
+  position: relative;
+}
+
+.jds-term-twisty::after {
+  content: '';
+  position: absolute;
+  inset: -0.25rem;
+}
+
+/* Keeps a focused row clear of anything sticky above the scroller (WCAG 2.4.11). */
+.jds-term-scroller {
+  scroll-padding-block: 2.25rem;
+}
+
+/* HPO's left rail is 284px; a flat 16px per level leaves no room for the label at depth. */
+@container (max-width: 20rem) {
+  .jds-term-row {
+    --jds-term-indent: 0.5rem;
+  }
+}

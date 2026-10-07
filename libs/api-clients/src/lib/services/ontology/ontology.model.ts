@@ -1,6 +1,8 @@
 export interface OntologyTerm {
   id: string;
   name: string;
+  /** Size of the term's transitive subtree, when the backend reports it. */
+  descendantCount?: number;
   /**
    * Ids of the term's immediate parents.
    *
