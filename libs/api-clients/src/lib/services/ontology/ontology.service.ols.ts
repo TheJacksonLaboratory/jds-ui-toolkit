@@ -179,15 +179,19 @@ export class OLSOntologyService extends OntologyService {
      * Convert an OLS entity to a term.
      *
      * `parents` is left undefined when OLS supplies no hierarchical parents for the entity,
-     * which is the case for the stub entities inlined under `linkedEntities`.
+     * which is the case for the stub entities inlined under `linkedEntities`. The descendant
+     * count decides which rows a tree can expand, so it is read from the hierarchical count
+     * to match the relation the ancestors are read from.
      * @param olsTerm - the OLS entity
      */
     mapOLSTermToOntologyTerm(olsTerm: OLSTerm): OntologyTerm {
         const parents = olsTerm.hierarchicalParent
             ?.map(parent => curieFromIri(this.iriOf(parent)));
+        const descendantCount = olsTerm.numHierarchicalDescendants ?? olsTerm.numDescendants;
         return {
             id: olsTerm.curie,
             name: olsTerm.label && olsTerm.label.length > 0 ? olsTerm.label[0] : 'No label',
+            ...(descendantCount === undefined ? {} : { descendantCount }),
             ...(parents ? { parents } : {})
         };
     }
