@@ -6,3 +6,4 @@ export * from './lib/auth/authentication.docs';
 export * from './lib/navbar/navbar.docs';
 export * from './lib/facet-search/facet-search.docs';
 export * from './lib/asynctask/asynctask.docs';
+export * from './lib/term-browser/term-browser.docs';

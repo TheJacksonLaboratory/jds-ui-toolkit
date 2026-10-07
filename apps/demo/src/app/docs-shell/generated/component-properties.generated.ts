@@ -212,6 +212,91 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
       }
     ]
   },
+  "JdsTermBrowserComponent": {
+    "inputs": [
+      {
+        "name": "ariaLabel",
+        "type": "string",
+        "default": "'Ontology term hierarchy'",
+        "required": false,
+        "description": "Accessible name of the tree."
+      },
+      {
+        "name": "childrenResolver",
+        "type": "JdsTermResolver",
+        "required": true,
+        "description": "Resolves a position&#39;s children when it is expanded."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<JdsTermBrowserLabels>",
+        "required": false,
+        "description": "Overrides for the component&#39;s own text."
+      },
+      {
+        "name": "maxHeight",
+        "type": "string",
+        "default": "'480px'",
+        "required": false,
+        "description": "Height at which the term list begins to scroll."
+      },
+      {
+        "name": "reFocusOnSelect",
+        "type": "boolean",
+        "default": "false",
+        "required": false,
+        "description": "Whether choosing a term re-centres the tree on it rather than only emitting."
+      },
+      {
+        "name": "showCounts",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "description": "Whether descendant counts are rendered beside non-leaf terms."
+      },
+      {
+        "name": "term",
+        "type": "JdsTerm | null",
+        "default": "null",
+        "required": false,
+        "description": "The term the tree is centred on. Two-way, so it composes with an autocomplete."
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "default": "'Term Browser'",
+        "required": false,
+        "description": "Heading above the browser."
+      },
+      {
+        "name": "tree",
+        "type": "JdsTermTreeNode[]",
+        "default": "[]",
+        "required": false,
+        "description": "Positions to render in the full tree view, as returned by buildTermTree. Already merged on shared prefix: a term reachable by several routes appears once per route, each occurrence carrying its own subtree."
+      }
+    ],
+    "outputs": [
+      {
+        "name": "expandTerm",
+        "type": "JdsTermExpandEvent",
+        "required": false,
+        "description": "Emitted when a position is expanded."
+      },
+      {
+        "name": "loadError",
+        "type": "JdsTermBrowserError",
+        "required": false,
+        "description": "Emitted when children could not be resolved."
+      },
+      {
+        "name": "termSelect",
+        "type": "JdsTermSelectEvent",
+        "required": false,
+        "description": "Emitted when a term is chosen."
+      }
+    ]
+  },
   "NavbarComponent": {
     "inputs": [
       {

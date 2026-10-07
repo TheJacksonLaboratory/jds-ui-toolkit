@@ -33,5 +33,10 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "dynamic-message": "<lib-jds-progress-widget [statusMessage]=\"message\" [isLoading]=\"isLoading\"></lib-jds-progress-widget>",
     "with-icon": "<lib-jds-progress-widget\n  [statusMessage]=\"'Downloading'\"\n  [isLoading]=\"isLoading\"\n  [iconClass]=\"'pi pi-download tw-text-blue-600'\">\n</lib-jds-progress-widget>",
     "block-ui": "<lib-jds-progress-widget [blockUi]=\"blockUi\" [statusMessage]=\"unblockMessage\"></lib-jds-progress-widget>"
+  },
+  "term-browser": {
+    "polyhierarchy": "<lib-jds-term-browser\n  [tree]=\"polyTree\"\n  [term]=\"polyFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  (termSelect)=\"onSelect($event)\" />",
+    "single-path": "<lib-jds-term-browser\n  [tree]=\"singleTree\"\n  [term]=\"singleFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  title=\"Hypertension\" />",
+    "narrow": "<lib-jds-term-browser\n  [tree]=\"polyTree\"\n  [term]=\"polyFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  maxHeight=\"320px\" />"
   }
 };

@@ -14,6 +14,8 @@
   --jds-term-browser-focus-ring-color: var(--p-primary-color, #0177b2);
   --jds-term-browser-radius: var(--p-content-border-radius, 6px);
   --jds-term-indent: 1rem;
+  /* Lets the indent respond to the width given to the component, not the viewport. */
+  container-type: inline-size;
 }
 
 /* Indent depends on runtime depth, which no utility can express. */

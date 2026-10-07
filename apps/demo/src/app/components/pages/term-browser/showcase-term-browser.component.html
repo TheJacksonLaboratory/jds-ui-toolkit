@@ -1,0 +1,51 @@
+<!-- Overview tab: single scrolling page (header + variations + usage + activity) -->
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
+</div>
+
+<!--
+  Live demo templates — referenced by @ViewChild.
+  The markup between `snippet:<id>` / `/snippet` markers is extracted into the
+  generated code block by `pnpm docs:snippets`.
+-->
+<ng-template #tplPolyhierarchy>
+  <div class="tw-max-w-[420px] tw-border tw-border-slate-200 tw-rounded-lg">
+    <!-- snippet:polyhierarchy -->
+    <lib-jds-term-browser
+      [tree]="polyTree"
+      [term]="polyFocus()"
+      [childrenResolver]="resolveChildren"
+      (termSelect)="onSelect($event)" />
+    <!-- /snippet -->
+  </div>
+  @if (lastSelected()) {
+    <p class="tw-mt-2 tw-text-sm tw-text-slate-600">Selected: {{ lastSelected() }}</p>
+  }
+</ng-template>
+
+<ng-template #tplSinglePath>
+  <div class="tw-max-w-[420px] tw-border tw-border-slate-200 tw-rounded-lg">
+    <!-- snippet:single-path -->
+    <lib-jds-term-browser
+      [tree]="singleTree"
+      [term]="singleFocus()"
+      [childrenResolver]="resolveChildren"
+      title="Hypertension" />
+    <!-- /snippet -->
+  </div>
+</ng-template>
+
+<ng-template #tplNarrow>
+  <div class="tw-w-[284px] tw-border tw-border-slate-200 tw-rounded-lg">
+    <!-- snippet:narrow -->
+    <lib-jds-term-browser
+      [tree]="polyTree"
+      [term]="polyFocus()"
+      [childrenResolver]="resolveChildren"
+      maxHeight="320px" />
+    <!-- /snippet -->
+  </div>
+</ng-template>
