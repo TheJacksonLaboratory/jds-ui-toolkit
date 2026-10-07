@@ -43,9 +43,13 @@
   scroll-padding-block: 2.25rem;
 }
 
-/* HPO's left rail is 284px; a flat 16px per level leaves no room for the label at depth. */
+/*
+ * A rail narrower than 20rem cannot afford 16px a level: a deep term spends the whole width
+ * on indentation and leaves none for the label. The rule targets the row rather than the
+ * host, because an element does not match a container query it establishes itself.
+ */
 @container (max-width: 20rem) {
-  :host {
+  .jds-term-row {
     --jds-term-indent: 0.5rem;
   }
 }

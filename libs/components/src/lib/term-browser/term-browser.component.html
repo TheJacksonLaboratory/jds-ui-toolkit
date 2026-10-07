@@ -4,8 +4,15 @@
 
 <p class="tw-sr-only" role="status" aria-live="polite">{{ status() }}</p>
 
-<div class="jds-term-scroller tw-overflow-y-auto" [style.max-height]="maxHeight()">
-  @if (rows().length) {
+<div class="jds-term-scroller tw-min-h-0 tw-flex-1 tw-overflow-y-auto">
+  @if (loading()) {
+    <div class="tw-flex tw-h-full tw-items-center tw-justify-center">
+      <p-progress-spinner
+        [style]="{ width: '2.5rem', height: '2.5rem' }"
+        [ariaLabel]="text().loading"
+        strokeWidth="4" />
+    </div>
+  } @else if (rows().length) {
     <div role="tree" [attr.aria-label]="ariaLabel()" class="tw-flex tw-flex-col tw-gap-0.5">
       @for (row of rows(); track row.node.key) {
         <div

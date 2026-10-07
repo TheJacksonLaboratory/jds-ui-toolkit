@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, input, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, linkedSignal, model, output, signal } from '@angular/core';
+import { ProgressSpinner } from 'primeng/progressspinner';
 import { isObservable } from 'rxjs';
 import {
   JDS_TERM_BROWSER_LABELS,
@@ -18,10 +19,11 @@ const TYPEAHEAD_WINDOW = 500;
 @Component({
   selector: 'lib-jds-term-browser',
   standalone: true,
+  imports: [ProgressSpinner],
   templateUrl: './term-browser.component.html',
   styleUrl: './term-browser.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'tw-flex tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)] tw-pt-6 tw-px-6 tw-pb-8' }
+  host: { class: 'tw-flex tw-min-h-0 tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)] tw-pt-6 tw-px-6 tw-pb-8' }
 })
 export class JdsTermBrowserComponent {
   private host: ElementRef<HTMLElement> = inject(ElementRef);
@@ -40,11 +42,16 @@ export class JdsTermBrowserComponent {
   /** Resolves a position's children when it is expanded. */
   childrenResolver = input.required<JdsTermResolver>();
 
+  /**
+   * Whether a tree is being loaded, which replaces the rows with a spinner.
+   *
+   * Expanding a position is reported per row instead, so this stays false while children
+   * are resolved.
+   */
+  loading = input(false);
+
   /** Whether descendant counts are rendered beside non-leaf terms. */
   showCounts = model(true);
-
-  /** Height at which the term list begins to scroll. */
-  maxHeight = model('480px');
 
   /** Whether choosing a term re-centres the tree on it rather than only emitting. */
   reFocusOnSelect = model(false);
@@ -65,14 +72,25 @@ export class JdsTermBrowserComponent {
   /** Emitted when children could not be resolved. */
   loadError = output<JdsTermBrowserError>();
 
+  // A new tree is a new set of positions, so everything keyed by position resets with it.
+
   /** Positions whose children are hidden, by node key. */
-  private collapsed = signal<ReadonlySet<string>>(new Set());
+  private collapsed = linkedSignal<JdsTermTreeNode[], ReadonlySet<string>>({
+    source: this.tree,
+    computation: () => new Set()
+  });
   /** Positions whose children are being resolved, by node key. */
-  private loading = signal<ReadonlySet<string>>(new Set());
+  private resolving = signal<ReadonlySet<string>>(new Set());
   /** Children resolved lazily, by node key. */
-  private resolved = signal<ReadonlyMap<string, JdsTerm[]>>(new Map());
+  private resolved = linkedSignal<JdsTermTreeNode[], ReadonlyMap<string, JdsTerm[]>>({
+    source: this.tree,
+    computation: () => new Map()
+  });
   /** Row the roving tabindex currently sits on. */
-  readonly activeKey = signal<string | null>(null);
+  readonly activeKey = linkedSignal<JdsTermTreeNode[], string | null>({
+    source: this.tree,
+    computation: () => null
+  });
   /** Most recent status message, announced politely. */
   readonly status = signal('');
 
@@ -85,7 +103,7 @@ export class JdsTermBrowserComponent {
   /** The rows to render, in the order they appear on screen. */
   readonly rows = computed<JdsTermBrowserRow[]>(() => {
     const collapsed = this.collapsed();
-    const loading = this.loading();
+    const resolving = this.resolving();
     const resolved = this.resolved();
     const selectedId = this.term()?.id;
     const rows: JdsTermBrowserRow[] = [];
@@ -103,7 +121,7 @@ export class JdsTermBrowserComponent {
           setsize: nodes.length,
           expanded: expandable ? open : undefined,
           selected: node.term.id === selectedId,
-          loading: loading.has(node.key)
+          loading: resolving.has(node.key)
         });
         if (open) {
           visit(children, level + 1);
@@ -114,24 +132,6 @@ export class JdsTermBrowserComponent {
     visit(this.tree(), 1);
     return rows;
   });
-
-  constructor() {
-    // A new tree is a new set of positions, so expansion state cannot carry over.
-    effect(() => {
-      this.tree();
-      this.collapsed.set(new Set());
-      this.resolved.set(new Map());
-      this.activeKey.set(null);
-    });
-  }
-
-  /**
-   * Get the row a key belongs to.
-   * @param key - identity of the position
-   */
-  private rowFor(key: string | null): JdsTermBrowserRow | undefined {
-    return this.rows().find(row => row.node.key === key);
-  }
 
   /**
    * Wrap lazily resolved children as positions below a node.
@@ -174,13 +174,13 @@ export class JdsTermBrowserComponent {
    * @param node - the position being expanded
    */
   private resolve(node: JdsTermTreeNode): void {
-    this.loading.update(keys => new Set(keys).add(node.key));
+    this.resolving.update(keys => new Set(keys).add(node.key));
     this.status.set(this.text().loading);
     this.expandTerm.emit({ term: node.term, key: node.key });
 
     const done = (children: JdsTerm[]) => {
       this.resolved.update(map => new Map(map).set(node.key, children));
-      this.loading.update(keys => {
+      this.resolving.update(keys => {
         const next = new Set(keys);
         next.delete(node.key);
         return next;
@@ -188,7 +188,7 @@ export class JdsTermBrowserComponent {
       this.status.set(`${children.length} terms loaded`);
     };
     const failed = (cause: unknown) => {
-      this.loading.update(keys => {
+      this.resolving.update(keys => {
         const next = new Set(keys);
         next.delete(node.key);
         return next;
