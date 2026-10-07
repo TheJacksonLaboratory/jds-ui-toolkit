@@ -321,7 +321,7 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
         "name": "mapOLSTermToOntologyTerm",
         "signature": "mapOLSTermToOntologyTerm(olsTerm: OLSTerm)",
         "returnType": "OntologyTerm",
-        "description": "Convert an OLS entity to a term. parents is left undefined when OLS supplies no hierarchical parents for the entity, which is the case for the stub entities inlined under linkedEntities."
+        "description": "Convert an OLS entity to a term. parents is left undefined when OLS supplies no hierarchical parents for the entity, which is the case for the stub entities inlined under linkedEntities. The descendant count decides which rows a tree can expand, so it is read from the hierarchical count to match the relation the ancestors are read from."
       },
       {
         "name": "parents",

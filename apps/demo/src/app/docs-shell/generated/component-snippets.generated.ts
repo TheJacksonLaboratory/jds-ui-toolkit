@@ -35,8 +35,6 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "block-ui": "<lib-jds-progress-widget [blockUi]=\"blockUi\" [statusMessage]=\"unblockMessage\"></lib-jds-progress-widget>"
   },
   "term-browser": {
-    "polyhierarchy": "<lib-jds-term-browser\n  [tree]=\"polyTree\"\n  [term]=\"polyFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  (termSelect)=\"onSelect($event)\" />",
-    "single-path": "<lib-jds-term-browser\n  [tree]=\"singleTree\"\n  [term]=\"singleFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  title=\"Hypertension\" />",
-    "narrow": "<lib-jds-term-browser\n  [tree]=\"polyTree\"\n  [term]=\"polyFocus()\"\n  [childrenResolver]=\"resolveChildren\"\n  maxHeight=\"320px\" />"
+    "live": "<lib-jds-term-browser\n  [tree]=\"facade.tree()\"\n  [term]=\"facade.term()\"\n  [childrenResolver]=\"facade.childrenResolver\"\n  [loading]=\"facade.loading()\"\n  (termSelect)=\"show($event.term.id)\" />"
   }
 };

@@ -10,70 +10,84 @@ export const termBrowserDoc: ComponentDoc = {
   contact: 'npm@jax.org',
   compodocSymbol: 'JdsTermBrowserComponent',
   description:
-    'A tree of where a term sits in an ontology. An ontology is a graph rather than a ' +
-    'tree, so a term reachable by several routes is rendered once per route, each ' +
-    'occurrence carrying its own subtree. Children load on expansion through a resolver ' +
-    'the consumer supplies, which keeps the component free of any ontology client.',
+    'A tree of where a term sits in an ontology. A term reachable by several routes is ' +
+    'rendered once per route. Children load on expansion.',
   variations: [
     {
-      id: 'polyhierarchy',
-      title: 'A term on several routes',
-      description:
-        'Arachnodactyly has fifteen ancestors reached over eight distinct routes, which ' +
-        'renders as thirty-seven rows across sixteen terms. Selecting it highlights all ' +
-        'eight positions, because selection follows the term; collapsing one leaves the ' +
-        'others open, because expansion follows the route.',
+      id: 'live',
+      title: 'Live',
+      description: 'Fetched from EBI’s OLS. Pick a term to rebuild the tree.',
       language: 'html',
     },
     {
-      id: 'single-path',
-      title: 'A term on one route, with children',
+      id: 'wiring',
+      title: 'Wiring the facade',
       description:
-        'Hypertension is reached one way, so nothing repeats. Its descendant count is ' +
-        'non-zero, so it carries a twisty; expanding it calls the resolver once and ' +
-        'caches the result.',
-      language: 'html',
-    },
-    {
-      id: 'narrow',
-      title: 'In a narrow rail',
-      description:
-        'The same tree in a 284px container, the width of HPO’s left rail. Indentation ' +
-        'steps down and labels truncate rather than overflowing.',
-      language: 'html',
+        'JdsTermBrowserFacade turns a term id into the tree the component renders. It ' +
+        'injects OntologyService, so the consumer chooses which backend answers. The ' +
+        'facade is providedIn root, so the binding has to be a root provider too.',
+      language: 'typescript',
+      code: `// app.config.ts — any OntologyService implementation will do.
+import { OLSOntologyService, OntologyService } from '@jax-data-science/api-clients';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(),
+    { provide: OntologyService, useExisting: OLSOntologyService },
+  ],
+};
+
+// The page that shows the browser.
+@Component({
+  selector: 'app-phenotype',
+  imports: [JdsTermBrowserComponent],
+  template: \`
+    <!-- The browser fills its parent, so the parent needs a height. -->
+    <div style="height: 420px">
+      <lib-jds-term-browser
+        [tree]="facade.tree()"
+        [term]="facade.term()"
+        [loading]="facade.loading()"
+        [childrenResolver]="facade.childrenResolver"
+        (termSelect)="facade.load($event.term.id)" />
+    </div>
+  \`,
+})
+export class PhenotypeComponent implements OnInit {
+  readonly facade = inject(JdsTermBrowserFacade);
+
+  ngOnInit(): void {
+    this.facade.load('HP:0001166');
+  }
+}`,
     },
   ],
   usage: {
     summary:
-      'Use the Term Browser to show where a term sits in a hierarchy and to let someone ' +
-      'walk it. Build the tree with buildTermTree from the api-clients library, or let ' +
-      'JdsTermBrowserFacade do it from any OntologyService implementation.',
+      'Build the tree with buildTermTree, or let JdsTermBrowserFacade do it from any ' +
+      'OntologyService implementation.',
     dos: [
-      'Supply childrenResolver — without it a term with descendants has a twisty that does nothing.',
-      'Resolve the term through the backend first and use the id it returns, since an ontology may replace a term and answer to its old id.',
-      'Let descendantCount reach the component, as it decides which rows can expand without a speculative request.',
+      'Supply childrenResolver, or a term with descendants gets a twisty that does nothing.',
+      'Use the id the backend returns, since an ontology may answer to a replaced term’s old id.',
+      'Give the component a parent with a height; it fills whatever it is given.',
+      'Bind loading while a tree is being fetched, or the reader sees the empty state instead.',
     ],
     donts: [
-      'Do not merge the tree by term id — that fabricates edges the ontology does not have and loses which route was taken.',
-      'Do not key expansion state on the term id, or collapsing one occurrence collapses every other one too.',
-      'Do not re-root the tree on selection unless that is what you want; set reFocusOnSelect, which defaults to false.',
+      'Do not merge by term id — that fabricates edges and loses which route was taken.',
+      'Do not key expansion on the term id, or collapsing one occurrence collapses them all.',
+      'Do not re-root on selection unless you want that; reFocusOnSelect defaults to false.',
     ],
-  },
-  activity: {
-    summary:
-      'Built for HPO’s term navigation and intended for any ontology the toolkit’s ' +
-      'clients can reach.',
   },
   theming: [
     { variable: '--jds-term-browser-background', default: 'var(--p-surface-0, #ffffff)', description: 'Card background.' },
     { variable: '--jds-term-browser-title-color', default: 'var(--p-text-color, #1e293b)', description: 'Heading colour.' },
     { variable: '--jds-term-browser-label-color', default: 'var(--p-text-color, #222222)', description: 'Term name colour.' },
-    { variable: '--jds-term-browser-muted-color', default: 'var(--p-text-muted-color, #454545)', description: 'Descendant count and empty-state colour.' },
-    { variable: '--jds-term-browser-twisty-color', default: 'var(--p-text-muted-color, #636363)', description: 'Expand and collapse chevron colour.' },
+    { variable: '--jds-term-browser-muted-color', default: 'var(--p-text-muted-color, #454545)', description: 'Descendant count and empty state.' },
+    { variable: '--jds-term-browser-twisty-color', default: 'var(--p-text-muted-color, #636363)', description: 'Chevron colour.' },
     { variable: '--jds-term-browser-selected-background', default: 'var(--p-highlight-background, #94e1dc)', description: 'Background of every row holding the selected term.' },
     { variable: '--jds-term-browser-selected-color', default: 'var(--p-highlight-color, #16191d)', description: 'Text colour on a selected row.' },
     { variable: '--jds-term-browser-focus-ring-color', default: 'var(--p-primary-color, #0177b2)', description: 'Keyboard focus ring.' },
     { variable: '--jds-term-browser-radius', default: 'var(--p-content-border-radius, 6px)', description: 'Row corner radius.' },
-    { variable: '--jds-term-indent', default: '1rem', description: 'Indentation per level; steps down to 0.5rem under a 20rem container.' },
+    { variable: '--jds-term-indent', default: '1rem', description: 'Indent per level; 0.5rem under a 20rem container.' },
   ],
 };

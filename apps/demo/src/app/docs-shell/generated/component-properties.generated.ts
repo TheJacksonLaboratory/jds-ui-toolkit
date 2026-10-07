@@ -234,11 +234,11 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "description": "Overrides for the component&#39;s own text."
       },
       {
-        "name": "maxHeight",
-        "type": "string",
-        "default": "'480px'",
+        "name": "loading",
+        "type": "boolean",
+        "default": "false",
         "required": false,
-        "description": "Height at which the term list begins to scroll."
+        "description": "Whether a tree is being loaded, which replaces the rows with a spinner. Expanding a position is reported per row instead, so this stays false while children are resolved."
       },
       {
         "name": "reFocusOnSelect",
