@@ -217,19 +217,19 @@ export const SERVICE_METHODS: Record<string, ApiMethodDoc> = {
       },
       {
         "name": "getMeasureSeriesCharacteristics",
-        "signature": "getMeasureSeriesCharacteristics(measureSeriesIds: string[], studyIds: string[])",
+        "signature": "getMeasureSeriesCharacteristics(measureSeriesIds: string[])",
         "returnType": "Observable<Response<IsaCharacteristic>>",
-        "description": "Fetches measure series characteristics for the given measure series IDs and study IDs."
+        "description": "Fetches measure series characteristics for the given measure series IDs."
       },
       {
         "name": "getMeasureSeriesMetadata",
-        "signature": "getMeasureSeriesMetadata(measureSeriesIds: string[], studyIds: string[])",
+        "signature": "getMeasureSeriesMetadata(measureSeriesIds: string[])",
         "returnType": "Observable<Response<MeasureSeriesMetadata>>",
-        "description": "Fetches measure series metadata for the given measure series IDs and study IDs."
+        "description": "Fetches measure series metadata for the given measure series IDs."
       },
       {
         "name": "getMeasuresMetadata",
-        "signature": "getMeasuresMetadata(measureIds: string[], studyIds: string[])",
+        "signature": "getMeasuresMetadata(measureIds: string[])",
         "returnType": "Observable<Response<MeasureMetadata>>",
         "description": "THIS METHOD SHOULD NOT BE USED. PLACEHOLDER FOR FUTURE IMPLEMENTATION ONCE THE API GROWS."
       }

@@ -18,7 +18,7 @@ export class ShowcaseISADataComponent implements OnInit {
   private isaDataService = inject(ISADataService);
 
   ngOnInit() {
-    this.isaDataService.getMeasureSeriesMetadata(['130499'], ['740']).subscribe(
+    this.isaDataService.getMeasureSeriesMetadata(['130499']).subscribe(
       (response) => {
         console.log('Measurement Set Metadata:', response.object);
       },
