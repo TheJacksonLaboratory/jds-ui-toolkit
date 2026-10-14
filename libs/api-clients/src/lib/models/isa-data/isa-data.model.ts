@@ -35,7 +35,6 @@ export interface MeasureMetadata {
   description: string;
   measure_id: number;
   method: string;
-  study_id: string;
   units: string;
   treatment: string;
   variable_name: string;
@@ -51,7 +50,6 @@ export interface MeasureSeriesMetadata {
   measure_series_id: string;
   measurement_units: string;
   method: string;
-  study_id?: number;
   treatment: string;
   treatment_units: string;
   variable_name: string;
@@ -63,7 +61,6 @@ export interface MeasureValue {
   value: string | number;
   measure_id: string;
   measure_series_id?: string;
-  study_id?: string;
   source_id: string;
 }
 

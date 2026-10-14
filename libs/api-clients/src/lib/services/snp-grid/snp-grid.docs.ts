@@ -34,6 +34,7 @@ export class MyComponent {
     summary: 'Use SnpGridService to look up strains, genes, and reference SNPs, and to query genotype results.',
     dos: [
       'Validate a gene symbol or rsID with isGeneSymbolValid()/isRSIDValid() before relying on it in a genotype query.',
+      'For GRCm39 downloads, pass the assembly and the locations as the user entered them to getGenotypeDownloadURLForCurrentData(), not the regions returned with search results (those are already converted).',
     ],
     donts: [
       'Do not build download URLs by hand — use getGenotypeDownloadURLForCurrentData().',
