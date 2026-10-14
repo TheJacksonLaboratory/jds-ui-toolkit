@@ -34,6 +34,9 @@ export class ShowcaseTermBrowserComponent implements OnInit, AfterViewInit {
   demoTemplates = new Map<string, TemplateRef<void>>();
   selectedId = EXAMPLES[0].id;
 
+  /** Width of the demo frame in pixels. */
+  width = 420;
+
   ngOnInit(): void {
     this.facade.load(this.selectedId);
   }

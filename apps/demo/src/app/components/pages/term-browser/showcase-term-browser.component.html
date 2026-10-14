@@ -17,10 +17,22 @@
     }
   </div>
 
+  <label class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
+    Width
+    <input
+      type="range"
+      min="200"
+      max="720"
+      step="10"
+      [value]="width"
+      (input)="width = +$any($event.target).value" />
+    <span class="tw-tabular-nums tw-text-slate-500">{{ width }}px</span>
+  </label>
+
   @if (facade.error()) {
     <p class="tw-text-sm tw-text-red-600">Could not reach OLS.</p>
   } @else {
-    <div class="tw-h-[420px] tw-w-[420px] tw-overflow-scroll tw-rounded-lg tw-border tw-border-slate-200">
+    <div class="tw-h-[420px] tw-overflow-auto" [style.width.px]="width">
       <!-- snippet:live -->
       <lib-jds-term-browser
         [tree]="facade.tree()"
