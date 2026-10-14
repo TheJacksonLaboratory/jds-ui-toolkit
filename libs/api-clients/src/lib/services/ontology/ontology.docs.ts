@@ -17,15 +17,15 @@ export const ontologyDoc: ServiceDoc = {
       id: 'jax-ontology',
       title: 'Using JaxOntologyService',
       description:
-        'Hits JAX’s own ontology-service backend, configured from a remote JSON config fetched on construction.',
+        'Hits JAX’s own ontology-service backend, addressed by the JAX_ONTOLOGY_API_ROOT token.',
       code: `import { inject } from '@angular/core';
-import { JaxOntologyService, Ontology } from '@jax-data-science/api-clients';
+import { JaxOntologyService } from '@jax-data-science/api-clients';
 
 export class MyComponent {
   private ontologyService = inject(JaxOntologyService);
 
   searchHpo(query: string) {
-    return this.ontologyService.search(query, 10, Ontology.HP);
+    return this.ontologyService.search(query, 10, 'hp');
   }
 }`,
       language: 'typescript',
@@ -35,13 +35,13 @@ export class MyComponent {
       title: 'Using OLSOntologyService',
       description: 'Hits EBI’s public OLS (Ontology Lookup Service) API directly — no config needed.',
       code: `import { inject } from '@angular/core';
-import { OLSOntologyService, Ontology } from '@jax-data-science/api-clients';
+import { OLSOntologyService } from '@jax-data-science/api-clients';
 
 export class MyComponent {
   private ontologyService = inject(OLSOntologyService);
 
   searchHpo(query: string) {
-    return this.ontologyService.search(query, 10, Ontology.HP);
+    return this.ontologyService.search(query, 10, 'hp');
   }
 }`,
       language: 'typescript',

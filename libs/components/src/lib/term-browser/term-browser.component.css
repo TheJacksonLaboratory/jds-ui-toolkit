@@ -1,0 +1,94 @@
+/*
+ * Colours resolve through the PrimeNG semantic layer so the component takes on whichever
+ * theme the consumer has installed. The fallbacks are the values from the design, so the
+ * component still looks right with no theme at all.
+ */
+:host {
+  --jds-term-browser-background: var(--p-surface-0, #ffffff);
+  --jds-term-browser-title-color: var(--p-text-color, #1e293b);
+  --jds-term-browser-label-color: var(--p-text-color, #222222);
+  --jds-term-browser-muted-color: var(--p-text-muted-color, #454545);
+  --jds-term-browser-twisty-color: var(--p-text-muted-color, #636363);
+  --jds-term-browser-selected-background: var(--p-highlight-background, #94e1dc);
+  --jds-term-browser-selected-color: var(--p-highlight-color, #16191d);
+  --jds-term-browser-focus-ring-color: var(--p-primary-color, #0177b2);
+  --jds-term-browser-radius: var(--p-content-border-radius, 6px);
+  --jds-term-indent: 1rem;
+  /* Lets the indent respond to the width given to the component, not the viewport. */
+  container-type: inline-size;
+}
+
+/* Indent depends on runtime depth, which no utility can express. */
+.jds-term-row {
+  padding-inline-start: calc(var(--jds-level, 0) * var(--jds-term-indent));
+  min-height: 1.5rem;
+}
+
+/*
+ * The design draws a 16px chevron column. WCAG 2.5.8 wants a 24px target, so the hit area
+ * grows through a pseudo-element rather than the box, which would widen every row.
+ */
+.jds-term-twisty {
+  position: relative;
+}
+
+.jds-term-twisty::after {
+  content: '';
+  position: absolute;
+  inset: -0.25rem;
+}
+
+/* Keeps a focused row clear of anything sticky above the scroller (WCAG 2.4.11). */
+.jds-term-scroller {
+  scroll-padding-block: 2.25rem;
+}
+
+/*
+ * A rail narrower than 20rem cannot afford 16px a level: a deep term spends the whole width
+ * on indentation and leaves none for the label. The rule targets the row rather than the
+ * host, because an element does not match a container query it establishes itself.
+ */
+@container (max-width: 20rem) {
+  .jds-term-row {
+    --jds-term-indent: 0.5rem;
+  }
+}
+
+/*
+ * State colours live here rather than in utilities: they read theme tokens, and a class
+ * binding carrying an arbitrary value with a custom property inside it is not something
+ * Tailwind's scanner can see.
+ */
+.jds-term-title {
+  color: var(--jds-term-browser-title-color);
+}
+
+.jds-term-row {
+  border-radius: var(--jds-term-browser-radius);
+  color: var(--jds-term-browser-label-color);
+}
+
+.jds-term-row:focus-visible {
+  outline: 2px solid var(--jds-term-browser-focus-ring-color);
+  outline-offset: -2px;
+}
+
+.jds-term-row[aria-selected='true'] {
+  background: var(--jds-term-browser-selected-background);
+  color: var(--jds-term-browser-selected-color);
+}
+
+.jds-term-count,
+.jds-term-empty {
+  color: var(--jds-term-browser-muted-color);
+}
+
+.jds-term-twisty {
+  color: var(--jds-term-browser-twisty-color);
+}
+
+/* The selected row's glyph and count take the contrast colour with the rest of the row. */
+.jds-term-row[aria-selected='true'] .jds-term-twisty,
+.jds-term-row[aria-selected='true'] .jds-term-count {
+  color: inherit;
+}

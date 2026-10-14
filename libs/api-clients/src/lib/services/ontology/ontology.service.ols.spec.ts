@@ -1,9 +1,16 @@
-import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { OLSResponse, Ontology, OntologyTerm} from './ontology.model';
-import { CollectionResponse, Response } from '../../models/response';
-import { OLSOntologyService } from './ontology.service.ols'
+import { OLSResponse, OntologyTerm } from './ontology.model';
+import { CollectionResponse } from '../../models/response';
+import { OLSOntologyService } from './ontology.service.ols';
+import { OntologyPrefixError } from './ontology.shared';
+
+const ENTITY_BASE = 'https://www.ebi.ac.uk/ols4/api/v2/ontologies';
+
+/** OLS embeds the class IRI in the path, encoded twice. */
+const classUrl = (id: string, suffix = '') =>
+  `${ENTITY_BASE}/hp/classes/${encodeURIComponent(encodeURIComponent(`http://purl.obolibrary.org/obo/${id.replace(':', '_')}`))}${suffix}`;
 
 describe('OLSOntologyService', () => {
   let service: OLSOntologyService;
@@ -24,103 +31,222 @@ describe('OLSOntologyService', () => {
   });
 
   it('should get some fake search results', (done) => {
-    const id = "HP:0000873";
-    service.search("testing", -1, Ontology.HP).subscribe(term => {
-      expect(term).toEqual(testOLSTransformedSearch);
+    service.search("testing", -1, 'hp').subscribe(term => {
+      expect(term.data.map(t => ({ id: t.id, name: t.name }))).toEqual(testOLSTransformedSearch.data);
+      expect(term.paging?.total_items).toEqual(testOLSTransformedSearch.paging?.total_items);
       done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/entities?search=testing&size=-1&ontologyId=hp&includeObsoleteEntities=false`);
+    const req = httpTestingController.expectOne(r =>
+      r.url === 'https://www.ebi.ac.uk/ols4/api/v2/entities' && r.params.get('search') === 'testing');
     expect(req.request.method).toEqual('GET');
     req.flush(testOLSResponseSearch);
   });
 
-  it('should get the fake term', (done) => {
-    const id = "HP:0001166";
-    const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "Arachnodactyly"}};
-    service.term(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
-      done()
+  it('should double-encode the class IRI so OLS can resolve it', (done) => {
+    service.term("HP:0001166").subscribe(term => {
+      expect(term.object?.id).toEqual("HP:0001166");
+      expect(term.object?.name).toEqual("Arachnodactyly");
+      done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0001166?includeObsoleteEntities=false`);
-    expect(req.request.method).toEqual('GET');
+    const req = httpTestingController.expectOne(r => r.url === classUrl("HP:0001166"));
+    expect(req.request.url).toContain('http%253A%252F%252Fpurl.obolibrary.org');
     req.flush(testOLSResponseTerm);
   });
 
-  // it('should fail to get the fake term', () => {
-  //   flushBrokenConfig(httpTestingController, service);
-  //   const id = "HP:0000001";
-  //   const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "All"}};
-  //   service.term(id).subscribe( {
-  //     next: (term) =>  expect(term).toEqual(fakeResponse),
-  //     error: (error) => expect(error).toEqual('No ontology configuration found.')
-  //   });
-  // });
-
   it('should get the fake term parents', (done) => {
-    const id = "HP:0001166";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0001238', name: "Slender finger"}, { id: 'HP:0100807', name: "Long fingers"}], paging: { page: 1, total_pages: 1, total_items: 2 }};
-    service.parents(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+    service.parents("HP:0001166").subscribe(term => {
+      expect(term.data.map(t => t.id).sort()).toEqual(['HP:0001238', 'HP:0100807']);
       done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0001166?includeObsoleteEntities=false`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(testOLSResponseTerm);
+    httpTestingController.expectOne(r => r.url === classUrl("HP:0001166")).flush(testOLSResponseTerm);
   });
 
   it('should get the fake term children', (done) => {
-    const id = "HP:0100807";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0001182', name: "Tapered finger"}, { id: 'HP:0001166', name: "Arachnodactyly"}], paging: { page: 0, total_pages: 1, total_items: 2 }};
-    service.children(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+    service.children("HP:0100807").subscribe(term => {
+      expect(term.data.map(t => t.id)).toEqual(['HP:0001182', 'HP:0001166']);
       done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0100807/children?includeObsoleteEntities=false&size=100&lang=en`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(testOLSResponseChildren);
+    httpTestingController.expectOne(r => r.url === classUrl("HP:0100807", '/children')).flush(testOLSResponseChildren);
   });
 
-  it('should get the fake term ancestors', (done) => {
-    const id = "HP:0001166";
-    const fakeResponse: CollectionResponse<OntologyTerm> = {data: [
-      { id: "HP:0001238", name: "Slender finger" },
-      { id: "HP:0001167", name: "Abnormal finger morphology" },
-      { id: "HP:0001155", name: "Abnormality of the hand" },
-      { id: "HP:0002817", name: "Abnormality of the upper limb" },
-      { id: "HP:0040064", name: "Abnormality of limbs" },
-      { id: "HP:0000118", name: "Phenotypic abnormality" },
-      { id: "HP:0000001", name: "All" },
-      { id: "HP:0011297", name: "Abnormal digit morphology" },
-      { id: "HP:0002813", name: "Abnormal limb bone morphology" },
-      { id: "HP:0011844", name: "Abnormal appendicular skeleton morphology" },
-      { id: "HP:0011842", name: "Abnormal skeletal morphology" },
-      { id: "HP:0000924", name: "Abnormality of the skeletal system" },
-      { id: "HP:0033127", name: "Abnormality of the musculoskeletal system" },
-      { id: "HP:0040068", name: "Abnormality of limb bone" },
-      { id: "HP:0100807", name: "Long fingers" }
-    ], paging: { page: 1, total_pages: 1, total_items: 15 }};
-    service.ancestors(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+  it('should read ancestors from the hierarchicalAncestors relation, carrying parent ids', (done) => {
+    service.ancestors("HP:0001166").subscribe(term => {
+      expect(term.data.length).toEqual(15);
+      // every parent id refers to a term that is itself in the result: no dangling edges
+      const ids = new Set(term.data.map(t => t.id));
+      const dangling = term.data.flatMap(t => t.parents ?? []).filter(p => !ids.has(p) && p !== 'HP:0001166');
+      expect(dangling).toEqual([]);
+      // the root is the only term without parents
+      expect(term.data.filter(t => t.parents === undefined).map(t => t.id)).toEqual(['HP:0000001']);
       done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0001166?includeObsoleteEntities=false`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(testOLSResponseTerm);
+    httpTestingController.expectOne(r => r.url === classUrl("HP:0001166", '/hierarchicalAncestors'))
+      .flush(testOLSResponseAncestors);
   });
 
   it('should get the fake term descendants', (done) => {
-      const id = "HP:0100807";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0001182', name: "Tapered finger"}, { id: 'HP:0001166', name: "Arachnodactyly"}], paging: { page: 0, total_pages: 1, total_items: 2 }};
-    service.descendants(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+    service.descendants("HP:0100807").subscribe(term => {
+      expect(term.data.map(t => t.id)).toEqual(['HP:0001182', 'HP:0001166']);
       done();
     });
-    const req = httpTestingController.expectOne(`https://www.ebi.ac.uk/ols4/api/v2/ontologies/hp/classes/http://purl.obolibrary.org/obo/HP_0100807/hierarchicalChildren?includeObsoleteEntities=false&size=100&lang=en`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(testOLSResponseChildren);
+    httpTestingController.expectOne(r => r.url === classUrl("HP:0100807", '/hierarchicalChildren'))
+      .flush(testOLSResponseChildren);
+  });
+
+  it('should fail the stream, not the caller, when the id carries no prefix', (done) => {
+    service.ancestors('notacurie').subscribe({
+      error: (error) => {
+        expect(error).toBeInstanceOf(OntologyPrefixError);
+        done();
+      }
+    });
   });
 });
 
+/** Captured from OLS: the 15 ancestors of HP:0001166, 14 of which carry hierarchical parents. */
+const testOLSResponseAncestors = {
+  "page": 0,
+  "numElements": 15,
+  "totalPages": 1,
+  "totalElements": 15,
+  "elements": [
+    {
+      "curie": "HP:0000001",
+      "label": [
+        "All"
+      ]
+    },
+    {
+      "curie": "HP:0000118",
+      "label": [
+        "Phenotypic abnormality"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0000001"
+      ]
+    },
+    {
+      "curie": "HP:0000924",
+      "label": [
+        "Abnormality of the skeletal system"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0033127"
+      ]
+    },
+    {
+      "curie": "HP:0001155",
+      "label": [
+        "Abnormality of the hand"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0002817"
+      ]
+    },
+    {
+      "curie": "HP:0001167",
+      "label": [
+        "Abnormal finger morphology"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0001155",
+        "http://purl.obolibrary.org/obo/HP_0011297"
+      ]
+    },
+    {
+      "curie": "HP:0001238",
+      "label": [
+        "Slender finger"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0001167"
+      ]
+    },
+    {
+      "curie": "HP:0002813",
+      "label": [
+        "Abnormal limb bone morphology"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0011844",
+        "http://purl.obolibrary.org/obo/HP_0040068"
+      ]
+    },
+    {
+      "curie": "HP:0002817",
+      "label": [
+        "Abnormality of the upper limb"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0040064"
+      ]
+    },
+    {
+      "curie": "HP:0011297",
+      "label": [
+        "Abnormal digit morphology"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0002813"
+      ]
+    },
+    {
+      "curie": "HP:0011842",
+      "label": [
+        "Abnormal skeletal morphology"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0000924"
+      ]
+    },
+    {
+      "curie": "HP:0011844",
+      "label": [
+        "Abnormal appendicular skeleton morphology"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0011842"
+      ]
+    },
+    {
+      "curie": "HP:0033127",
+      "label": [
+        "Abnormality of the musculoskeletal system"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0000118"
+      ]
+    },
+    {
+      "curie": "HP:0040064",
+      "label": [
+        "Abnormality of limbs"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0000118"
+      ]
+    },
+    {
+      "curie": "HP:0040068",
+      "label": [
+        "Abnormality of limb bone"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0000924",
+        "http://purl.obolibrary.org/obo/HP_0040064"
+      ]
+    },
+    {
+      "curie": "HP:0100807",
+      "label": [
+        "Long fingers"
+      ],
+      "hierarchicalParent": [
+        "http://purl.obolibrary.org/obo/HP_0001167"
+      ]
+    }
+  ]
+};
 
 const testOLSResponseSearch: OLSResponse = 
 {

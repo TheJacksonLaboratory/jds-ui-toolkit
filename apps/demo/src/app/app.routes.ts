@@ -21,6 +21,7 @@ import { ShowcaseProgressWidgetComponent } from './components/pages/progress-wid
 import { ShowcaseErrorWidgetComponent } from './components/pages/error-widget/showcase-error-widget.component';
 import { ShowcaseNavbarComponent } from './components/pages/navbar/showcase-navbar.component';
 import { ShowcaseAutocompleteComponent } from './components/pages/autocomplete/showcase-autocomplete.component';
+import { ShowcaseTermBrowserComponent } from './components/pages/term-browser/showcase-term-browser.component';
 
 // New services shell
 import { ALL_SERVICE_DOCS, ServicesShellComponent } from './services-shell/services-shell.component';
@@ -79,6 +80,15 @@ export const appRoutes: Route[] = [
         path: 'autocomplete',
         children: [
           { path: 'overview', component: ShowcaseAutocompleteComponent },
+          { path: 'properties', component: DocPropertiesComponent },
+          { path: 'theming', component: DocThemingComponent },
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+        ],
+      },
+      {
+        path: 'term-browser',
+        children: [
+          { path: 'overview', component: ShowcaseTermBrowserComponent },
           { path: 'properties', component: DocPropertiesComponent },
           { path: 'theming', component: DocThemingComponent },
           { path: '', redirectTo: 'overview', pathMatch: 'full' },

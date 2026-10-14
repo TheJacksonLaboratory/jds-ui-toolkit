@@ -25,3 +25,7 @@ export * from './lib/widget-error/widget-error.component';
 // Progress Widget UI component
 export * from './lib/progress-widget/progress-widget.component';
 
+// Term Browser UI component
+export * from './lib/term-browser/term-browser.component';
+export * from './lib/term-browser/term-browser.facade';
+export * from './lib/term-browser/term-browser.model';
