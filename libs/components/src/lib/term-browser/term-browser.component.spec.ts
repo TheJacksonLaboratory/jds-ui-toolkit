@@ -88,17 +88,37 @@ describe('JdsTermBrowserComponent', () => {
     expect(component.countOf({ id: 'HP:0001166', name: 'Arachnodactyly', descendantCount: 0 })).toBeNull();
   });
 
+  it('starts a row closed while it reports descendants it has not resolved', () => {
+    render([node('HP:0000822', 'Hypertension', [], 7)]);
+    expect(component.rows()[0].expanded).toBe(false);
+    expect(resolver).not.toHaveBeenCalled();
+  });
+
   it('resolves children the first time a childless expandable row is opened', () => {
     render([node('HP:0000822', 'Hypertension', [], 7)]);
-    const row = component.rows()[0];
-    expect(row.expanded).toBe(true);
 
-    component.toggleRow(row);          // collapse
-    component.toggleRow(component.rows()[0]);  // expand, which resolves
+    component.toggleRow(component.rows()[0]);
     fixture.detectChanges();
 
     expect(resolver).toHaveBeenCalledTimes(1);
     expect(component.rows().map(r => r.node.term.name)).toEqual(['Hypertension', 'Child']);
+    expect(component.rows()[0].expanded).toBe(true);
+  });
+
+  it('orders resolved children by name, whatever order the backend returned them in', () => {
+    resolver.mockReturnValueOnce(of([
+      { id: 'HP:3', name: 'Zebra', descendantCount: 0 },
+      { id: 'HP:1', name: 'Aardvark', descendantCount: 0 },
+      { id: 'HP:2', name: 'Manatee', descendantCount: 0 }
+    ]));
+    render([node('HP:0000822', 'Hypertension', [], 7)]);
+
+    component.toggleRow(component.rows()[0]);
+    fixture.detectChanges();
+
+    expect(component.rows().map(r => r.node.term.name)).toEqual([
+      'Hypertension', 'Aardvark', 'Manatee', 'Zebra'
+    ]);
   });
 
   it('treats a term reporting no descendants as a leaf', () => {

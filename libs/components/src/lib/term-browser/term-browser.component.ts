@@ -112,8 +112,12 @@ export class JdsTermBrowserComponent {
       nodes.forEach((node, index) => {
         const lazy = resolved.get(node.key);
         const children = node.children.length ? node.children : this.asNodes(node, lazy);
-        const expandable = children.length > 0 || (node.term.descendantCount ?? 0) > 0;
-        const open = expandable && !collapsed.has(node.key);
+        // A position is open only once it has children to show. A term that reports
+        // descendants it has not resolved yet is expandable but closed, so its twisty
+        // points at children that are not on screen rather than at nothing.
+        const hasChildren = children.length > 0;
+        const expandable = hasChildren || (node.term.descendantCount ?? 0) > 0;
+        const open = hasChildren && !collapsed.has(node.key);
         rows.push({
           node,
           level,
@@ -135,17 +139,22 @@ export class JdsTermBrowserComponent {
 
   /**
    * Wrap lazily resolved children as positions below a node.
+   *
+   * Sorted by name, because a backend is free to return children in any order and the
+   * ancestors above them are already ordered that way.
    * @param parent - the position being expanded
    * @param children - the resolved children, if any
    */
   private asNodes(parent: JdsTermTreeNode, children: JdsTerm[] | undefined): JdsTermTreeNode[] {
-    return (children ?? []).map(term => ({
-      term,
-      path: [...parent.path, term.id],
-      key: `${parent.key}>${term.id}`,
-      children: [],
-      isFocus: false
-    }));
+    return [...(children ?? [])]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(term => ({
+        term,
+        path: [...parent.path, term.id],
+        key: `${parent.key}>${term.id}`,
+        children: [],
+        isFocus: false
+      }));
   }
 
   /**

@@ -4,7 +4,7 @@
 
 <p class="tw-sr-only" role="status" aria-live="polite">{{ status() }}</p>
 
-<div class="jds-term-scroller tw-min-h-0 tw-flex-1 tw-overflow-y-auto">
+<div class="jds-term-scroller tw-min-h-0 tw-flex-1" [class.tw-overflow-y-auto]="!loading()">
   @if (loading()) {
     <div class="tw-flex tw-h-full tw-items-center tw-justify-center">
       <p-progress-spinner
@@ -37,9 +37,13 @@
               class="jds-term-twisty tw-flex tw-h-4 tw-w-4 tw-shrink-0 tw-items-center tw-justify-center"
               aria-hidden="true"
               (click)="toggleRow(row); $event.stopPropagation()">
-              <i
-                class="pi pi-chevron-down tw-text-[10px] tw-transition-transform tw-duration-150"
-                [class.-tw-rotate-90]="!row.expanded"></i>
+              @if (row.loading) {
+                <i class="pi pi-spinner pi-spin tw-text-[10px]"></i>
+              } @else {
+                <i
+                  class="pi pi-chevron-down tw-text-[10px] tw-transition-transform tw-duration-150"
+                  [class.-tw-rotate-90]="!row.expanded"></i>
+              }
             </span>
           }
 
