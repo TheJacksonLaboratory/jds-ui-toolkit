@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, linkedSignal, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, input, linkedSignal, model, output, signal, untracked } from '@angular/core';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { isObservable } from 'rxjs';
 import {
@@ -137,6 +137,34 @@ export class JdsTermBrowserComponent {
     return rows;
   });
 
+  constructor() {
+    effect(() => {
+      const roots = this.tree();
+      untracked(() => this.openFocus(roots));
+    });
+  }
+
+  /**
+   * Resolve the children of every position holding the focus term.
+   * @param roots - the tree to scan
+   */
+  private openFocus(roots: JdsTermTreeNode[]): void {
+    const positions: JdsTermTreeNode[] = [];
+    const visit = (nodes: JdsTermTreeNode[]) => {
+      for (const node of nodes) {
+        if (node.isFocus && node.children.length === 0 && (node.term.descendantCount ?? 0) > 0) {
+          positions.push(node);
+        }
+        visit(node.children);
+      }
+    };
+
+    visit(roots);
+    if (positions.length) {
+      this.resolve(positions[0].term, positions.map(node => node.key));
+    }
+  }
+
   /**
    * Wrap lazily resolved children as positions below a node.
    *
@@ -174,39 +202,54 @@ export class JdsTermBrowserComponent {
     next.delete(row.node.key);
     this.collapsed.set(next);
     if (row.node.children.length === 0 && !this.resolved().has(row.node.key)) {
-      this.resolve(row.node);
+      this.resolve(row.node.term, [row.node.key]);
     }
   }
 
   /**
-   * Resolve a position's children.
-   * @param node - the position being expanded
+   * Resolve a term's children into every position it occupies.
+   * @param term - the term being expanded
+   * @param keys - identities of the positions to fill
    */
-  private resolve(node: JdsTermTreeNode): void {
-    this.resolving.update(keys => new Set(keys).add(node.key));
+  private resolve(term: JdsTerm, keys: string[]): void {
+    const without = (current: ReadonlySet<string>) => {
+      const next = new Set(current);
+      for (const key of keys) {
+        next.delete(key);
+      }
+      return next;
+    };
+
+    this.resolving.update(current => {
+      const next = new Set(current);
+      for (const key of keys) {
+        next.add(key);
+      }
+      return next;
+    });
     this.status.set(this.text().loading);
-    this.expandTerm.emit({ term: node.term, key: node.key });
+    for (const key of keys) {
+      this.expandTerm.emit({ term, key });
+    }
 
     const done = (children: JdsTerm[]) => {
-      this.resolved.update(map => new Map(map).set(node.key, children));
-      this.resolving.update(keys => {
-        const next = new Set(keys);
-        next.delete(node.key);
+      this.resolved.update(map => {
+        const next = new Map(map);
+        for (const key of keys) {
+          next.set(key, children);
+        }
         return next;
       });
+      this.resolving.update(without);
       this.status.set(`${children.length} terms loaded`);
     };
     const failed = (cause: unknown) => {
-      this.resolving.update(keys => {
-        const next = new Set(keys);
-        next.delete(node.key);
-        return next;
-      });
+      this.resolving.update(without);
       this.status.set(this.text().error);
-      this.loadError.emit({ term: node.term, cause });
+      this.loadError.emit({ term, cause });
     };
 
-    const result = this.childrenResolver()(node.term);
+    const result = this.childrenResolver()(term);
     if (isObservable(result)) {
       result.subscribe({ next: done, error: failed });
     } else {

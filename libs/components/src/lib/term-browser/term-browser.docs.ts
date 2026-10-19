@@ -11,7 +11,7 @@ export const termBrowserDoc: ComponentDoc = {
   compodocSymbol: 'JdsTermBrowserComponent',
   description:
     'A tree of where a term sits in an ontology. A term reachable by several routes is ' +
-    'rendered once per route. Children load on expansion.',
+    'rendered once per route, open at its own children. Deeper children load on expansion.',
   variations: [
     {
       id: 'live',
@@ -81,7 +81,7 @@ export class PhenotypeComponent implements OnInit {
   theming: [
     { variable: '--jds-term-browser-background', default: 'var(--p-surface-0, #ffffff)', description: 'Card background.' },
     { variable: '--jds-term-browser-title-color', default: 'var(--p-text-color, #1e293b)', description: 'Heading colour.' },
-    { variable: '--jds-term-browser-label-color', default: 'var(--p-text-color, #222222)', description: 'Term name colour.' },
+    { variable: '--jds-term-browser-label-color', default: 'var(--p-text-color, #222222)', description: 'Term name and caret ring colour.' },
     { variable: '--jds-term-browser-muted-color', default: 'var(--p-text-muted-color, #454545)', description: 'Descendant count and empty state.' },
     { variable: '--jds-term-browser-twisty-color', default: 'var(--p-text-muted-color, #636363)', description: 'Chevron colour.' },
     { variable: '--jds-term-browser-selected-background', default: 'var(--p-highlight-background, #94e1dc)', description: 'Background of every row holding the selected term.' },

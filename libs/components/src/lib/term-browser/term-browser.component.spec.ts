@@ -29,6 +29,18 @@ const polyhierarchy: JdsTermTreeNode[] = [
   ], 19388)
 ];
 
+/** The same polyhierarchy, with a focus term that has children of its own. */
+const expandableFocus: JdsTermTreeNode[] = [
+  node('HP:0000001', 'All', [
+    node('HP:0100807', 'Long fingers', [
+      { ...node('HP:0001166', 'Arachnodactyly', [], 3, ['HP:0000001', 'HP:0100807', 'HP:0001166']), isFocus: true }
+    ], 3, ['HP:0000001', 'HP:0100807']),
+    node('HP:0001238', 'Slender finger', [
+      { ...node('HP:0001166', 'Arachnodactyly', [], 3, ['HP:0000001', 'HP:0001238', 'HP:0001166']), isFocus: true }
+    ], 1, ['HP:0000001', 'HP:0001238'])
+  ], 19388)
+];
+
 describe('JdsTermBrowserComponent', () => {
   let fixture: ComponentFixture<JdsTermBrowserComponent>;
   let component: JdsTermBrowserComponent;
@@ -86,6 +98,46 @@ describe('JdsTermBrowserComponent', () => {
     render(polyhierarchy);
     expect(component.countOf({ id: 'HP:0000001', name: 'All', descendantCount: 19388 })).toEqual(' (19,388)');
     expect(component.countOf({ id: 'HP:0001166', name: 'Arachnodactyly', descendantCount: 0 })).toBeNull();
+  });
+
+  it('opens every position of the focus term from one children request', () => {
+    render(expandableFocus);
+
+    expect(resolver).toHaveBeenCalledTimes(1);
+    const focusRows = component.rows().filter(r => r.node.isFocus);
+    expect(focusRows.length).toEqual(2);
+    expect(focusRows.map(r => r.expanded)).toEqual([true, true]);
+    expect(component.rows().filter(r => r.node.term.name === 'Child').length).toEqual(2);
+  });
+
+  it('reports the expansion once per position opened', () => {
+    const emitted: unknown[] = [];
+    fixture.componentRef.instance.expandTerm.subscribe(e => emitted.push(e));
+
+    render(expandableFocus);
+
+    expect(emitted).toEqual([
+      { term: expect.objectContaining({ id: 'HP:0001166' }), key: 'HP:0000001>HP:0100807>HP:0001166' },
+      { term: expect.objectContaining({ id: 'HP:0001166' }), key: 'HP:0000001>HP:0001238>HP:0001166' }
+    ]);
+  });
+
+  it('does not refetch a position that was opened, collapsed and opened again', () => {
+    render(expandableFocus);
+    const focusRow = () => component.rows().find(r => r.node.isFocus)!;
+
+    component.toggleRow(focusRow());
+    fixture.detectChanges();
+    component.toggleRow(focusRow());
+    fixture.detectChanges();
+
+    expect(resolver).toHaveBeenCalledTimes(1);
+    expect(focusRow().expanded).toBe(true);
+  });
+
+  it('leaves a focus term reporting no descendants closed', () => {
+    render(polyhierarchy);
+    expect(resolver).not.toHaveBeenCalled();
   });
 
   it('starts a row closed while it reports descendants it has not resolved', () => {

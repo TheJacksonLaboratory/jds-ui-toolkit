@@ -16,7 +16,7 @@
     <div role="tree" [attr.aria-label]="ariaLabel()" class="tw-flex tw-flex-col tw-gap-0.5">
       @for (row of rows(); track row.node.key) {
         <div
-          class="jds-term-row tw-flex tw-cursor-pointer tw-items-center tw-gap-2 tw-py-1.5 tw-pr-4"
+          class="jds-term-row tw-flex tw-cursor-pointer tw-items-start tw-gap-2 tw-py-1.5 tw-pr-4"
           role="treeitem"
           [attr.data-key]="row.node.key"
           [attr.aria-level]="row.level"
@@ -31,10 +31,10 @@
           (keydown)="onKeydown($event, row)">
 
           @if (row.expanded === undefined) {
-            <span class="tw-h-4 tw-w-4 tw-shrink-0" aria-hidden="true"></span>
+            <span class="tw-h-5 tw-w-4 tw-shrink-0" aria-hidden="true"></span>
           } @else {
             <span
-              class="jds-term-twisty tw-flex tw-h-4 tw-w-4 tw-shrink-0 tw-items-center tw-justify-center"
+              class="jds-term-twisty tw-flex tw-h-5 tw-w-4 tw-shrink-0 tw-items-center tw-justify-center"
               aria-hidden="true"
               (click)="toggleRow(row); $event.stopPropagation()">
               @if (row.loading) {
@@ -48,9 +48,10 @@
           }
 
           <span
-            class="tw-min-w-0 tw-flex-1 tw-truncate tw-text-sm hover:tw-underline"
+            class="tw-group tw-min-w-0 tw-flex-1 tw-break-words tw-text-sm"
             [class.tw-font-bold]="row.selected">
-            {{ row.node.term.name }}<span class="jds-term-count tw-font-normal">{{ countOf(row.node.term) }}</span>
+            <span class="group-hover:tw-underline">{{ row.node.term.name }}</span
+            ><span class="jds-term-count">{{ countOf(row.node.term) }}</span>
           </span>
         </div>
       }

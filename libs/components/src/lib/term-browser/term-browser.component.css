@@ -73,6 +73,12 @@
   outline-offset: -2px;
 }
 
+/* Ring on the chevron's hit area while its row has keyboard focus. */
+.jds-term-row:focus-visible .jds-term-twisty::after {
+  outline: 2px solid var(--jds-term-browser-label-color);
+  border-radius: var(--jds-term-browser-radius);
+}
+
 .jds-term-row[aria-selected='true'] {
   background: var(--jds-term-browser-selected-background);
   color: var(--jds-term-browser-selected-color);
