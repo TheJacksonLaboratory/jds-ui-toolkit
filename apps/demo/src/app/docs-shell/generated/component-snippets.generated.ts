@@ -35,6 +35,6 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "block-ui": "<lib-jds-progress-widget [blockUi]=\"blockUi\" [statusMessage]=\"unblockMessage\"></lib-jds-progress-widget>"
   },
   "term-browser": {
-    "live": "<lib-jds-term-browser\n  [tree]=\"facade.tree()\"\n  [term]=\"facade.term()\"\n  [childrenResolver]=\"facade.childrenResolver\"\n  [loading]=\"facade.loading()\"\n  (termSelect)=\"show($event.term.id)\" />"
+    "live": "<lib-jds-term-browser\n  [tree]=\"facade.tree()\"\n  [term]=\"facade.term()\"\n  [childrenResolver]=\"facade.childrenResolver\"\n  [autoExpandFocus]=\"autoExpandFocus\"\n  [loading]=\"facade.loading()\"\n  (termSelect)=\"show($event.term.id)\" />"
   }
 };

@@ -222,6 +222,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "description": "Accessible name of the tree."
       },
       {
+        "name": "autoExpandFocus",
+        "type": "boolean",
+        "default": "true",
+        "required": false,
+        "description": "Whether a tree arriving opens the focus term at every position it occupies. Read when the tree changes, so turning it off leaves rows already on screen open. With it off the focus term renders closed, and its children load when the reader expands it."
+      },
+      {
         "name": "childrenResolver",
         "type": "JdsTermResolver",
         "required": true,

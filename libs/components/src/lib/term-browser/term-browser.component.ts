@@ -73,6 +73,14 @@ export class JdsTermBrowserComponent {
   /** Whether choosing a term re-centres the tree on it rather than only emitting. */
   reFocusOnSelect = model(false);
 
+  /**
+   * Whether a tree arriving opens the focus term at every position it occupies.
+   *
+   * Read when the tree changes, so turning it off leaves rows already on screen open. With
+   * it off the focus term renders closed, and its children load when the reader expands it.
+   */
+  autoExpandFocus = model(true);
+
   /** Heading above the browser. */
   title = model('Term Browser');
 
@@ -164,7 +172,7 @@ export class JdsTermBrowserComponent {
     toObservable(this.tree)
       .pipe(
         switchMap(roots =>
-          merge(of(...this.focusExpansions(roots)), this.requested).pipe(
+          merge(of(...(this.autoExpandFocus() ? this.focusExpansions(roots) : [])), this.requested).pipe(
             mergeMap(expansion => this.fetchChildren(expansion))
           )
         ),

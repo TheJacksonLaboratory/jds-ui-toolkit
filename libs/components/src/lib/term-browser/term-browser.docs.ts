@@ -11,7 +11,8 @@ export const termBrowserDoc: ComponentDoc = {
   compodocSymbol: 'JdsTermBrowserComponent',
   description:
     'A tree of where a term sits in an ontology. A term reachable by several routes is ' +
-    'rendered once per route, open at its own children. Deeper children load on expansion.',
+    'rendered once per route, open at its own children unless autoExpandFocus is turned ' +
+    'off. Deeper children load on expansion.',
   variations: [
     {
       id: 'live',
@@ -71,6 +72,8 @@ export class PhenotypeComponent implements OnInit {
       'Use the id the backend returns, since an ontology may answer to a replaced term’s old id.',
       'Give the component a parent with a height; it fills whatever it is given.',
       'Bind loading while a tree is being fetched, or the reader sees the empty state instead.',
+      'Turn autoExpandFocus off where the route matters more than the subtree, since a term ' +
+        'with many parents opens its children under every one of them.',
     ],
     donts: [
       'Do not merge by term id — that fabricates edges and loses which route was taken.',

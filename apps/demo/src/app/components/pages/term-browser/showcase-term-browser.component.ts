@@ -37,6 +37,9 @@ export class ShowcaseTermBrowserComponent implements OnInit, AfterViewInit {
   /** Width of the demo frame in pixels. */
   width = 420;
 
+  /** Whether a tree arriving opens the focus term at every position it occupies. */
+  autoExpandFocus = true;
+
   ngOnInit(): void {
     this.facade.load(this.selectedId);
   }
@@ -48,6 +51,12 @@ export class ShowcaseTermBrowserComponent implements OnInit, AfterViewInit {
   show(id: string): void {
     this.selectedId = id;
     this.facade.load(id);
+  }
+
+  /** Flip auto-expansion and rebuild the tree, since the component reads it on arrival. */
+  toggleAutoExpand(): void {
+    this.autoExpandFocus = !this.autoExpandFocus;
+    this.facade.load(this.selectedId);
   }
 
   ngAfterViewInit(): void {

@@ -29,6 +29,12 @@
     <span class="tw-tabular-nums tw-text-slate-500">{{ width }}px</span>
   </label>
 
+  <label class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
+    <!-- The input is read when a tree arrives, so the toggle reloads to take effect. -->
+    <input type="checkbox" [checked]="autoExpandFocus" (change)="toggleAutoExpand()" />
+    Open the focus term's children
+  </label>
+
   @if (facade.error()) {
     <p class="tw-text-sm tw-text-red-600">Could not reach OLS.</p>
   } @else {
@@ -38,6 +44,7 @@
         [tree]="facade.tree()"
         [term]="facade.term()"
         [childrenResolver]="facade.childrenResolver"
+        [autoExpandFocus]="autoExpandFocus"
         [loading]="facade.loading()"
         (termSelect)="show($event.term.id)" />
       <!-- /snippet -->

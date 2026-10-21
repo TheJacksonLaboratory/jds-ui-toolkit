@@ -116,6 +116,27 @@ describe('JdsTermBrowserComponent', () => {
     expect(component.rows().filter(r => r.node.term.name === 'Child').length).toEqual(2);
   });
 
+  it('leaves the focus term closed when auto-expansion is off', () => {
+    fixture.componentRef.setInput('autoExpandFocus', false);
+    render(expandableFocus);
+
+    expect(resolver).not.toHaveBeenCalled();
+    const focusRows = component.rows().filter(r => r.node.isFocus);
+    expect(focusRows.map(r => r.expanded)).toEqual([false, false]);
+    expect(component.rows().some(r => r.node.term.name === 'Child')).toBe(false);
+  });
+
+  it('still resolves a focus position the reader opens with auto-expansion off', () => {
+    fixture.componentRef.setInput('autoExpandFocus', false);
+    render(expandableFocus);
+
+    component.toggleRow(component.rows().find(r => r.node.isFocus)!);
+    fixture.detectChanges();
+
+    expect(resolver).toHaveBeenCalledTimes(1);
+    expect(component.rows().filter(r => r.node.term.name === 'Child').length).toEqual(1);
+  });
+
   it('reports the expansion once per position opened', () => {
     const emitted: unknown[] = [];
     fixture.componentRef.instance.expandTerm.subscribe(e => emitted.push(e));
