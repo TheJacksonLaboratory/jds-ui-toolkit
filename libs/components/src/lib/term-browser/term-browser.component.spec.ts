@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { JdsTermBrowserComponent } from './term-browser.component';
 import { JdsTerm, JdsTermTreeNode } from './term-browser.model';
 
@@ -41,11 +41,17 @@ const expandableFocus: JdsTermTreeNode[] = [
   ], 19388)
 ];
 
+/** Two roots, each with expandable children, so equal depth does not imply siblinghood. */
+const twoBranches: JdsTermTreeNode[] = [
+  node('A', 'A', [node('B', 'B', [], 2, ['A', 'B']), node('C', 'C', [], 2, ['A', 'C'])], 4),
+  node('D', 'D', [node('E', 'E', [], 2, ['D', 'E'])], 2)
+];
+
 describe('JdsTermBrowserComponent', () => {
   let fixture: ComponentFixture<JdsTermBrowserComponent>;
   let component: JdsTermBrowserComponent;
 
-  const resolver = jest.fn((term: JdsTerm) => of([{ id: `${term.id}-c`, name: 'Child', descendantCount: 0 }]));
+  const resolver = jest.fn((term: JdsTerm): Observable<JdsTerm[]> => of([{ id: `${term.id}-c`, name: 'Child', descendantCount: 0 }]));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [JdsTermBrowserComponent] }).compileComponents();
@@ -135,6 +141,31 @@ describe('JdsTermBrowserComponent', () => {
     expect(focusRow().expanded).toBe(true);
   });
 
+  it('does not start a second request for a position already resolving', () => {
+    resolver.mockReturnValueOnce(new Subject<JdsTerm[]>());
+    render([node('HP:0000822', 'Hypertension', [], 7)]);
+
+    component.toggleRow(component.rows()[0]);
+    fixture.detectChanges();
+    component.toggleRow(component.rows()[0]);
+    fixture.detectChanges();
+
+    expect(resolver).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancels an open child request when the tree is replaced', () => {
+    const pending = new Subject<JdsTerm[]>();
+    resolver.mockReturnValueOnce(pending);
+    render([node('HP:0000822', 'Hypertension', [], 7)]);
+    component.toggleRow(component.rows()[0]);
+    fixture.detectChanges();
+    expect(pending.observed).toBe(true);
+
+    render([node('HP:0001250', 'Seizure', [], 0)]);
+
+    expect(pending.observed).toBe(false);
+  });
+
   it('leaves a focus term reporting no descendants closed', () => {
     render(polyhierarchy);
     expect(resolver).not.toHaveBeenCalled();
@@ -204,6 +235,32 @@ describe('JdsTermBrowserComponent', () => {
 
     expect(event.preventDefault).toHaveBeenCalled();
     expect(component.activeKey()).toEqual('HP:0000001>HP:0100807');
+  });
+
+  it('keeps a tab stop when the active row is collapsed out of view', () => {
+    render(polyhierarchy);
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }), component.rows()[0]);
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }), component.rows()[1]);
+    fixture.detectChanges();
+    expect(component.activeKey()).toEqual('HP:0000001>HP:0100807>HP:0001166');
+
+    component.toggleRow(component.rows().find(r => r.node.key === 'HP:0000001>HP:0100807')!);
+    fixture.detectChanges();
+
+    expect(component.rows().some(r => r.node.key === component.activeKey())).toBe(false);
+    expect(component.rows().filter(r => component.tabindexOf(r) === 0).length).toEqual(1);
+  });
+
+  it('expands only the positions sharing a parent when * is pressed', () => {
+    render(twoBranches);
+    const cursor = component.rows().find(r => r.node.key === 'A>B')!;
+
+    component.onKeydown(new KeyboardEvent('keydown', { key: '*' }), cursor);
+    fixture.detectChanges();
+
+    expect(resolver).toHaveBeenCalledTimes(2);
+    expect(component.rows().filter(r => r.expanded).map(r => r.node.key)).toEqual(['A', 'A>B', 'A>C', 'D']);
+    expect(component.rows().find(r => r.node.key === 'D>E')?.expanded).toBe(false);
   });
 
   it('emits the chosen term with the route taken to it', () => {

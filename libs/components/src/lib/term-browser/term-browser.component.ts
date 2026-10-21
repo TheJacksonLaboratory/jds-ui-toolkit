@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, inject, input, linkedSignal, model, output, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input, linkedSignal, model, output, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ProgressSpinner } from 'primeng/progressspinner';
-import { isObservable } from 'rxjs';
+import { Observable, Subject, catchError, defer, from, isObservable, map, merge, mergeMap, of, switchMap } from 'rxjs';
 import {
   JDS_TERM_BROWSER_LABELS,
   JdsTerm,
@@ -16,6 +17,22 @@ import {
 /** Milliseconds a typeahead buffer survives between keystrokes. */
 const TYPEAHEAD_WINDOW = 500;
 
+/** A request to resolve one term's children into every position it occupies. */
+interface Expansion {
+  /** The term being expanded. */
+  term: JdsTerm;
+  /** Identities of the positions to fill. */
+  keys: string[];
+}
+
+/** The outcome of an {@link Expansion}. */
+interface Resolution extends Expansion {
+  /** The children that were resolved, or undefined when the request failed. */
+  children?: JdsTerm[];
+  /** Why the request failed, when it did. */
+  cause?: unknown;
+}
+
 @Component({
   selector: 'lib-jds-term-browser',
   standalone: true,
@@ -23,7 +40,7 @@ const TYPEAHEAD_WINDOW = 500;
   templateUrl: './term-browser.component.html',
   styleUrl: './term-browser.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'tw-flex tw-min-h-0 tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)] tw-pt-6 tw-px-6 tw-pb-8' }
+  host: { class: 'tw-flex tw-h-full tw-min-h-0 tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)] tw-pt-6 tw-px-6 tw-pb-8' }
 })
 export class JdsTermBrowserComponent {
   private host: ElementRef<HTMLElement> = inject(ElementRef);
@@ -80,7 +97,10 @@ export class JdsTermBrowserComponent {
     computation: () => new Set()
   });
   /** Positions whose children are being resolved, by node key. */
-  private resolving = signal<ReadonlySet<string>>(new Set());
+  private resolving = linkedSignal<JdsTermTreeNode[], ReadonlySet<string>>({
+    source: this.tree,
+    computation: () => new Set()
+  });
   /** Children resolved lazily, by node key. */
   private resolved = linkedSignal<JdsTermTreeNode[], ReadonlyMap<string, JdsTerm[]>>({
     source: this.tree,
@@ -137,18 +157,28 @@ export class JdsTermBrowserComponent {
     return rows;
   });
 
+  /** Expansions asked for by the reader. */
+  private requested = new Subject<Expansion>();
+
   constructor() {
-    effect(() => {
-      const roots = this.tree();
-      untracked(() => this.openFocus(roots));
-    });
+    toObservable(this.tree)
+      .pipe(
+        switchMap(roots =>
+          merge(of(...this.focusExpansions(roots)), this.requested).pipe(
+            mergeMap(expansion => this.fetchChildren(expansion))
+          )
+        ),
+        takeUntilDestroyed()
+      )
+      .subscribe(resolution => this.apply(resolution));
   }
 
   /**
-   * Resolve the children of every position holding the focus term.
+   * Get the expansion that opens every position holding the focus term.
    * @param roots - the tree to scan
+   * @returns one expansion, or none when the focus term has no children to load
    */
-  private openFocus(roots: JdsTermTreeNode[]): void {
+  private focusExpansions(roots: JdsTermTreeNode[]): Expansion[] {
     const positions: JdsTermTreeNode[] = [];
     const visit = (nodes: JdsTermTreeNode[]) => {
       for (const node of nodes) {
@@ -160,9 +190,7 @@ export class JdsTermBrowserComponent {
     };
 
     visit(roots);
-    if (positions.length) {
-      this.resolve(positions[0].term, positions.map(node => node.key));
-    }
+    return positions.length ? [{ term: positions[0].term, keys: positions.map(node => node.key) }] : [];
   }
 
   /**
@@ -201,60 +229,65 @@ export class JdsTermBrowserComponent {
     }
     next.delete(row.node.key);
     this.collapsed.set(next);
-    if (row.node.children.length === 0 && !this.resolved().has(row.node.key)) {
-      this.resolve(row.node.term, [row.node.key]);
+    const key = row.node.key;
+    if (row.node.children.length === 0 && !this.resolved().has(key) && !this.resolving().has(key)) {
+      this.requested.next({ term: row.node.term, keys: [key] });
     }
   }
 
   /**
-   * Resolve a term's children into every position it occupies.
-   * @param term - the term being expanded
-   * @param keys - identities of the positions to fill
+   * Run an expansion, marking its positions as resolving for as long as it is open.
+   * @param expansion - the positions to fill
    */
-  private resolve(term: JdsTerm, keys: string[]): void {
-    const without = (current: ReadonlySet<string>) => {
+  private fetchChildren(expansion: Expansion): Observable<Resolution> {
+    return defer(() => {
+      this.resolving.update(current => {
+        const next = new Set(current);
+        for (const key of expansion.keys) {
+          next.add(key);
+        }
+        return next;
+      });
+      this.status.set(this.text().loading);
+      for (const key of expansion.keys) {
+        this.expandTerm.emit({ term: expansion.term, key });
+      }
+
+      const result = this.childrenResolver()(expansion.term);
+      return isObservable(result) ? result : from(result);
+    }).pipe(
+      map(children => ({ ...expansion, children })),
+      catchError(cause => of({ ...expansion, cause }))
+    );
+  }
+
+  /**
+   * Record the outcome of an expansion.
+   * @param resolution - the expansion and what it returned
+   */
+  private apply({ term, keys, children, cause }: Resolution): void {
+    this.resolving.update(current => {
       const next = new Set(current);
       for (const key of keys) {
         next.delete(key);
       }
       return next;
-    };
+    });
 
-    this.resolving.update(current => {
-      const next = new Set(current);
+    if (children === undefined) {
+      this.status.set(this.text().error);
+      this.loadError.emit({ term, cause });
+      return;
+    }
+
+    this.resolved.update(map => {
+      const next = new Map(map);
       for (const key of keys) {
-        next.add(key);
+        next.set(key, children);
       }
       return next;
     });
-    this.status.set(this.text().loading);
-    for (const key of keys) {
-      this.expandTerm.emit({ term, key });
-    }
-
-    const done = (children: JdsTerm[]) => {
-      this.resolved.update(map => {
-        const next = new Map(map);
-        for (const key of keys) {
-          next.set(key, children);
-        }
-        return next;
-      });
-      this.resolving.update(without);
-      this.status.set(`${children.length} terms loaded`);
-    };
-    const failed = (cause: unknown) => {
-      this.resolving.update(without);
-      this.status.set(this.text().error);
-      this.loadError.emit({ term, cause });
-    };
-
-    const result = this.childrenResolver()(term);
-    if (isObservable(result)) {
-      result.subscribe({ next: done, error: failed });
-    } else {
-      result.then(done).catch(failed);
-    }
+    this.status.set(`${children.length} terms loaded`);
   }
 
   /**
@@ -342,11 +375,14 @@ export class JdsTermBrowserComponent {
   }
 
   /**
-   * Expand every sibling of a row.
+   * Expand every position sharing a row's parent.
    * @param row - the row whose siblings to expand
    */
   private expandSiblings(row: JdsTermBrowserRow): void {
-    for (const sibling of this.rows().filter(candidate => candidate.level === row.level)) {
+    const parentOf = (node: JdsTermTreeNode) => node.path.slice(0, -1).join('>');
+    const parent = parentOf(row.node);
+
+    for (const sibling of this.rows().filter(candidate => parentOf(candidate.node) === parent)) {
       if (sibling.expanded === false) {
         this.toggleRow(sibling);
       }
@@ -376,7 +412,11 @@ export class JdsTermBrowserComponent {
    * @param row - the row being rendered
    */
   tabindexOf(row: JdsTermBrowserRow): number {
-    const active = this.activeKey() ?? this.rows().find(candidate => candidate.selected)?.node.key ?? this.rows()[0]?.node.key;
+    const rows = this.rows();
+    const current = this.activeKey();
+    const active = rows.some(candidate => candidate.node.key === current)
+      ? current
+      : rows.find(candidate => candidate.selected)?.node.key ?? rows[0]?.node.key;
     return row.node.key === active ? 0 : -1;
   }
 

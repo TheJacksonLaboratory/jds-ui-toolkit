@@ -32,7 +32,7 @@
   @if (facade.error()) {
     <p class="tw-text-sm tw-text-red-600">Could not reach OLS.</p>
   } @else {
-    <div class="tw-h-[420px] tw-overflow-auto" [style.width.px]="width">
+    <div class="tw-h-[420px]" [style.width.px]="width">
       <!-- snippet:live -->
       <lib-jds-term-browser
         [tree]="facade.tree()"
