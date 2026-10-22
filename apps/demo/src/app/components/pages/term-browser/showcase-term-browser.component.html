@@ -32,7 +32,7 @@
   <label class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
     <!-- The input is read when a tree arrives, so the toggle reloads to take effect. -->
     <input type="checkbox" [checked]="autoExpandFocus" (change)="toggleAutoExpand()" />
-    Open the focus term's children
+    Show immediate children
   </label>
 
   @if (facade.error()) {
