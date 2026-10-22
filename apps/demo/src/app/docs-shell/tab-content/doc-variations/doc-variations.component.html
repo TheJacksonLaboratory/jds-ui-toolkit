@@ -11,10 +11,12 @@
       <!-- Description -->
       <p class="tw-text-gray-600 tw-mb-4">{{ variation.description }}</p>
 
-      <!-- Live demo -->
-      <div class="tw-p-6 tw-border tw-border-gray-200 tw-rounded-lg tw-bg-white tw-mb-3">
-        <ng-container [ngTemplateOutlet]="getTemplate(variation.id)"></ng-container>
-      </div>
+      <!-- Live demo, for variations that have one -->
+      @if (getTemplate(variation.id); as demo) {
+        <div class="tw-p-6 tw-border tw-border-gray-200 tw-rounded-lg tw-bg-white tw-mb-3">
+          <ng-container [ngTemplateOutlet]="demo"></ng-container>
+        </div>
+      }
 
       <!-- Code block (plain, no syntax-highlight library) -->
       <div class="tw-relative tw-rounded-lg tw-overflow-hidden echo-bg-slate-900">
