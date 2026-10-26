@@ -11,6 +11,7 @@ import {
   facetSearchDoc,
   navbarDoc,
   progressWidgetDoc,
+  termBrowserDoc,
   widgetErrorDoc,
 } from '@jax-data-science/component-docs';
 
@@ -28,6 +29,7 @@ export const ALL_DOCS: ComponentDoc[] = [
   navbarDoc,
   facetSearchDoc,
   asyncTaskDoc,
+  termBrowserDoc,
 ];
 
 const DOCS_REGISTRY = new Map<string, ComponentDoc>(ALL_DOCS.map((d) => [d.slug, d]));

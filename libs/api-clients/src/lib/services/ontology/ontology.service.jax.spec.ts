@@ -1,168 +1,99 @@
-import {HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Ontology, OntologyConfig, OntologyTerm} from './ontology.model';
-import { CollectionResponse, Response } from '../../models/response';
-import { JaxOntologyService } from './ontology.service.jax';
-import { ontologyFromCurie } from './ontology.shared';
+import { OntologyTerm } from './ontology.model';
+import { JAX_ONTOLOGY_API_ROOT, JaxOntologyService } from './ontology.service.jax';
+import { OntologyPrefixError } from './ontology.shared';
+
+const ROOT = 'https://ontology.jax.org/api';
+const ID = 'HP:0001166';
+const ENCODED = encodeURIComponent(ID);
 
 describe('JaxOntologyService', () => {
   let service: JaxOntologyService;
   let httpTestingController: HttpTestingController;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [JaxOntologyService, provideHttpClient(), provideHttpClientTesting()],
+  const configure = (root?: string) => {
+    TestBed.configureTestingModule({
+      providers: [
+        JaxOntologyService,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        ...(root ? [{ provide: JAX_ONTOLOGY_API_ROOT, useValue: root }] : [])
+      ]
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(JaxOntologyService);
-  });
+  };
 
-  afterEach(() => {httpTestingController.verify();})
+  beforeEach(() => configure());
+  afterEach(() => httpTestingController.verify());
 
-  it('should create', () => {
-    const req = httpTestingController.expectOne(service.config_location);
-    expect(req.request.method).toEqual('GET');
-    req.flush([]);
+  it('should create without fetching any configuration', () => {
     expect(service).toBeTruthy();
+    httpTestingController.expectNone(() => true);
   });
 
-  it('should get ontology from curie', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000001"
-    const ontology = ontologyFromCurie(id);
-    expect(ontology).toEqual(Ontology.HP);
-  });
-
-  it('should fail to get ontology from curie', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "BAD:0000001"
-    const ontology = ontologyFromCurie(id);
-    expect(ontology).toBeUndefined();
-  });
-
-  it('should get the fake configuration string', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    expect(() => service.ontologyBaseResolver(Ontology.MP)).toThrowError('Ontology not found in configuration.');
-  });
-
-  it('should fail to get configuration string', () => {
-    flushBrokenConfig(httpTestingController, service);
-    expect(() => service.ontologyBaseResolver(Ontology.HP)).toThrowError('No ontology configuration found.');
-  });
-
-  it('should get some fake search results', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000001";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: id, name: "All"}]};
-    service.search("testing", -1, Ontology.HP).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+  it('should address a term under the ontology of its own prefix', done => {
+    service.term(ID).subscribe(response => {
+      expect(response.object?.name).toEqual('Arachnodactyly');
+      done();
     });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/search?q=testing&limit=-1`);
+    const req = httpTestingController.expectOne(`${ROOT}/hp/terms/${ENCODED}`);
     expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
+    req.flush({ id: ID, name: 'Arachnodactyly' });
   });
 
-  it('should get the fake term', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000001";
-    const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "All"}};
-    service.term(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
+  it('should map the search body onto a collection response', done => {
+    service.search('arachno', 2, 'hp').subscribe(response => {
+      expect(response.data.map(t => t.id)).toEqual(['HP:0001166']);
+      expect(response.paging?.total_items).toEqual(42);
+      done();
     });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
+    const req = httpTestingController.expectOne(
+      r => r.url === `${ROOT}/hp/search` && r.params.get('q') === 'arachno' && r.params.get('limit') === '2'
+    );
+    req.flush({ terms: [{ id: ID, name: 'Arachnodactyly' }], totalCount: 42 });
   });
 
-  it('should fail to get the fake term', () => {
-    flushBrokenConfig(httpTestingController, service);
-    const id = "HP:0000001";
-    const fakeResponse: Response<OntologyTerm> = { object: { id: id, name: "All"}};
-    service.term(id).subscribe( {
-      next: (term) =>  expect(term).toEqual(fakeResponse),
-      error: (error) => expect(error).toEqual('No ontology configuration found.')
+  it.each([
+    ['parents', (s: JaxOntologyService) => s.parents(ID)],
+    ['children', (s: JaxOntologyService) => s.children(ID)],
+    ['ancestors', (s: JaxOntologyService) => s.ancestors(ID)],
+    ['descendants', (s: JaxOntologyService) => s.descendants(ID)]
+  ])('should wrap the bare %s array in a collection response', (relation, call) => {
+    let received: OntologyTerm[] | undefined;
+    call(service).subscribe(response => (received = response.data));
+    const req = httpTestingController.expectOne(`${ROOT}/hp/terms/${ENCODED}/${relation}`);
+    req.flush([{ id: 'HP:0001167', name: 'Abnormal finger morphology' }]);
+    expect(received?.map(t => t.id)).toEqual(['HP:0001167']);
+  });
+
+  it('should preserve the parent ids carried by ancestors', done => {
+    service.ancestors(ID).subscribe(response => {
+      expect(response.data[0].parents).toEqual(['HP:0000001']);
+      expect(response.data[1].parents).toEqual([]);
+      done();
+    });
+    httpTestingController.expectOne(`${ROOT}/hp/terms/${ENCODED}/ancestors`).flush([
+      { id: 'HP:0000118', name: 'Phenotypic abnormality', parents: ['HP:0000001'] },
+      { id: 'HP:0000001', name: 'All', parents: [] }
+    ]);
+  });
+
+  it('should fail the stream, not the caller, when the id carries no prefix', done => {
+    service.term('notacurie').subscribe({
+      error: error => {
+        expect(error).toBeInstanceOf(OntologyPrefixError);
+        done();
+      }
     });
   });
 
-  it('should get the fake term parents', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000002";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000001', name: "All"}]};
-    service.parents(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
-    });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/parents`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
-  });
-
-  it('should get the fake term children', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000002";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000003', name: "Children Term"},
-        { id: 'HP:0000004', name: "Sister Children Term"}]};
-    service.children(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
-    });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/children`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
-  });
-
-  it('should get the fake term ancestors', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000004";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000001', name: "All"},
-        { id: 'HP:0000002', name: "Term 2"}]};
-    service.ancestors(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
-    });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/ancestors`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
-  });
-
-  it('should get the fake term descendants', () => {
-    flushFakeHpConfig(httpTestingController, service);
-    const id = "HP:0000001";
-    const fakeResponse: CollectionResponse<OntologyTerm> = { data: [{ id: 'HP:0000002', name: "Term 2"},
-        { id: 'HP:0000003', name: "Children Term"}, { id: 'HP:0000004', name: "Sister Children Term"}]};
-    service.descendants(id).subscribe(term => {
-      expect(term).toEqual(fakeResponse);
-    });
-    const req = httpTestingController.expectOne(`${testOntologyConfig[0].api.base}/${id}/descendants`);
-    expect(req.request.method).toEqual('GET');
-    req.flush(fakeResponse);
+  it('should honour an overridden API root', () => {
+    TestBed.resetTestingModule();
+    configure('https://staging.example.org/api/');
+    service.term(ID).subscribe();
+    httpTestingController.expectOne(`https://staging.example.org/api/hp/terms/${ENCODED}`).flush({});
   });
 });
-
-
-const testOntologyConfig: OntologyConfig[] = [{
-  name: "Human Phenotype Ontology",
-  prefix: "hp",
-  github: {
-    api: "https://api.github.com/repos/obophenotype/human-phenotype-ontology",
-    home: "https://github.com/obophenotype/human-phenotype-ontology"
-  },
-  home: "http://human-phenotype-ontology.org",
-  api: {
-    docs: "http://human-phenotype-ontology.org/api/docs",
-    base: "http://human-phenotype-ontology.org/api"
-  },
-  base_file: "hp.obo",
-  international: true,
-  description: "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities encountered in human disease."
-}];
-
-function flushFakeHpConfig(httpTestingController: HttpTestingController, service: JaxOntologyService) {
-  const req = httpTestingController.expectOne(service.config_location);
-  expect(req.request.method).toEqual('GET');
-  req.flush(testOntologyConfig);
-}
-
-function flushBrokenConfig(httpTestingController: HttpTestingController, service: JaxOntologyService) {
-  const req = httpTestingController.expectOne(service.config_location);
-  expect(req.request.method).toEqual('GET');
-  req.flush('Error occurred', { status: 500, statusText: 'Internal Server Error'});
-}

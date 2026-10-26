@@ -9,7 +9,7 @@ import { EchoPreset } from '@jax-data-science/themes';
 import { appRoutes } from './app.routes';
 import { environment } from '../environments/environment';
 
-import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig } from '@jax-data-science/api-clients';
+import { ISA_DATA_SERVICE_CONFIG, IsaDataServiceConfig, OLSOntologyService, OntologyService } from '@jax-data-science/api-clients';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,6 +45,8 @@ export const appConfig: ApplicationConfig = {
         ]
       }
     }),
+    // The term browser resolves whichever OntologyService is provided; the demo uses OLS.
+    { provide: OntologyService, useExisting: OLSOntologyService },
     {
       provide: ISA_DATA_SERVICE_CONFIG,
       useValue: {

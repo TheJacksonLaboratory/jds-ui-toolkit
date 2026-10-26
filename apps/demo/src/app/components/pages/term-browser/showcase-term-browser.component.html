@@ -1,0 +1,54 @@
+<div class="tw-p-8 tw-max-w-4xl">
+  <app-doc-overview></app-doc-overview>
+  <app-doc-variations [doc]="doc" [demoTemplates]="demoTemplates"></app-doc-variations>
+  <app-doc-usage></app-doc-usage>
+  <app-doc-activity></app-doc-activity>
+</div>
+
+<ng-template #tplLive>
+  <div class="tw-mb-3 tw-flex tw-gap-2">
+    @for (example of examples; track example.id) {
+      <button
+        type="button"
+        class="tw-rounded tw-border tw-px-3 tw-py-1 tw-text-sm"
+        [class.tw-border-slate-800]="selectedId === example.id"
+        [class.tw-border-slate-300]="selectedId !== example.id"
+        (click)="show(example.id)">{{ example.label }}</button>
+    }
+  </div>
+
+  <label class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
+    Width
+    <input
+      type="range"
+      min="200"
+      max="720"
+      step="10"
+      [value]="width"
+      (input)="width = +$any($event.target).value" />
+    <span class="tw-tabular-nums tw-text-slate-500">{{ width }}px</span>
+  </label>
+
+  <label class="tw-mb-3 tw-flex tw-items-center tw-gap-2 tw-text-sm">
+    <!-- The input is read when a tree arrives, so the toggle reloads to take effect. -->
+    <input type="checkbox" [checked]="autoExpandFocus" (change)="toggleAutoExpand()" />
+    Show immediate children
+  </label>
+
+  @if (facade.error()) {
+    <p class="tw-text-sm tw-text-red-600">Could not reach OLS.</p>
+  } @else {
+    <div class="tw-h-[420px]" [style.width.px]="width">
+      <!-- snippet:live -->
+      <lib-jds-term-browser
+        [tree]="facade.tree()"
+        [term]="facade.term()"
+        [childrenResolver]="facade.childrenResolver"
+        [autoExpandFocus]="autoExpandFocus"
+        [loading]="facade.loading()"
+        (termSelect)="show($event.term.id)" />
+      <!-- /snippet -->
+    </div>
+  }
+</ng-template>
+
