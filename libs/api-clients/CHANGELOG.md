@@ -5,6 +5,27 @@ All notable changes to the @jax-data-science/api-clients library will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0-a.3] - 2026-10-29
+
+### Added
+- `buildTermTree()` builds the tree of positions a term's ancestors occupy, for rendering an ontology's ancestor graph as a tree
+- `OntologyTerm` carries the ids of its parents
+
+### Changed
+- **Breaking**: the JAX ontology client no longer fetches a remote catalog on construction; the API root is provided through the `JAX_ONTOLOGY_API_ROOT` token and the ontology is taken from the term id's prefix
+- **Breaking**: the `Ontology` enum is removed
+- Term ids without a prefix fail with `OntologyPrefixError` instead of building an undefined URL
+
+### Fixed
+- Search, term, and relation responses are mapped to their actual shapes, so `data` and `object` no longer read `undefined`
+- `term()` includes the missing `/terms` path segment
+- OLS adapter: IRIs are encoded so classes no longer return 404, ancestors are read from `hierarchicalAncestors`, and the descendant count is carried through
+
+### Chores
+- Removed an unreferenced copy of the base service
+
+---
+
 ## [0.1.0-a.2] - 2026-10-13
 
 ### Added

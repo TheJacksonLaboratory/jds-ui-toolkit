@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0-a.7] - 2026-10-29
+
+### Added
+- **Term browser**: new `JdsTermBrowserComponent` and `JdsTermBrowserFacade` for browsing a term's ancestor tree, loaded from any `OntologyService`
+
+### Chores
+- Stopped tracking the generated `components-tailwind.css`
+
+---
+
+## [0.2.0-a.6] - 2026-10-13
+
+### Chores
+- Version bump only, released alongside `@jax-data-science/api-clients` 0.1.0-a.2; no changes to the library
+
+---
+
 ## [0.2.0-a.5] - 2026-08-20
 
 ### Added
