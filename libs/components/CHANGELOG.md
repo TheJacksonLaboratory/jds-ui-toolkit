@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- **Term browser**: `--jds-term-browser-padding` custom property for the card padding, so a consumer can tighten it without wrapping the component. The default is unchanged
+
+---
+
 ## [0.2.0-a.7] - 2026-10-29
 
 ### Added

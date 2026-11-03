@@ -91,6 +91,7 @@ export class PhenotypeComponent implements OnInit {
     { variable: '--jds-term-browser-selected-color', default: 'var(--p-highlight-color, #16191d)', description: 'Text colour on a selected row.' },
     { variable: '--jds-term-browser-focus-ring-color', default: 'var(--p-primary-color, #0177b2)', description: 'Keyboard focus ring.' },
     { variable: '--jds-term-browser-radius', default: 'var(--p-content-border-radius, 6px)', description: 'Row corner radius.' },
+    { variable: '--jds-term-browser-padding', default: '1.5rem 1.5rem 2rem', description: 'Padding around the whole card.' },
     { variable: '--jds-term-indent', default: '1rem', description: 'Indent per level; 0.5rem under a 20rem container.' },
   ],
 };

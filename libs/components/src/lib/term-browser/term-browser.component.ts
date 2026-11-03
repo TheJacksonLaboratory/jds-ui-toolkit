@@ -40,7 +40,7 @@ interface Resolution extends Expansion {
   templateUrl: './term-browser.component.html',
   styleUrl: './term-browser.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'tw-flex tw-h-full tw-min-h-0 tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)] tw-pt-6 tw-px-6 tw-pb-8' }
+  host: { class: 'tw-flex tw-h-full tw-min-h-0 tw-flex-col tw-gap-3 tw-bg-[var(--jds-term-browser-background)]' }
 })
 export class JdsTermBrowserComponent {
   private host: ElementRef<HTMLElement> = inject(ElementRef);
