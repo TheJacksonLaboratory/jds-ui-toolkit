@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- **Term browser**: `--jds-term-browser-padding` custom property for the card padding, so a consumer can tighten it without wrapping the component
+
+### Changed
+- **Term browser**: default padding is now `1.5rem 0` (top and bottom only, matching). The 1.5rem left/right padding was removed and the bottom went from 2rem to 1.5rem. Set `--jds-term-browser-padding: 1.5rem 1.5rem 2rem` to restore the old spacing
+
+---
+
 ## [0.2.0-a.7] - 2026-10-29
 
 ### Added
