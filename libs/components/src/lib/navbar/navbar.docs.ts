@@ -11,12 +11,13 @@ export const navbarDoc: ComponentDoc = {
   compodocSymbol: 'NavbarComponent',
   description:
     'The application top navigation bar: brand/logo, a PrimeNG menubar, an optional ' +
-    'external link, and optional Auth0-backed login/logout controls.',
+    'external link, and optional Auth0-backed login/logout controls. ' +
+    'Maintenance only: bug fixes, no new features. New app chrome should come from a per-app design.',
   variations: [
     {
       id: 'basic',
       title: 'Basic',
-      description: 'Default title and menu items, no authentication controls.',
+      description: 'Title and menu items, no authentication controls.',
       language: 'html',
     },
     {
@@ -40,6 +41,7 @@ export const navbarDoc: ComponentDoc = {
     ],
     donts: [
       'Do not render more than one Navbar per page — it is meant to be a single global header.',
+      'Do not extend Navbar with new features; build new layout or chrome from a per-app design instead.',
     ],
   },
   activity: {
