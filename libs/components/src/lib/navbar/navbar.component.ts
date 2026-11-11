@@ -39,6 +39,8 @@ export class NavbarComponent implements OnInit {
   @Input() icon = "pi-cog";
   /** Router link the brand logo/title navigates to when clicked. */
   @Input() logoLink = "/";
+  /** Logo position when the menu is collapsed: `'left'` (next to the hamburger) or `'center'`. */
+  @Input() mobileLogoPosition: 'left' | 'center' = 'left';
 
   /** Menu items rendered in the PrimeNG menubar; supports nested items, router links, and click commands. */
   @Input() items: JdsMenuItem[] = [];

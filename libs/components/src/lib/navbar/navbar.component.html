@@ -1,4 +1,4 @@
-<p-menubar [model]="items" class="tw-w-full">
+<p-menubar [model]="items" class="tw-w-full" [styleClass]="mobileLogoPosition === 'center' ? 'jds-navbar-logo-center' : ''">
   <ng-template #start>
     <a aria-label="Logo" class="p-menubar-logo tw-mr-2" [href]="logoLink">
       @if (getLogoImageSrc(); as logoImage) {

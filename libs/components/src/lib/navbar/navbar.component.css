@@ -4,9 +4,20 @@
  * Layout only; colors come from the theme.
  */
 
-/* Bar: hamburger left, brand centered, end controls right. The side columns never shrink below
-   their content; the brand column gives way first so a long title truncates instead of overflowing. */
+/* Bar, default (mobileLogoPosition 'left'): hamburger, then logo, end controls pushed right. */
 lib-jds-navbar .p-menubar-mobile {
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+lib-jds-navbar .p-menubar-mobile .p-menubar-end {
+  margin-inline-start: auto;
+}
+
+/* Bar, mobileLogoPosition 'center': hamburger left, logo centered, end controls right. The side
+   columns never shrink below their content; the logo column gives way first. */
+lib-jds-navbar .p-menubar-mobile.jds-navbar-logo-center {
   display: grid;
   grid-template-columns: minmax(max-content, 1fr) minmax(0, max-content) minmax(max-content, 1fr);
   align-items: center;
@@ -26,6 +37,7 @@ lib-jds-navbar .p-menubar-mobile .p-menubar-button:hover {
 }
 
 lib-jds-navbar .p-menubar-mobile .p-menubar-start {
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
   min-width: 0;

@@ -370,6 +370,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "description": "Router link the brand logo/title navigates to when clicked."
       },
       {
+        "name": "mobileLogoPosition",
+        "type": "\"left\" | \"center\"",
+        "default": "'left'",
+        "required": false,
+        "description": "Logo position when the menu is collapsed: &#39;left&#39; (next to the hamburger) or &#39;center&#39;."
+      },
+      {
         "name": "title",
         "type": "string",
         "default": "\"JDS Angular Application\"",
