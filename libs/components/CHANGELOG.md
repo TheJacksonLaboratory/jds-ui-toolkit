@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## [0.2.0-a.9] - 2026-11-13
 
 ### Added
 - **Navbar**: `mobileLogoPosition` input (`'left'` | `'center'`, default `'left'`) sets where the logo sits when the menu is collapsed
