@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- **Navbar**: `mobileLogoPosition` input (`'left'` | `'center'`, default `'left'`) sets where the logo sits when the menu is collapsed
+
+### Changed
+- **Navbar**: `items` now defaults to `[]` and `externalLink` to `''`. The old defaults were demo content (an "Explore" menu with a Google News link, and the toolkit's GitHub repo), so an app that left them unset shipped that content. Apps that relied on the defaults must now pass `items` and `externalLink`
+- **Navbar**: marked maintenance only in its docs; bug fixes, no new features
+
+### Fixed
+- **Navbar**: collapsed (mobile) layout now puts the hamburger on the left, then the logo (left or centered, see `mobileLogoPosition`; the title is hidden), and keeps the end controls on the right
+- **Navbar**: the open mobile menu is a full-width panel flush under the bar, with left-aligned, bold rows matching the HPO design, and dark item text (`--jds-navbar-mobile-item-color`, default echo navy-800) instead of the bar's white text. Item icons are hidden in the open menu; submenu arrows still show
+- **Navbar**: the hamburger icon now uses the bar's text color and has no hover effect
+- **Navbar**: items with `iconEnd` no longer right-align in the mobile menu; the icon is placed after the label instead of reversing the row
+
+---
+
 ## [0.2.0-a.8] - 2026-11-04
 
 ### Added

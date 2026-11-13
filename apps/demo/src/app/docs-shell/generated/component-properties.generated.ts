@@ -330,9 +330,9 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
       {
         "name": "externalLink",
         "type": "string",
-        "default": "\"https://github.com/TheJacksonLaboratory/jds-ui-components\"",
+        "default": "\"\"",
         "required": false,
-        "description": "URL for the external link shown at the end of the navbar (e.g. a GitHub repo)."
+        "description": "URL for the external link shown at the end of the navbar (e.g. a GitHub repo); hidden when empty."
       },
       {
         "name": "externalLinkLabel",
@@ -351,7 +351,7 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
       {
         "name": "items",
         "type": "JdsMenuItem[]",
-        "default": "[\n    {\n      label: \"Explore\",\n      icon: \"\",\n      items: [\n        {\n          label: \"News\",\n          url: \"www.google.com/news\",\n          styleClass: \"text-black\"\n        }, {\n          label: \"Search\",\n          routerLink: \"/search\",\n          styleClass: \"text-black\"\n        }\n      ]\n    }, {\n      label: \"Components\",\n      icon: \"\"\n    }, {\n      label: \"Contact\",\n      icon: \"\"\n    }\n  ]",
+        "default": "[]",
         "required": false,
         "description": "Menu items rendered in the PrimeNG menubar; supports nested items, router links, and click commands."
       },
@@ -368,6 +368,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "default": "\"/\"",
         "required": false,
         "description": "Router link the brand logo/title navigates to when clicked."
+      },
+      {
+        "name": "mobileLogoPosition",
+        "type": "\"left\" | \"center\"",
+        "default": "'left'",
+        "required": false,
+        "description": "Logo position when the menu is collapsed: &#39;left&#39; (next to the hamburger) or &#39;center&#39;."
       },
       {
         "name": "title",

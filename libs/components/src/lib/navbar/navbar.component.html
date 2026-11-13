@@ -1,4 +1,4 @@
-<p-menubar [model]="items" class="tw-w-full">
+<p-menubar [model]="items" class="tw-w-full" [styleClass]="mobileLogoPosition === 'center' ? 'jds-navbar-logo-center' : ''">
   <ng-template #start>
     <a aria-label="Logo" class="p-menubar-logo tw-mr-2" [href]="logoLink">
       @if (getLogoImageSrc(); as logoImage) {
@@ -30,10 +30,10 @@
                [attr.aria-disabled]="item.disabled ? 'true' : null"
                [pTooltip]="item.tooltip"
                [tooltipOptions]="item.tooltipOptions"
-               [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
+               [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }"
                (click)="onItemClick($event, item)">
               @if (item.icon) {
-                <i [class]="resolveIconClass(item)" [ngStyle]="item.iconStyle"></i>
+                <i [class]="resolveIconClass(item) + ' jds-navbar-item-icon'" [class.tw-order-last]="item.iconEnd" [ngStyle]="item.iconStyle"></i>
               }
               @if (item.escape === false) {
                 <span [innerHTML]="item.label"></span>
@@ -59,10 +59,10 @@
                [attr.aria-disabled]="item.disabled ? 'true' : null"
                [pTooltip]="item.tooltip"
                [tooltipOptions]="item.tooltipOptions"
-               [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled, 'tw-flex-row-reverse': item.iconEnd }"
+               [ngClass]="{ 'tw-opacity-50 tw-cursor-not-allowed': item.disabled }"
                (click)="onItemClick($event, item)">
               @if (item.icon) {
-                <i [class]="resolveIconClass(item)" [ngStyle]="item.iconStyle"></i>
+                <i [class]="resolveIconClass(item) + ' jds-navbar-item-icon'" [class.tw-order-last]="item.iconEnd" [ngStyle]="item.iconStyle"></i>
               }
               @if (item.escape === false) {
                 <span [innerHTML]="item.label"></span>

@@ -23,9 +23,9 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
     "basic": "<div #facetContainer class=\"tw-relative tw-h-96 tw-border tw-border-gray-200 tw-rounded-md tw-overflow-hidden\">\n  <lib-facet-search [categories]=\"categories\" [parentContainer]=\"facetContainer\"></lib-facet-search>\n</div>"
   },
   "navbar": {
-    "basic": "<lib-jds-navbar [title]=\"'My App'\"></lib-jds-navbar>",
-    "with-auth": "<lib-jds-navbar [title]=\"'My App'\" [authentication]=\"true\"></lib-jds-navbar>",
-    "custom-branding": "<lib-jds-navbar\n  [title]=\"'JAX Data Science'\"\n  [icon]=\"'pi-flask'\"\n  [externalLink]=\"'https://www.jax.org'\"\n  [externalLinkLabel]=\"'jax.org'\">\n</lib-jds-navbar>"
+    "basic": "<lib-jds-navbar [title]=\"'My App'\" [items]=\"demoItems\"></lib-jds-navbar>",
+    "with-auth": "<lib-jds-navbar [title]=\"'My App'\" [items]=\"demoItems\" [authentication]=\"true\"></lib-jds-navbar>",
+    "custom-branding": "<lib-jds-navbar\n  [title]=\"'JAX Data Science'\"\n  [items]=\"demoItems\"\n  [icon]=\"'pi-flask'\"\n  [externalLink]=\"'https://www.jax.org'\"\n  [externalLinkLabel]=\"'jax.org'\">\n</lib-jds-navbar>"
   },
   "progress-widget": {
     "basic-spinner": "<lib-jds-progress-widget [spinnerSize]=\"1\"></lib-jds-progress-widget>",

@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild, inject } from '@angular/core';
-import { NavbarComponent } from '@jax-data-science/components';
+import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 import { navbarDoc } from '@jax-data-science/component-docs';
 import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
 import { DocVariationsComponent } from '../../../docs-shell/tab-content/doc-variations/doc-variations.component';
@@ -23,6 +23,12 @@ export class ShowcaseNavbarComponent implements AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
   readonly doc = navbarDoc;
   demoTemplates = new Map<string, TemplateRef<void>>();
+  /** Sample menu for the variations; Navbar has no default items. */
+  readonly demoItems: JdsMenuItem[] = [
+    { label: 'Data', items: [{ label: 'Search', routerLink: '/search' }] },
+    { label: 'Tools', routerLink: '/tools' },
+    { label: 'Documentation', icon: 'pi pi-external-link', iconEnd: true, url: 'https://www.jax.org', target: '_blank' },
+  ];
 
   @ViewChild('tplBasic') tplBasic!: TemplateRef<void>;
   @ViewChild('tplWithAuth') tplWithAuth!: TemplateRef<void>;

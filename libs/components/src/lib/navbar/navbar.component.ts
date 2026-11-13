@@ -39,33 +39,13 @@ export class NavbarComponent implements OnInit {
   @Input() icon = "pi-cog";
   /** Router link the brand logo/title navigates to when clicked. */
   @Input() logoLink = "/";
+  /** Logo position when the menu is collapsed: `'left'` (next to the hamburger) or `'center'`. */
+  @Input() mobileLogoPosition: 'left' | 'center' = 'left';
 
   /** Menu items rendered in the PrimeNG menubar; supports nested items, router links, and click commands. */
-  @Input() items: JdsMenuItem[] = [
-    {
-      label: "Explore",
-      icon: "",
-      items: [
-        {
-          label: "News",
-          url: "www.google.com/news",
-          styleClass: "text-black"
-        }, {
-          label: "Search",
-          routerLink: "/search",
-          styleClass: "text-black"
-        }
-      ]
-    }, {
-      label: "Components",
-      icon: ""
-    }, {
-      label: "Contact",
-      icon: ""
-    }
-  ];
-  /** URL for the external link shown at the end of the navbar (e.g. a GitHub repo). */
-  @Input() externalLink = "https://github.com/TheJacksonLaboratory/jds-ui-components";
+  @Input() items: JdsMenuItem[] = [];
+  /** URL for the external link shown at the end of the navbar (e.g. a GitHub repo); hidden when empty. */
+  @Input() externalLink = "";
   /** Label text for the external link. */
   @Input() externalLinkLabel = "GitHub";
   /** Auth0 redirect-login options forwarded to the embedded Authentication component when `authentication` is true. */
