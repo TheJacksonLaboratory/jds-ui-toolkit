@@ -28,3 +28,11 @@
   </lib-jds-navbar>
   <!-- /snippet -->
 </ng-template>
+
+<ng-template #tplCustomEndContent>
+  <!-- snippet:custom-end-content -->
+  <lib-jds-navbar [title]="'My App'" [items]="demoItems">
+    <p-button jdsNavbarEnd icon="pi pi-clipboard" [text]="true" ariaLabel="Copied terms" />
+  </lib-jds-navbar>
+  <!-- /snippet -->
+</ng-template>

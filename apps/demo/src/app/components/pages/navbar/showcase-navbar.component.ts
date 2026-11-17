@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, TemplateRef, ViewChild, inject } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 import { navbarDoc } from '@jax-data-science/component-docs';
 import { DocOverviewComponent } from '../../../docs-shell/tab-content/doc-overview/doc-overview.component';
@@ -14,6 +15,7 @@ import { DocActivityComponent } from '../../../docs-shell/tab-content/doc-activi
     DocUsageComponent,
     DocActivityComponent,
     NavbarComponent,
+    ButtonModule,
   ],
   templateUrl: './showcase-navbar.component.html',
   styleUrl: './showcase-navbar.component.css',
@@ -33,12 +35,14 @@ export class ShowcaseNavbarComponent implements AfterViewInit {
   @ViewChild('tplBasic') tplBasic!: TemplateRef<void>;
   @ViewChild('tplWithAuth') tplWithAuth!: TemplateRef<void>;
   @ViewChild('tplCustomBranding') tplCustomBranding!: TemplateRef<void>;
+  @ViewChild('tplCustomEndContent') tplCustomEndContent!: TemplateRef<void>;
 
   ngAfterViewInit(): void {
     this.demoTemplates = new Map([
       ['basic', this.tplBasic],
       ['with-auth', this.tplWithAuth],
       ['custom-branding', this.tplCustomBranding],
+      ['custom-end-content', this.tplCustomEndContent],
     ]);
     this.cdr.detectChanges();
   }
