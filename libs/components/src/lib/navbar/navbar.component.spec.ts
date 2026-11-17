@@ -64,9 +64,8 @@ describe('NavbarComponent end slot', () => {
     const el: HTMLElement = fixture.nativeElement;
     const btn = el.querySelector('.p-menubar-end [data-testid="end-btn"]');
     const link = el.querySelector('.p-menubar-end a[href="https://x.org"]');
-    expect(btn).toBeTruthy();
-    expect(link).toBeTruthy();
-    expect(btn!.compareDocumentPosition(link!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    if (!btn || !link) throw new Error('projected button or external link not rendered');
+    expect(btn.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('renders unchanged without projected content', () => {
