@@ -86,6 +86,7 @@
   </ng-template>
   <ng-template #end>
     <div class="tw-flex tw-items-center">
+      <ng-content select="[jdsNavbarEnd]" />
       @if (externalLink) {
         <a class="p-button-link tw-mr-4" [href]="externalLink" target="_blank">{{externalLinkLabel}}</a>
       }
