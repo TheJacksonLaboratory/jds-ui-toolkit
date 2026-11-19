@@ -15,6 +15,14 @@ lib-jds-navbar .p-menubar-end .p-button-text[jdsNavbarEnd] {
   color: inherit;
 }
 
+/* On hover, projected text buttons invert like the menu links: the theme's item focus colors.
+   Icons use currentColor, so they follow. */
+lib-jds-navbar .p-menubar-end [jdsNavbarEnd] .p-button-text:not(:disabled):hover,
+lib-jds-navbar .p-menubar-end .p-button-text[jdsNavbarEnd]:not(:disabled):hover {
+  background: var(--p-menubar-item-focus-background);
+  color: var(--p-menubar-item-focus-color);
+}
+
 /* Bar, default (mobileLogoPosition 'left'): hamburger, then logo, end controls pushed right. */
 lib-jds-navbar .p-menubar-mobile {
   display: flex;
