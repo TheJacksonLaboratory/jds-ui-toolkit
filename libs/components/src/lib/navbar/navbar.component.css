@@ -4,6 +4,24 @@
  * Layout only; colors come from the theme.
  */
 
+/* Content projected with jdsNavbarEnd uses the menubar item color, so app controls match the
+   menu links. PrimeNG text buttons set their own (primary) color, so they inherit it instead. */
+lib-jds-navbar .p-menubar-end [jdsNavbarEnd] {
+  color: var(--echo-menubar-item-color, var(--p-menubar-item-color));
+}
+
+lib-jds-navbar .p-menubar-end [jdsNavbarEnd] .p-button-text,
+lib-jds-navbar .p-menubar-end .p-button-text[jdsNavbarEnd] {
+  color: inherit;
+}
+
+/* On hover, projected text buttons keep their own hover background; the icon and text switch to
+   the navbar color so they stay visible. Icons use currentColor, so they follow. */
+lib-jds-navbar .p-menubar-end [jdsNavbarEnd] .p-button-text:not(:disabled):hover,
+lib-jds-navbar .p-menubar-end .p-button-text[jdsNavbarEnd]:not(:disabled):hover {
+  color: var(--echo-menubar-background, var(--p-menubar-background));
+}
+
 /* Bar, default (mobileLogoPosition 'left'): hamburger, then logo, end controls pushed right. */
 lib-jds-navbar .p-menubar-mobile {
   display: flex;

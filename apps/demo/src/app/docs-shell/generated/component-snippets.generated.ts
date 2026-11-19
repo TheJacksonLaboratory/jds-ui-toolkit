@@ -25,7 +25,8 @@ export const COMPONENT_SNIPPETS: Record<string, Record<string, string>> = {
   "navbar": {
     "basic": "<lib-jds-navbar [title]=\"'My App'\" [items]=\"demoItems\"></lib-jds-navbar>",
     "with-auth": "<lib-jds-navbar [title]=\"'My App'\" [items]=\"demoItems\" [authentication]=\"true\"></lib-jds-navbar>",
-    "custom-branding": "<lib-jds-navbar\n  [title]=\"'JAX Data Science'\"\n  [items]=\"demoItems\"\n  [icon]=\"'pi-flask'\"\n  [externalLink]=\"'https://www.jax.org'\"\n  [externalLinkLabel]=\"'jax.org'\">\n</lib-jds-navbar>"
+    "custom-branding": "<lib-jds-navbar\n  [title]=\"'JAX Data Science'\"\n  [items]=\"demoItems\"\n  [icon]=\"'pi-flask'\"\n  [externalLink]=\"'https://www.jax.org'\"\n  [externalLinkLabel]=\"'jax.org'\">\n</lib-jds-navbar>",
+    "custom-end-content": "<lib-jds-navbar [title]=\"'My App'\" [items]=\"demoItems\">\n  <p-button jdsNavbarEnd icon=\"pi pi-clipboard\" [text]=\"true\" ariaLabel=\"Copied terms\" />\n</lib-jds-navbar>"
   },
   "progress-widget": {
     "basic-spinner": "<lib-jds-progress-widget [spinnerSize]=\"1\"></lib-jds-progress-widget>",
