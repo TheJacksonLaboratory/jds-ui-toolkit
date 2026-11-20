@@ -10,6 +10,20 @@ export interface OntologyTerm {
    * graph. Absent means the relation was not requested; an empty array means the term is a root.
    */
   parents?: string[];
+  /** The term's name and definition in other languages, when the backend reports them. */
+  translations?: OntologyTermTranslation[];
+}
+
+/** A term's name and definition in one language. */
+export interface OntologyTermTranslation {
+  /** Language code, lowercase once returned by {@link JaxOntologyService}, e.g. `de`. */
+  language: string;
+  /** Translated name, or an empty string when the translation has none. */
+  name: string;
+  /** Translated definition, or an empty string when the translation has none. */
+  definition?: string;
+  /** Review status of the translation, e.g. `CANDIDATE`. */
+  status?: string;
 }
 
 // OLS Term interface based on provided JSON

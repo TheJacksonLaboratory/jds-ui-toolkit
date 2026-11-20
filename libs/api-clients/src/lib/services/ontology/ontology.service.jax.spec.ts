@@ -96,4 +96,34 @@ describe('JaxOntologyService', () => {
     service.term(ID).subscribe();
     httpTestingController.expectOne(`https://staging.example.org/api/hp/terms/${ENCODED}`).flush({});
   });
+  it('should lowercase translation language codes on a term', done => {
+    service.term(ID).subscribe(response => {
+      expect(response.object?.translations?.[0].language).toEqual('de');
+      expect(response.object?.translations?.[0].name).toEqual('Spinnenfingrigkeit');
+      done();
+    });
+    httpTestingController.expectOne(`${ROOT}/hp/terms/${ENCODED}`).flush({
+      id: ID,
+      name: 'Arachnodactyly',
+      translations: [{ language: 'DE', name: 'Spinnenfingrigkeit', definition: '', status: 'CANDIDATE' }]
+    });
+  });
+
+  it('should lowercase translation language codes on related terms', done => {
+    service.children(ID).subscribe(response => {
+      expect(response.data[0].translations?.[0].language).toEqual('tr');
+      done();
+    });
+    httpTestingController
+      .expectOne(`${ROOT}/hp/terms/${ENCODED}/children`)
+      .flush([{ id: 'HP:0000002', name: 'Child', translations: [{ language: 'TR', name: 'Çocuk' }] }]);
+  });
+
+  it('should leave a term without translations untouched', done => {
+    service.term(ID).subscribe(response => {
+      expect(response.object?.translations).toBeUndefined();
+      done();
+    });
+    httpTestingController.expectOne(`${ROOT}/hp/terms/${ENCODED}`).flush({ id: ID, name: 'Arachnodactyly' });
+  });
 });

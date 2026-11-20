@@ -60,8 +60,25 @@ export class JaxOntologyService extends OntologyService {
    */
   private relation(id: string, suffix: string): Observable<CollectionResponse<OntologyTerm>> {
     return defer(() => this.httpClient.get<OntologyTerm[]>(this.termUrl(id, suffix))).pipe(
-      map(data => ({ data }))
+      map(data => ({ data: data.map(term => this.normalise(term)) }))
     );
+  }
+
+  /**
+   * Get a copy of a term whose translation language codes are lowercase.
+   * @param term - the term as the backend returned it
+   */
+  private normalise(term: OntologyTerm): OntologyTerm {
+    if (!term?.translations) {
+      return term;
+    }
+    return {
+      ...term,
+      translations: term.translations.map(translation => ({
+        ...translation,
+        language: translation.language.toLowerCase()
+      }))
+    };
   }
 
   /**
@@ -86,7 +103,7 @@ export class JaxOntologyService extends OntologyService {
    */
   term(id: string): Observable<Response<OntologyTerm>> {
     return defer(() => this.httpClient.get<OntologyTerm>(this.termUrl(id))).pipe(
-      map(object => ({ object }))
+      map(object => ({ object: this.normalise(object) }))
     );
   }
 
