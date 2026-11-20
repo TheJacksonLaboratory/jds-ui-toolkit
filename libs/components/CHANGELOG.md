@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- **Term Browser**: `language` input shows translated term names when a translation exists, falling back to the canonical name per term; `termName` and `termLanguage` helpers and `JdsTerm.translations` are exported
+
 ## [0.2.0-a.9] - 2026-11-13
 
 ### Added
