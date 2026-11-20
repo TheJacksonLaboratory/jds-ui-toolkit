@@ -14,6 +14,54 @@ export interface JdsTerm {
   name: string;
   /** Size of the term's transitive subtree. A term reporting zero renders as a leaf. */
   descendantCount?: number;
+  /** The term's name in other languages. */
+  translations?: JdsTermTranslation[];
+}
+
+/** A term's name, and optionally its definition, in one language. */
+export interface JdsTermTranslation {
+  /** Language code, e.g. `de`. Matched without regard to case. */
+  language: string;
+  /** Translated name, or an empty string when the translation has none. */
+  name: string;
+  /** Translated definition, or an empty string when the translation has none. */
+  definition?: string;
+  /** Review status of the translation, e.g. `CANDIDATE`. */
+  status?: string;
+}
+
+/**
+ * Find the translation of a term that has a name in a language.
+ * @param term - the term to look in
+ * @param language - the language code, in any case, or null for none
+ * @returns the translation, or undefined when there is none with a name
+ */
+function translationOf(term: JdsTerm, language: string | null | undefined): JdsTermTranslation | undefined {
+  if (!language) {
+    return undefined;
+  }
+  const code = language.toLowerCase();
+  return term.translations?.find(translation => translation.language.toLowerCase() === code && translation.name !== '');
+}
+
+/**
+ * Get the name of a term in a language, falling back to its canonical name.
+ * @param term - the term to name
+ * @param language - the language code, in any case, or null for the canonical name
+ * @returns the translated name, or `term.name` when the term has no named translation in that language
+ */
+export function termName(term: JdsTerm, language: string | null | undefined): string {
+  return translationOf(term, language)?.name ?? term.name;
+}
+
+/**
+ * Get the language of the name {@link termName} returns for a term.
+ * @param term - the term to name
+ * @param language - the language code, in any case, or null for the canonical name
+ * @returns the translation's language code, or null when the canonical name is used
+ */
+export function termLanguage(term: JdsTerm, language: string | null | undefined): string | null {
+  return translationOf(term, language)?.language ?? null;
 }
 
 /**
