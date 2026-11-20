@@ -11,7 +11,9 @@ import {
   JdsTermExpandEvent,
   JdsTermResolver,
   JdsTermSelectEvent,
-  JdsTermTreeNode
+  JdsTermTreeNode,
+  termLanguage,
+  termName
 } from './term-browser.model';
 
 /** Milliseconds a typeahead buffer survives between keystrokes. */
@@ -89,6 +91,14 @@ export class JdsTermBrowserComponent {
 
   /** Overrides for the component's own text. */
   labels = model<Partial<JdsTermBrowserLabels>>({});
+
+  /**
+   * Language code whose translated term names are shown, or null for canonical names.
+   *
+   * A term with no named translation in this language shows its canonical name. Siblings
+   * stay in canonical order, and the component's own text is set through `labels`.
+   */
+  language = input<string | null>(null);
 
   /** Emitted when a term is chosen. */
   termSelect = output<JdsTermSelectEvent>();
@@ -409,7 +419,7 @@ export class JdsTermBrowserComponent {
     this.typeaheadAt = now;
 
     const ordered = [...rows.slice(from + 1), ...rows.slice(0, from + 1)];
-    const match = ordered.find(row => row.node.term.name.toLowerCase().startsWith(this.typeahead.toLowerCase()));
+    const match = ordered.find(row => this.nameOf(row.node.term).toLowerCase().startsWith(this.typeahead.toLowerCase()));
     if (match) {
       this.focusKey(match.node.key);
     }
@@ -426,6 +436,22 @@ export class JdsTermBrowserComponent {
       ? current
       : rows.find(candidate => candidate.selected)?.node.key ?? rows[0]?.node.key;
     return row.node.key === active ? 0 : -1;
+  }
+
+  /**
+   * Get the name a term is shown with, in the chosen language when it has one.
+   * @param term - the term being rendered
+   */
+  nameOf(term: JdsTerm): string {
+    return termName(term, this.language());
+  }
+
+  /**
+   * Get the language of the name a term is shown with, or null when it is the canonical name.
+   * @param term - the term being rendered
+   */
+  langOf(term: JdsTerm): string | null {
+    return termLanguage(term, this.language());
   }
 
   /**
