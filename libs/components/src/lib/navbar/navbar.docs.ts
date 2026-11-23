@@ -12,7 +12,7 @@ export const navbarDoc: ComponentDoc = {
   description:
     'The application top navigation bar: brand/logo, a PrimeNG menubar, an optional ' +
     'external link, and optional Auth0-backed login/logout controls. ' +
-    'Maintenance only: bug fixes, no new features. New app chrome should come from a per-app design.',
+    'Apps can project their own controls into the right side of the bar with the jdsNavbarEnd attribute.',
   variations: [
     {
       id: 'basic',
@@ -32,6 +32,12 @@ export const navbarDoc: ComponentDoc = {
       description: 'Custom title, icon, and external link label/URL.',
       language: 'html',
     },
+    {
+      id: 'custom-end-content',
+      title: 'Custom End Content',
+      description: 'Project app-specific controls into the right side with the jdsNavbarEnd attribute.',
+      language: 'html',
+    },
   ],
   usage: {
     summary: 'Use Navbar once per app shell as the top-level navigation bar.',
@@ -39,10 +45,10 @@ export const navbarDoc: ComponentDoc = {
       'Provide items that mirror your app’s real route structure.',
       'Set authentication to true only when an AuthService provider is configured.',
       'Set mobileLogoPosition to center only when the right side of the bar holds a single control; keep the default left when it holds several.',
+      'Use the jdsNavbarEnd slot for app-specific controls (e.g. a clipboard button) instead of forking Navbar.',
     ],
     donts: [
       'Do not render more than one Navbar per page — it is meant to be a single global header.',
-      'Do not extend Navbar with new features; build new layout or chrome from a per-app design instead.',
     ],
   },
   activity: {
