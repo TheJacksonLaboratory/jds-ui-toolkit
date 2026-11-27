@@ -296,4 +296,85 @@ describe('JdsTermBrowserComponent', () => {
       path: ['HP:0000001', 'HP:0001238', 'HP:0001166']
     }]);
   });
+  describe('language', () => {
+    const translated = (n: JdsTermTreeNode, name: string, children = n.children): JdsTermTreeNode => ({
+      ...n,
+      term: { ...n.term, translations: [{ language: 'de', name }] },
+      children
+    });
+
+    /** A tree where one branch has a German name and the other does not. */
+    const german: JdsTermTreeNode[] = [
+      translated(polyhierarchy[0], 'Alle', [
+        translated(polyhierarchy[0].children[0], 'Lange Finger'),
+        polyhierarchy[0].children[1]
+      ])
+    ];
+
+    const names = (): string[] =>
+      Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.jds-term-row .group-hover\\:tw-underline')).map(
+        el => el.textContent?.trim() ?? ''
+      );
+
+    it('renders the translated name for the chosen language', () => {
+      fixture.componentRef.setInput('language', 'de');
+      render(german);
+
+      expect(names()).toEqual(['Alle', 'Lange Finger', 'Arachnodactyly', 'Slender finger', 'Arachnodactyly']);
+    });
+
+    it('marks translated names with their language and leaves fallbacks unmarked', () => {
+      fixture.componentRef.setInput('language', 'de');
+      render(german);
+
+      const spans: HTMLElement[] = Array.from(fixture.nativeElement.querySelectorAll('.jds-term-row .group-hover\\:tw-underline'));
+      expect(spans[0].getAttribute('lang')).toEqual('de');
+      expect(spans[3].hasAttribute('lang')).toBe(false);
+    });
+
+    it('renders canonical names when no language is set', () => {
+      render(german);
+
+      expect(names()[0]).toEqual('All');
+      expect(fixture.nativeElement.querySelector('[lang]')).toBeNull();
+    });
+
+    it('keeps expansion and resolved children when the language changes', () => {
+      render([node('HP:0000001', 'All', [node('HP:0000822', 'Hypertension', [], 7, ['HP:0000001', 'HP:0000822'])], 8)]);
+      component.toggleRow(component.rows()[1]);
+      fixture.detectChanges();
+      const before = component.rows().map(r => [r.node.key, r.expanded]);
+      resolver.mockClear();
+
+      fixture.componentRef.setInput('language', 'de');
+      fixture.detectChanges();
+
+      expect(component.rows().map(r => [r.node.key, r.expanded])).toEqual(before);
+      expect(before.length).toEqual(3);
+      expect(resolver).not.toHaveBeenCalled();
+    });
+
+    it('matches typeahead against the shown name', () => {
+      fixture.componentRef.setInput('language', 'de');
+      render([node('HP:1', 'Hands'), translated(node('HP:2', 'Toes'), 'Zehen')]);
+
+      component.onKeydown(new KeyboardEvent('keydown', { key: 'z' }), component.rows()[0]);
+
+      expect(component.activeKey()).toEqual('HP:2');
+    });
+
+    it('keeps sibling order on the canonical name when translated', () => {
+      resolver.mockReturnValueOnce(of([
+        { id: 'HP:3', name: 'C', descendantCount: 0, translations: [{ language: 'de', name: 'A' }] },
+        { id: 'HP:2', name: 'B', descendantCount: 0, translations: [{ language: 'de', name: 'Z' }] }
+      ]));
+      fixture.componentRef.setInput('language', 'de');
+      render([node('HP:0000822', 'Hypertension', [], 7)]);
+
+      component.toggleRow(component.rows()[0]);
+      fixture.detectChanges();
+
+      expect(names()).toEqual(['Hypertension', 'Z', 'A']);
+    });
+  });
 });

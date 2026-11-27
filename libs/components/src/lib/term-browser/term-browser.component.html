@@ -50,7 +50,7 @@
           <span
             class="tw-group tw-min-w-0 tw-flex-1 tw-break-words tw-text-sm"
             [class.tw-font-bold]="row.selected">
-            <span class="group-hover:tw-underline">{{ row.node.term.name }}</span
+            <span class="group-hover:tw-underline" [attr.lang]="langOf(row.node.term)">{{ nameOf(row.node.term) }}</span
             ><span class="jds-term-count">{{ countOf(row.node.term) }}</span>
           </span>
         </div>

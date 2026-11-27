@@ -62,6 +62,23 @@ export class PhenotypeComponent implements OnInit {
   }
 }`,
     },
+    {
+      id: 'language',
+      title: 'Language',
+      description:
+        'Pass a language code to language and each row shows its translated name, or its ' +
+        'canonical name when it has none in that language. Siblings stay in canonical order. ' +
+        'The page owns which languages are offered and what they are called; labels ' +
+        'translates the component’s own text, not the terms.',
+      language: 'html',
+      code: `<lib-jds-term-browser
+  [tree]="facade.tree()"
+  [term]="facade.term()"
+  [loading]="facade.loading()"
+  [childrenResolver]="facade.childrenResolver"
+  [language]="selectedLanguage()"
+  (termSelect)="facade.load($event.term.id)" />`,
+    },
   ],
   usage: {
     summary:
@@ -79,6 +96,7 @@ export class PhenotypeComponent implements OnInit {
       'Do not merge by term id — that fabricates edges and loses which route was taken.',
       'Do not key expansion on the term id, or collapsing one occurrence collapses them all.',
       'Do not re-root on selection unless you want that; reFocusOnSelect defaults to false.',
+      'Do not reload the tree to change language; bind language instead, so expanded rows stay open.',
     ],
   },
   theming: [

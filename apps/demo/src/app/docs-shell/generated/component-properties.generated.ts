@@ -241,6 +241,13 @@ export const COMPONENT_PROPERTIES: Record<string, ApiDoc> = {
         "description": "Overrides for the component&#39;s own text."
       },
       {
+        "name": "language",
+        "type": "string | null",
+        "default": "null",
+        "required": false,
+        "description": "Language code whose translated term names are shown, or null for canonical names. A term with no named translation in this language shows its canonical name. Siblings stay in canonical order, and the component&#39;s own text is set through labels."
+      },
+      {
         "name": "loading",
         "type": "boolean",
         "default": "false",
