@@ -15,10 +15,6 @@ export * from './lib/facet-search/facet-search.component';
 export * from './lib/facet-search/facet-search.facade';
 export * from './lib/facet-search/facet-search.model';
 
-// Navbar UI component
-export * from './lib/navbar/navbar.component';
-export * from './lib/navbar/navbar.model';
-
 // Widget Error UI component
 export * from './lib/widget-error/widget-error.component';
 

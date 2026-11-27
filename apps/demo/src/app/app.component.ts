@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
+import { MenuItem } from 'primeng/api';
+import { MenubarModule } from 'primeng/menubar';
 
 @Component({
   imports: [
     RouterModule,
-    NavbarComponent
+    MenubarModule
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,21 +15,8 @@ import { JdsMenuItem, NavbarComponent } from '@jax-data-science/components';
 })
 export class AppComponent {
   title = 'jax-data-science';
-  navbarItems: JdsMenuItem[] = [
-    {
-      label: 'Components',
-      icon: 'pi pi-box',
-      routerLink: '/components',
-    },
-    {
-      label: 'Services',
-      routerLink: '/services'
-    },
-    {
-      label: 'Help',
-      icon: 'pi pi-external-link',
-      url: 'https://google.com',
-      iconEnd: true,
-    },
+  readonly menuItems: MenuItem[] = [
+    { label: 'Components', routerLink: '/components' },
+    { label: 'Services', routerLink: '/services' },
   ];
 }

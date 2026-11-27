@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Term Browser**: `language` input shows translated term names when a translation exists, falling back to the canonical name per term; `termName` and `termLanguage` helpers and `JdsTerm.translations` are exported
+- 
+### Removed
+
+- **Navbar**: `NavbarComponent` (`lib-jds-navbar`) and `JdsMenuItem` are removed. Apps build their own navbar, for example on PrimeNG's `p-menubar`.
+- `@angular/router` is no longer a peer dependency; nothing in the library uses it now.
 
 ## [0.2.0-a.9] - 2026-11-13
 
