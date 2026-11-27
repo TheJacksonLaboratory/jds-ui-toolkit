@@ -37,7 +37,7 @@ export const authenticationDoc: ComponentDoc = {
     ],
   },
   activity: {
-    summary: 'Embedded inside Navbar to provide the app-wide login/logout control.',
+    summary: 'Placed once in the app header to provide the app-wide login/logout control.',
   },
   theming: [],
 };

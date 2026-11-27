@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Removed
+
+- **Navbar**: `NavbarComponent` (`lib-jds-navbar`) and `JdsMenuItem` are removed. Apps build their own navbar, for example on PrimeNG's `p-menubar`.
+- `@angular/router` is no longer a peer dependency; nothing in the library uses it now.
+
 ## [0.2.0-a.9] - 2026-11-13
 
 ### Added
